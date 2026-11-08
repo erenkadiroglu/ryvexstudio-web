@@ -2,7 +2,7 @@
 name: "Ryvex Studio"
 tagline: "Her ekranda aynı özen."
 specVersion: "0.3.0"
-version: 3
+version: 4
 language: tr
 type: master
 ---
@@ -10,7 +10,7 @@ type: master
 # Ryvex Studio
 
 > Durum: Strateji, ses tonu, renkler, yazı tipleri ve logo konsepti onaylandı.
-> Logo dosyaları ve ürün listesi henüz eklenmedi.
+> Ürün listesi henüz eklenmedi.
 
 ## Strategy
 
@@ -288,19 +288,29 @@ değiştirilmeden yazılır.
 
 ### Logo & Marks
 
-> Durum: Konsept onaylandı. Logo dosyaları henüz üretilmedi.
+> Durum: Onaylandı (Yön A, "Çerçeve"). Dosyalar `public/brand/` klasöründedir.
 
-- **Kelime logosu:** "Ryvex" kelimesi marka yazı tipinde, sıkı ve dengeli harf
-  aralığıyla; altında ya da yanında daha hafif ağırlıkta "Studio".
-- **Sembol:** "R" harfinden türeyen, yuvarlatılmış kare bir çerçeve içinde duran
-  bir işaret. Çerçeve, farklı ürünleri kapsayan tek çatı fikrini taşır ve
-  uygulama ikonu biçimine doğal olarak uyar.
-- **Kombinasyon:** Sembol + kelime logosu, yatay dizilim.
-- **Boşluk ilkesi:** Logonun çevresinde en az sembol yüksekliğinin yarısı
-  kadar boşluk bırakılır.
+- **Sembol:** Vişne renginde, uygulama ikonu biçiminde yuvarlatılmış bir kare
+  (köşe yarıçapı kenarın yüzde 22,5'i) ve içinde beyaz, geometrik bir "R".
+  R'nin gövdesi düz bir çubuk, göbeği tam bir yarım daire; bacağı 45 derecelik
+  bir çizgi olarak çerçevenin sağ alt köşesinden dışarı taşar. Anlamı: tek bir
+  çatının altında duran ama sınırı aşan bir imza.
+- **Yapı:** 64 birimlik ızgarada çizgi kalınlığı 8 birimdir. Gövde x=24'te,
+  göbeğin merkezi (33, 27), yarıçapı 7 birimdir; bacak göbeğin altından
+  (31, 34) başlar.
+- **Kelime logosu:** Geist ile "Ryvex" yarı kalın (600), "Studio" normal (400),
+  sıkı harf aralığıyla. Logo dosyalarında harfler çizime dönüştürülmüştür.
+- **Kombinasyon:** Sembol solda, kelime logosu sağda, yatay dizilim. Sembol
+  yüksekliği yazının büyük harf yüksekliğinin yaklaşık iki katıdır.
+- **Renk kullanımı:** Sembol her zeminde vişne kalır. Yazı açık zeminde
+  Mürekkep, koyu zeminde Beyaz'dır.
+- **Boşluk ilkesi:** Logonun çevresinde en az sembol yüksekliğinin yarısı kadar
+  boşluk bırakılır.
+- **En küçük boyut:** Sembol 16 piksele kadar okunur; kelime logosu 14 pikselin
+  altında kullanılmaz.
 - **Değişmez yasaklar:** Logo asla esnetilmez, döndürülmez, onaylı renkler
   dışında renklendirilmez, gölge ya da efekt eklenmez, karmaşık bir fotoğrafın
-  üzerine konmaz.
+  üzerine konmaz; sembolün bacağı çerçevenin içine çekilmez.
 
 ### Core Colors
 

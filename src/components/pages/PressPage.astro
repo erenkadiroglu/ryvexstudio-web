@@ -36,10 +36,13 @@ const copy = {
     ],
     logoTitle: "Logo",
     logoText:
-      "Sembolü olduğu gibi kullanın: esnetmeyin, döndürmeyin, yeniden renklendirmeyin ve efekt eklemeyin. Çevresinde en az sembol yüksekliğinin yarısı kadar boşluk bırakın.",
-    logoNote: "Tam logo paketi hazırlanıyor.",
-    svg: "SVG indir",
-    png: "PNG indir (1024 piksel)",
+      "Logoyu ve sembolü olduğu gibi kullanın: esnetmeyin, döndürmeyin, yeniden renklendirmeyin ve efekt eklemeyin. Çevresinde en az sembol yüksekliğinin yarısı kadar boşluk bırakın. Açık zeminde koyu yazılı, koyu zeminde beyaz yazılı logoyu kullanın.",
+    files: "Dosyalar",
+    assets: [
+      ["Logo, açık zemin için", "ryvex-studio-logo"],
+      ["Logo, koyu zemin için", "ryvex-studio-logo-white"],
+      ["Sembol", "ryvex-studio-symbol"],
+    ],
     colorsTitle: "Renkler",
     productsTitle: "Ürünler",
     contactTitle: "Basın iletişimi",
@@ -61,10 +64,13 @@ const copy = {
     ],
     logoTitle: "Logo",
     logoText:
-      "Use the symbol as it is: never stretch, rotate, recolor or add effects to it. Leave clear space of at least half the symbol's height around it.",
-    logoNote: "A full logo package is being prepared.",
-    svg: "Download SVG",
-    png: "Download PNG (1024 px)",
+      "Use the logo and symbol as they are: never stretch, rotate, recolor or add effects to them. Leave clear space of at least half the symbol's height around them. Use the dark-text logo on light backgrounds and the white-text logo on dark ones.",
+    files: "Files",
+    assets: [
+      ["Logo, for light backgrounds", "ryvex-studio-logo"],
+      ["Logo, for dark backgrounds", "ryvex-studio-logo-white"],
+      ["Symbol", "ryvex-studio-symbol"],
+    ],
     colorsTitle: "Colors",
     productsTitle: "Products",
     contactTitle: "Press contact",
@@ -110,30 +116,41 @@ const block = "border-t border-outline py-12 md:grid md:grid-cols-12 md:gap-6";
   <section aria-labelledby="logo" class={block}>
     <h2 id="logo" class:list={[h2, "md:col-span-4"]}>{copy.logoTitle}</h2>
     <div class="mt-6 md:col-span-8 md:mt-0">
-      <div class="flex flex-wrap gap-4">
-        <div class="flex size-40 items-center justify-center rounded-xl border border-outline bg-[#F4F2F3]">
-          <img src="/press/ryvex-studio-symbol.svg" alt="Ryvex Studio" width="80" height="80" />
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="flex h-40 items-center justify-center rounded-xl border border-outline bg-[#FFFFFF] px-8">
+          <img src="/brand/ryvex-studio-logo.svg" alt="Ryvex Studio" width="236" height="51" />
         </div>
-        <div class="flex size-40 items-center justify-center rounded-xl border border-outline bg-[#1C1418]">
-          <img src="/press/ryvex-studio-symbol.svg" alt="" width="80" height="80" />
+        <div class="flex h-40 items-center justify-center rounded-xl border border-outline bg-[#1C1418] px-8">
+          <img src="/brand/ryvex-studio-logo-white.svg" alt="" width="236" height="51" />
         </div>
       </div>
       <p class="mt-6 max-w-[60ch] text-body-md text-secondary">{copy.logoText}</p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <a
-          href="/press/ryvex-studio-symbol.svg"
-          download
-          class="inline-flex rounded-full border border-outline px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
-          >{copy.svg}</a
-        >
-        <a
-          href="/press/ryvex-studio-symbol.png"
-          download
-          class="inline-flex rounded-full border border-outline px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
-          >{copy.png}</a
-        >
-      </div>
-      <p class="mt-4 text-body-sm text-secondary">{copy.logoNote}</p>
+      <h3 class="mt-8 text-label font-medium text-secondary">{copy.files}</h3>
+      <ul class="mt-3 border-t border-outline">
+        {
+          copy.assets.map(([label, file]) => (
+            <li class="flex flex-wrap items-center justify-between gap-3 border-b border-outline py-3">
+              <span class="text-body-md">{label}</span>
+              <span class="flex gap-2">
+                <a
+                  href={`/brand/${file}.svg`}
+                  download
+                  class="inline-flex rounded-full border border-outline px-4 py-2 text-label font-medium transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
+                >
+                  SVG
+                </a>
+                <a
+                  href={`/brand/${file}.png`}
+                  download
+                  class="inline-flex rounded-full border border-outline px-4 py-2 text-label font-medium transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
+                >
+                  PNG
+                </a>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 

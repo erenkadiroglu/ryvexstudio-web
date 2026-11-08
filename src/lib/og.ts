@@ -36,11 +36,9 @@ function loadFonts() {
   return fontsPromise;
 }
 
-const SYMBOL_PATH =
-  "M22 46V18h12.5c6.2 0 10 3.4 10 8.7 0 4-2.2 6.9-5.9 8L45 46h-6.6l-5.6-10.6H28V46h-6Zm6-15.6h6c3 0 4.6-1.4 4.6-3.7 0-2.4-1.6-3.7-4.6-3.7h-6v7.4Z";
-
+// The approved symbol (see public/brand/ryvex-studio-symbol.svg).
 const symbolDataUri = `data:image/svg+xml;base64,${Buffer.from(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14.4" fill="${BRAND}"/><path d="${SYMBOL_PATH}" fill="#FFFFFF"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><clipPath id="c"><rect width="64" height="64" rx="14.4"/></clipPath><rect width="64" height="64" rx="14.4" fill="${BRAND}"/><g clip-path="url(#c)" fill="none" stroke="#FFFFFF" stroke-width="8"><path d="M24 16V48"/><path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"/><path d="M31 34L64 67"/></g></svg>`,
 ).toString("base64")}`;
 
 type Node = { type: string; props: Record<string, unknown> };
