@@ -25,6 +25,6 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 export const GET: APIRoute = async ({ props }) => {
-  const png = await renderOgImage(props);
+  const png = await renderOgImage(props as OgOptions);
   return new Response(new Uint8Array(png), { headers: { "Content-Type": "image/png" } });
 };

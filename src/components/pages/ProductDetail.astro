@@ -171,7 +171,7 @@ const stripStyle = `background-color: color-mix(in srgb, ${data.color} 8%, var(-
         <dl class="mt-5 text-body-sm">
           {
             facts.map((fact) => (
-              <div class="flex justify-between gap-6 border-t border-outline py-3">
+              <div class="flex items-baseline justify-between gap-6 border-t border-outline py-3">
                 <dt class="text-secondary">{fact.label}</dt>
                 <dd class:list={["text-right", fact.mono && "font-mono text-mono-sm"]}>
                   {fact.value}
