@@ -100,7 +100,7 @@ rounded:
   md: 12px
   lg: 20px
   xl: 24px
-  icon: 22.5%
+  icon: 36px
   full: 999px
 components:
   button-primary:
@@ -120,6 +120,9 @@ components:
     padding: 13px 21px
   button-secondary-hover:
     backgroundColor: "{colors.neutral}"
+    textColor: "{colors.primary}"
+  button-secondary-pressed:
+    backgroundColor: "{colors.neutral-strong}"
     textColor: "{colors.primary}"
   link-inline:
     backgroundColor: "{colors.surface}"
@@ -163,12 +166,37 @@ components:
     textColor: "{colors.secondary}"
     typography: "{typography.body-sm}"
     padding: 64px
+  divider:
+    backgroundColor: "{colors.outline}"
+    height: 1px
   button-primary-dark:
     backgroundColor: "{colors.tertiary-dark}"
     textColor: "{colors.on-tertiary-dark}"
+  button-primary-hover-dark:
+    backgroundColor: "{colors.tertiary-hover-dark}"
+    textColor: "{colors.on-tertiary-dark}"
+  button-secondary-hover-dark:
+    backgroundColor: "{colors.neutral-dark}"
+    textColor: "{colors.primary-dark}"
+  button-secondary-pressed-dark:
+    backgroundColor: "{colors.neutral-strong-dark}"
+    textColor: "{colors.primary-dark}"
   body-dark:
     backgroundColor: "{colors.surface-dark}"
     textColor: "{colors.primary-dark}"
+  caption-dark:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.secondary-dark}"
+    typography: "{typography.body-sm}"
+  product-facts-dark:
+    backgroundColor: "{colors.neutral-dark}"
+    textColor: "{colors.primary-dark}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.xl}"
+    padding: 32px
+  divider-dark:
+    backgroundColor: "{colors.outline-dark}"
+    height: 1px
 ---
 
 # Ryvex Studio Web
@@ -376,6 +404,8 @@ Bulanık cam efekti kullanılmaz.
 Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
 
 - **Ürün ikonları:** Kenar uzunluğunun yüzde 22,5'i, uygulama ikonu biçimi.
+  `rounded.icon` değeri (36px) 160px'lik ikon içindir; diğer boyutlarda oran
+  korunur.
   Logo sembolü de aynı biçimdedir. Bu, markanın "çerçeve" fikrinin sitedeki
   karşılığıdır.
 - **Butonlar, filtreler, mağaza rozetleri:** Tam yuvarlak uçlar (999px).
@@ -394,7 +424,7 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
 - **Birincil buton:** Vişne zemin, beyaz metin, tam yuvarlak. Üzerine gelince
   zemin `tertiary-hover` olur. Sayfa başına en fazla bir tane.
 - **İkincil buton:** Beyaz zemin, `outline` kenarlık, Mürekkep metin. Üzerine
-  gelince zemin `neutral` olur.
+  gelince zemin `neutral`, basılıyken `neutral-strong` olur.
 - **Metin içi link:** Vişne metin, 1px alt çizgi, alt çizgi metinden 3px uzakta.
   Üzerine gelince alt çizgi 2px olur.
 - **Ürün kutucuğu (sergi duvarı):** İkon, altında ürün adı (title) ve künye
