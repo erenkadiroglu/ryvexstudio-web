@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+---
+
+<BaseLayout>
+  <section class="container-page py-section-mobile md:py-section">
+    <h1
+      class="max-w-[9ch] text-display-mobile leading-[0.98] font-semibold tracking-[-0.045em] md:text-display"
+    >
+      {site.tagline.tr}
+    </h1>
+    <p class="mt-6 max-w-[40ch] text-body-lg text-secondary">
+      Mobil uygulamalar, oyunlar ve web projeleri. Hepsi tek imza altında, aynı titizlikle.
+    </p>
+  </section>
+</BaseLayout>

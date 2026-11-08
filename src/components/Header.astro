@@ -1,0 +1,59 @@
+---
+import Logo from "./Logo.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import { getLangFromUrl, localizePath, useTranslations } from "@/i18n/ui";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const nav = [
+  { href: localizePath("/urunler", lang), label: t("nav.products") },
+  { href: localizePath("/studyo", lang), label: t("nav.studio") },
+  { href: localizePath("/iletisim", lang), label: t("nav.contact") },
+];
+
+const otherLang = lang === "tr" ? "en" : "tr";
+---
+
+<header
+  class="site-header sticky top-0 z-40 border-b border-transparent bg-surface transition-colors duration-150 data-[scrolled]:border-outline"
+>
+  <div class="container-page flex h-[72px] items-center justify-between">
+    <Logo href={localizePath("/", lang)} />
+
+    <nav aria-label={t("nav.menu")} class="flex items-center gap-1">
+      <ul class="hidden items-center gap-1 md:flex">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="rounded-full px-3.5 py-2 text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a
+        href={localizePath("/", otherLang)}
+        hreflang={otherLang}
+        lang={otherLang}
+        class="rounded-full px-3 py-2 text-label font-medium text-secondary transition-colors duration-150 hover:bg-neutral hover:text-primary"
+      >
+        {otherLang.toUpperCase()}
+      </a>
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header");
+  if (header) {
+    const update = () => header.toggleAttribute("data-scrolled", window.scrollY > 4);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  }
+</script>

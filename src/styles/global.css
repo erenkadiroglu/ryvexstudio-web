@@ -1,0 +1,184 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/* Dark theme is driven by the data-theme attribute on <html>, not by system preference. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Color roles from DESIGN.md. Light theme is the default. */
+:root {
+  --rv-surface: #ffffff;
+  --rv-neutral: #f4f2f3;
+  --rv-neutral-strong: #eae6e8;
+  --rv-outline: #e2dde0;
+  --rv-primary: #1c1418;
+  --rv-secondary: #5e5459;
+  --rv-tertiary: #8e1b3b;
+  --rv-tertiary-hover: #74142f;
+  --rv-on-tertiary: #ffffff;
+  --rv-object-shadow: 0 24px 48px -24px rgb(28 20 24 / 0.28);
+  --rv-object-border: transparent;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --rv-surface: #160f12;
+  --rv-neutral: #211a1d;
+  --rv-neutral-strong: #2b2226;
+  --rv-outline: #33292e;
+  --rv-primary: #f2ecee;
+  --rv-secondary: #a99da3;
+  --rv-tertiary: #d9567a;
+  --rv-tertiary-hover: #e57a97;
+  --rv-on-tertiary: #160f12;
+  --rv-object-shadow: none;
+  --rv-object-border: #33292e;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-surface: var(--rv-surface);
+  --color-neutral: var(--rv-neutral);
+  --color-neutral-strong: var(--rv-neutral-strong);
+  --color-outline: var(--rv-outline);
+  --color-primary: var(--rv-primary);
+  --color-secondary: var(--rv-secondary);
+  --color-tertiary: var(--rv-tertiary);
+  --color-tertiary-hover: var(--rv-tertiary-hover);
+  --color-on-tertiary: var(--rv-on-tertiary);
+  --color-brand: #8e1b3b;
+}
+
+@theme {
+  --font-sans: "Geist Variable", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale */
+  --text-display: 6rem;
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.045em;
+  --text-display-mobile: 3.25rem;
+  --text-headline-xl: 3.5rem;
+  --text-headline-xl--line-height: 1.05;
+  --text-headline-xl--letter-spacing: -0.035em;
+  --text-headline-lg: 2.25rem;
+  --text-headline-lg--line-height: 1.12;
+  --text-headline-lg--letter-spacing: -0.025em;
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 1.25;
+  --text-headline-md--letter-spacing: -0.015em;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.35;
+  --text-title--letter-spacing: -0.01em;
+  --text-body-lg: 1.25rem;
+  --text-body-lg--line-height: 1.55;
+  --text-body-lg--letter-spacing: -0.01em;
+  --text-body-md: 1.0625rem;
+  --text-body-md--line-height: 1.6;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.5;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.3;
+  --text-mono-sm: 0.8125rem;
+  --text-mono-sm--line-height: 1.4;
+
+  /* Layout */
+  --container-content: 1240px;
+  --spacing-section: 160px;
+  --spacing-section-mobile: 96px;
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+
+  /* Shapes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  /* Motion */
+  --ease-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-tertiary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-tertiary);
+    color: var(--color-on-tertiary);
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: calc(var(--container-content) + 2 * 20px);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      max-width: calc(var(--container-content) + 2 * 40px);
+      padding-inline: 40px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-page {
+      max-width: calc(var(--container-content) + 2 * 64px);
+      padding-inline: 64px;
+    }
+  }
+
+  .link-inline {
+    color: var(--color-tertiary);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .link-inline:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .shape-icon {
+    border-radius: 22.5%;
+  }
+
+  .object-depth {
+    box-shadow: var(--rv-object-shadow);
+    outline: 1px solid var(--rv-object-border);
+    outline-offset: -1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
