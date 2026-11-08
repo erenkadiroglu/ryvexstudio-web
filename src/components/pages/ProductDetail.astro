@@ -1,5 +1,6 @@
 ---
 import ClosingBand from "@/components/ClosingBand.astro";
+import PhoneFrame from "@/components/PhoneFrame.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
 import { iconTransitionName } from "@/lib/transitions";
@@ -178,14 +179,11 @@ const shot = data.screenshots[0];
       <!-- Desktop: a real screenshot in the product's device, or the product's own icon. -->
       <div class="hidden justify-center md:col-span-5 md:flex" aria-hidden="true">
         {
-          shot ? (
-            <div
-              class:list={[
-                "object-depth relative overflow-hidden border border-outline bg-surface",
-                kind === "browser" ? "aspect-[16/10] w-full rounded-[20px]" : "aspect-[9/19.5] w-[260px] rounded-[40px]",
-              ]}
-            >
-              <Image src={shot} alt="" widths={[400, 800]} sizes="520px" class="absolute inset-0 size-full object-cover" />
+          shot && kind === "phone" ? (
+            <PhoneFrame src={shot} alt="" width={280} loading="eager" />
+          ) : shot ? (
+            <div class="object-depth relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-outline bg-surface">
+              <Image src={shot} alt="" widths={[400, 800]} sizes="520px" class="absolute inset-0 size-full object-cover object-top" />
             </div>
           ) : (
             <Image
@@ -204,18 +202,20 @@ const shot = data.screenshots[0];
     {
       data.screenshots.length > 0 && (
         <div class="container-page pb-16 md:pb-20">
-          <div class="overflow-x-auto" tabindex="0" role="region" aria-label={copy.screenshots}>
-            <ul class="flex gap-5 pb-2">
-              {data.screenshots.map((image, i) => (
-                <li class="shrink-0">
-                  <Image
-                    src={image}
-                    alt={`${data.name}, ${copy.screenshots.toLocaleLowerCase(lang)} ${i + 1}`}
-                    height={560}
-                    class="h-[420px] w-auto rounded-lg md:h-[560px]"
-                  />
-                </li>
-              ))}
+          <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots}>
+            <ul class="flex gap-6 pt-1 pb-12 md:gap-8">
+              {data.screenshots.map((image, i) => {
+                const alt = `${data.name}, ${copy.screenshots.toLocaleLowerCase(lang)} ${i + 1}`;
+                return (
+                  <li class="shrink-0">
+                    {kind === "phone" ? (
+                      <PhoneFrame src={image} alt={alt} width={232} />
+                    ) : (
+                      <Image src={image} alt={alt} height={400} class="h-[300px] w-auto rounded-lg border border-outline md:h-[400px]" />
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

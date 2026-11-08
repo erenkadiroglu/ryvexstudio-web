@@ -554,10 +554,18 @@ Sitede yalnızca ürünlerin kendi görselleri kullanılır: ürün ikonları ve
 ürünlerden alınmış ekran görüntüleri. Stok fotoğraf, yapay zekâ ile üretilmiş
 görsel, maket ya da temsili arayüz çizimi kullanılmaz.
 
-Bir ürünün ekran görüntüsü yoksa cihaz çerçevesi gösterilmez; onun yerine ürünün
-kendi ikonu, ürünün renginde sade bir zemin üzerinde büyük boyda durur. Ekran
-görüntüsü eklendiğinde ürün sayfası ve vitrin bandı onu kendiliğinden cihaz
-çerçevesinde gösterir.
+Ekran görüntüleri gerçek bir telefonda ya da emülatörde, dikey, Türkçe ve aydınlık
+temada alınır; durum çubuğu gösteri kipiyle temizlenir (saat 09.41, pil dolu,
+bildirim yok). Kişisel dosya adı, fotoğraf ya da gerçek kişi adı görünmez.
+
+Uygulama ve oyun görüntüleri `PhoneFrame` bileşenindeki telefon çerçevesinde
+gösterilir: koyu gövde, ince metal kenar, yan tuş ve ortada delik kamera. Çerçeve
+CSS ile çizilir; hazır maket görseli kullanılmaz. Web ürünleri tarayıcı
+çerçevesinde durur.
+
+Bir ürünün ekran görüntüsü yoksa çerçeve gösterilmez; onun yerine ürünün kendi
+ikonu, ürünün renginde sade bir zemin üzerinde büyük boyda durur. Ekran görüntüsü
+eklendiğinde ürün sayfası ve vitrin bandı onu kendiliğinden çerçevede gösterir.
 
 ## Do's and Don'ts
 

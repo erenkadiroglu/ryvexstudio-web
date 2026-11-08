@@ -48,7 +48,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
       <div class="hidden md:col-span-6 md:block" aria-hidden="true">
         <div class="sticky top-[calc(50vh-290px)] flex h-[580px] items-center justify-center">
           <div
-            class="showcase-device group relative overflow-hidden border border-outline bg-surface data-[kind=browser]:aspect-[16/10] data-[kind=browser]:w-full data-[kind=browser]:rounded-[20px] data-[kind=phone]:aspect-[9/19.5] data-[kind=phone]:w-[270px] data-[kind=phone]:rounded-[42px] data-[kind=stage]:aspect-[4/5] data-[kind=stage]:w-[440px] data-[kind=stage]:rounded-[28px]"
+            class="showcase-device group relative overflow-hidden border border-outline bg-surface data-[kind=browser]:aspect-[16/10] data-[kind=browser]:w-full data-[kind=browser]:rounded-[20px] data-[kind=phone]:aspect-[270/578] data-[kind=phone]:w-[270px] data-[kind=phone]:rounded-[42px] data-[kind=stage]:aspect-[4/5] data-[kind=stage]:w-[440px] data-[kind=stage]:rounded-[28px]"
             data-kind={kindOf(products[0])}
           >
             <div
@@ -58,6 +58,8 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
               <span class="size-2 rounded-full bg-neutral-strong"></span>
               <span class="size-2 rounded-full bg-neutral-strong"></span>
             </div>
+            <span class="showcase-camera phone-camera z-20 size-[10px] top-[19px]"></span>
+            <div class="showcase-viewport absolute inset-0 overflow-hidden">
             {
               products.map((product) => (
                 <div class="showcase-screen absolute inset-0" style={product.data.screenshots[0] ? undefined : panel(product.data.color)}>
@@ -65,7 +67,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
                     <Image
                       src={product.data.screenshots[0]}
                       alt=""
-                      class="absolute inset-0 size-full object-cover"
+                      class="absolute inset-0 size-full object-cover object-top"
                       widths={[400, 800]}
                       sizes="520px"
                     />
@@ -77,6 +79,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
                 </div>
               ))
             }
+            </div>
           </div>
         </div>
       </div>
