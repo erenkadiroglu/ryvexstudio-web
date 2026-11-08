@@ -3,6 +3,7 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
 import desk from "@/assets/studio/desk.jpg";
+import founder from "@/assets/studio/founder.png";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts } from "@/lib/products";
@@ -30,6 +31,12 @@ const copy = {
       "Çok ürün çıkarmak için acele etmiyoruz. Her ürünü kendimiz kullanmak isteyeceğimiz seviyeye gelene kadar işliyoruz. Ne yaptığını açıkça anlatan, gereksiz izin istemeyen, açıldığında insanı yormayan ürünler yapıyoruz.",
       "Bir Ryvex ürününü sevdiyseniz, diğerlerinde de aynı özeni bulacaksınız. Bulamazsanız bize yazın; okuyoruz.",
     ],
+    founderLabel: "Kurucu",
+    founderBio: [
+      `${site.founder}, Ryvex Studio'nun kurucusu. Mobil uygulamaları, oyunları ve web projelerini kendisi tasarlıyor ve geliştiriyor.`,
+      "Ryvex Studio'yu, farklı yerlerde ayrı ayrı yayınladığı ürünleri tek bir imza altında toplamak için kurdu. Her ürünün arkasında o var; bir sorunuz olduğunda karşınızda gerçek biri var.",
+    ],
+    founderAlt: `${site.founder}, kollarını kavuşturmuş, siyah polo tişörtle`,
     principlesTitle: "Neye önem veriyoruz",
     principles: [
       ["Özen", "Her ürün, kullanmak isteyeceğimiz seviyeye gelmeden yayınlanmaz. Detaylar tesadüf değildir."],
@@ -55,6 +62,12 @@ const copy = {
       "We are in no hurry to ship many products. Each one is refined until it is something we would want to use ourselves. We make products that say clearly what they do, ask for no unnecessary permissions and never wear you out.",
       "If you like one Ryvex product, you will find the same care in the others. If you don't, write to us; we read every message.",
     ],
+    founderLabel: "Founder",
+    founderBio: [
+      `${site.founder} is the founder of Ryvex Studio, and designs and builds its mobile apps, games and web products.`,
+      "Ryvex Studio was founded to bring products that had been released separately under one signature. The founder stands behind every product; when you have a question, there is a real person on the other side.",
+    ],
+    founderAlt: `${site.founder}, arms crossed, wearing a black polo shirt`,
     principlesTitle: "What we care about",
     principles: [
       ["Care", "No product ships before it is something we would want to use. Details are never an accident."],
@@ -90,6 +103,25 @@ const copy = {
 <section class="container-page grid gap-6 py-section-mobile md:grid-cols-12 md:py-section">
   <div class="space-y-5 text-body-lg text-secondary md:col-span-7 md:col-start-6">
     {copy.story.map((paragraph, i) => <p class:list={[i === 0 && "text-primary"]}>{paragraph}</p>)}
+  </div>
+</section>
+
+<section aria-labelledby="kurucu" class="container-page pb-section-mobile md:pb-section">
+  <div class="grid items-end gap-10 overflow-hidden rounded-xl bg-neutral md:grid-cols-12 md:gap-6">
+    <div class="px-8 pt-10 md:col-span-6 md:col-start-1 md:px-12 md:pt-12 md:pb-14">
+      <p class="text-body-sm text-secondary">{copy.founderLabel}</p>
+      <h2 id="kurucu" class="mt-2 text-headline-xl font-semibold tracking-[-0.035em]">{site.founder}</h2>
+      {copy.founderBio.map((p) => <p class="mt-5 max-w-[46ch] text-body-lg text-secondary">{p}</p>)}
+    </div>
+    <div class="flex justify-center md:col-span-5 md:col-start-8 md:justify-end md:pr-10">
+      <Image
+        src={founder}
+        alt={copy.founderAlt}
+        widths={[320, 480, 640]}
+        sizes="(min-width: 960px) 360px, 70vw"
+        class="h-auto w-[70%] max-w-[360px] md:w-full"
+      />
+    </div>
   </div>
 </section>
 

@@ -16,5 +16,11 @@ export const site = {
   },
   founder: "Eren KADİROĞLU",
   contactEmail: "hello@ryvexstudio.com",
+  /** Official studio accounts. All use the handle @ryvexstudio. */
+  social: [
+    { name: "Instagram", url: "https://www.instagram.com/ryvexstudio" },
+    { name: "TikTok", url: "https://www.tiktok.com/@ryvexstudio" },
+    { name: "YouTube", url: "https://www.youtube.com/@ryvexstudio" },
+  ],
   supportEmail: "destek@ryvexstudio.com",
 } as const;

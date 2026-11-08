@@ -15,6 +15,7 @@ export function organizationSchema(lang: Lang) {
     description: site.description[lang],
     founder: { "@type": "Person", name: site.founder },
     email: site.contactEmail,
+    sameAs: site.social.map((s) => s.url),
   };
 }
 
