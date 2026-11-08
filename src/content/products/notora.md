@@ -24,6 +24,29 @@ faq:
     a: { tr: "Yalnızca cihazınızda. Notora notlarınızı herhangi bir sunucuya göndermez.", en: "Only on your device. Notora never sends your notes to a server." }
   - q: { tr: "Telefon değiştirirsem notlarım taşınır mı?", en: "Will my notes move to a new phone?" }
     a: { tr: "Cihazınızın kendi yedekleme özelliği (iCloud veya Google yedekleme) açıksa notlarınız yedekle birlikte taşınır.", en: "If your device backup (iCloud or Google backup) is on, your notes move with the backup." }
+features:
+  - title: { tr: "Etiketlerle düzen", en: "Organised with tags" }
+    text: { tr: "Notlarınızı etiketlerle gruplayın, tek dokunuşla filtreleyin.", en: "Group notes with tags and filter them with a single tap." }
+  - title: { tr: "Çevrimdışı", en: "Works offline" }
+    text: { tr: "İnternet olmadan da yazın; her şey cihazınızda kalır.", en: "Write without a connection; everything stays on your device." }
+  - title: { tr: "Sabitlenmiş notlar", en: "Pinned notes" }
+    text: { tr: "Sık kullandığınız notları listenin en üstünde tutun.", en: "Keep the notes you use most at the top of the list." }
+releases:
+  - version: "1.4.0"
+    date: 2026-09-20
+    notes:
+      tr: ["Etiketlere renk desteği eklendi.", "Arama hızı iyileştirildi."]
+      en: ["Added colours for tags.", "Faster search."]
+  - version: "1.3.0"
+    date: 2026-06-02
+    notes:
+      tr: ["Sabitlenmiş notlar eklendi."]
+      en: ["Added pinned notes."]
+  - version: "1.0.0"
+    date: 2026-01-15
+    notes:
+      tr: ["İlk sürüm."]
+      en: ["First release."]
 featured: true
 order: 10
 sample: true

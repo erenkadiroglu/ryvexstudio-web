@@ -26,6 +26,24 @@ faq:
     a: { tr: "Hayır. Planlarınız size özel bir bağlantıyla saklanır.", en: "No. Your plans are saved under a private link." }
   - q: { tr: "Paylaştığım planı kimler görebilir?", en: "Who can see a plan I share?" }
     a: { tr: "Yalnızca bağlantıya sahip olan kişiler. Bağlantıyı istediğiniz zaman iptal edebilirsiniz.", en: "Only people who have the link. You can revoke the link at any time." }
+features:
+  - title: { tr: "Gün gün plan", en: "Day-by-day plan" }
+    text: { tr: "Gideceğiniz yerleri ve günleri girin, plan kendiliğinden oluşsun.", en: "Enter places and days; the plan builds itself." }
+  - title: { tr: "Bağlantıyla paylaşım", en: "Share by link" }
+    text: { tr: "Planınızı tek bir bağlantıyla paylaşın.", en: "Share your plan with a single link." }
+  - title: { tr: "Kurulum yok", en: "Nothing to install" }
+    text: { tr: "Tarayıcıda çalışır, her cihazdan açılır.", en: "Runs in the browser and opens on any device." }
+releases:
+  - version: "0.9.0"
+    date: 2026-09-12
+    notes:
+      tr: ["Paylaşılan planlara salt okunur görünüm eklendi."]
+      en: ["Added a read-only view for shared plans."]
+  - version: "0.8.0"
+    date: 2026-05-15
+    notes:
+      tr: ["Herkese açık ön sürüm."]
+      en: ["Public preview."]
 featured: true
 order: 50
 sample: true
