@@ -1,0 +1,121 @@
+---
+import { Image } from "astro:assets";
+import apps from "@/assets/categories/apps.jpg";
+import games from "@/assets/categories/games.jpg";
+import web from "@/assets/categories/web.jpg";
+import { route, type Lang } from "@/i18n/ui";
+import { typeSlugs, type Product, type ProductType } from "@/lib/products";
+
+interface Props {
+  products: Product[];
+  lang: Lang;
+}
+
+const { products, lang } = Astro.props;
+
+const copy = {
+  tr: {
+    heading: "Ne yapıyoruz",
+    lede: "Üç alanda, tek standartla üretiyoruz.",
+    items: {
+      app: {
+        title: "Uygulamalar",
+        text: "Günlük bir işi kolaylaştıran, sade ve hızlı mobil uygulamalar. iOS ve Android için.",
+        link: "Uygulamaları gör",
+        alt: "Ahşap bir masanın üzerinde duran akıllı telefon",
+      },
+      game: {
+        title: "Oyunlar",
+        text: "Kısa molalarda açılıp keyifle oynanan, tekrar dönmek isteyeceğiniz oyunlar.",
+        link: "Oyunları gör",
+        alt: "Sarı bir zeminde iki oyun kolu",
+      },
+      web: {
+        title: "Web",
+        text: "Kurulum gerektirmeden tarayıcıda çalışan, paylaşması kolay web uygulamaları.",
+        link: "Web projelerini gör",
+        alt: "Aydınlık bir masada kod açık dizüstü bilgisayar",
+      },
+    },
+  },
+  en: {
+    heading: "What we make",
+    lede: "Three disciplines, one standard.",
+    items: {
+      app: {
+        title: "Apps",
+        text: "Simple, fast mobile apps that make an everyday task easier. For iOS and Android.",
+        link: "See the apps",
+        alt: "A smartphone lying on a wooden desk",
+      },
+      game: {
+        title: "Games",
+        text: "Games you open in a short break, enjoy, and want to come back to.",
+        link: "See the games",
+        alt: "Two game controllers on a yellow background",
+      },
+      web: {
+        title: "Web",
+        text: "Web apps that run in the browser with nothing to install and are easy to share.",
+        link: "See the web products",
+        alt: "A laptop with code on a bright desk",
+      },
+    },
+  },
+}[lang];
+
+const photos: Record<ProductType, ImageMetadata> = { app: apps, game: games, web };
+const types: ProductType[] = ["app", "game", "web"];
+const param = lang === "tr" ? "tur" : "type";
+---
+
+<section aria-labelledby="ne-yapiyoruz" class="container-page pb-section-mobile md:pb-section">
+  <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">
+    {copy.heading}
+  </h2>
+  <p class="mt-4 max-w-[44ch] text-body-lg text-secondary">{copy.lede}</p>
+
+  <div class="mt-14 grid gap-x-6 gap-y-14 md:grid-cols-3">
+    {
+      types.map((type) => {
+        const item = copy.items[type];
+        const ofType = products.filter((p) => p.data.type === type);
+        const slug = lang === "tr" ? typeSlugs[type] : type;
+        return (
+          <article class="group flex flex-col">
+            <div class="overflow-hidden rounded-xl">
+              <Image
+                src={photos[type]}
+                alt={item.alt}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 960px) 33vw, 100vw"
+                class="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-[var(--ease-settle)] group-hover:scale-[1.03]"
+              />
+            </div>
+            <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
+            <p class="mt-3 max-w-[40ch] text-body-md text-secondary">{item.text}</p>
+            {ofType.length > 0 && (
+              <ul class="mt-5 flex flex-wrap gap-2" aria-label={item.title}>
+                {ofType.map((product) => (
+                  <li>
+                    <Image
+                      src={product.data.icon}
+                      alt={product.data.name}
+                      title={product.data.name}
+                      width={36}
+                      height={36}
+                      class="shape-icon size-9"
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+            <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
+              {item.link}
+            </a>
+          </article>
+        );
+      })
+    }
+  </div>
+</section>

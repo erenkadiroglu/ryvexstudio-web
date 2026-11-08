@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
+import Disciplines from "@/components/Disciplines.astro";
+import Process from "@/components/Process.astro";
 import workspace from "@/assets/studio/workspace.jpg";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
@@ -120,7 +122,11 @@ const copy = {
   <ProductWall items={items} animate />
 </section>
 
+<Disciplines products={products} lang={lang} />
+
 {featured.length > 0 && <Showcase products={featured} lang={lang} />}
+
+<Process lang={lang} />
 
 <section
   aria-labelledby="studyo"

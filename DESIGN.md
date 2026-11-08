@@ -333,10 +333,10 @@ boşlukla kurulur.
 ```text
 [R] Ryvex Studio                  Ürünler   Stüdyo   İletişim   [tema]
 ----------------------------------------------------------------------
-Her ekranda                                   (display, 8 sütun, sol)
-aynı özen.
-
-Mobil uygulamalar, oyunlar ve web projeleri.      (body-lg, 6 sütun)
+Her ekranda                          ┌──┐   ┌──┐   ← süzülen ikonlar
+aynı özen.                         ┌──┐   ┌───┐      (5 sütun, yalnızca
+                                         ┌──┐  ┌──┐     masaüstü)
+Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
 [Ürünleri keşfet]  [Stüdyoyu tanı]
 
  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐    ← sergi duvarı
@@ -345,10 +345,32 @@ Mobil uygulamalar, oyunlar ve web projeleri.      (body-lg, 6 sütun)
  Ad      Ad      Ad      Ad      Ad      Ad        ← künye: ad
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
+Ne yapıyoruz
+┌ fotoğraf ┐   ┌ fotoğraf ┐   ┌ fotoğraf ┐       ← 3 sütun, 4:5 fotoğraf
+Uygulamalar    Oyunlar        Web
+açıklama       açıklama       açıklama
+■ ■ ■          ■ ■            ■                  ← o türdeki ürün ikonları
+link           link           link               ← filtreli ürün listesi
+
+█████████████████ koyu vitrin bandı (kenardan kenara) █████████████████
+█  Öne çıkanlar                                                       █
+█  ┌──────┐ sabit cihaz          ■ Oyun, iOS ve Android               █
+█  │eskiz │                      Kelimo                               █
+█  └──────┘                      Her gün yeni bir kelime bulmacası.   █
+████████████████████████████████████████████████████████████████████████
+
+Nasıl çalışıyoruz
+●───────────●───────────●───────────●───────────●   ← 5 adım, numaralı
+01 Fikir    02 Tasarım  03 Geliştirme 04 Yayın  05 Destek
+
 Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
 
 Footer
 ```
+
+Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
+sayfanın ortasında ritmi değiştiren tek koyu alandır. "Nasıl çalışıyoruz"
+gerçek bir sıra olduğu için numaralıdır; vişne noktalar adımları çizgiye bağlar.
 
 Sergi duvarında ikonlar masaüstünde 6, tablette 3, mobilde 2 sütunlu bir
 ızgaraya, eşit aralıklarla asılır. İkon en fazla 160px'tir ve sütun genişliğine
@@ -392,6 +414,16 @@ mağaza inceleme ekipleri tarafından okunur; süsleme yapılmaz.
 Arayüz öğelerinde gölge yoktur. Kartlar, butonlar, header ve menüler düzdür.
 Derinlik yalnızca zemin tonu farkıyla (`surface` → `neutral` → `neutral-strong`)
 kurulur.
+
+Koyu vitrin bandı, `data-theme="dark"` ile karanlık tema değerlerini yalnızca
+kendi içine uygular; böylece aydınlık sayfanın ortasında koyu bir sahne
+oluşur. Sayfanın kendisi karanlık temadayken bant bir kademe açılır
+(`#241C20`), böylece yine ayrışır. Bant, aktif ürünün renginin yüzde 7'lik
+tonunu alır; sayfa zemini ve header bundan etkilenmez.
+
+Bu yüzden bileşen içi stillerde `--color-*` yerine doğrudan `--rv-*`
+değişkenleri kullanılır: `--color-*` sayfanın kökünde çözümlenir ve bölüm
+düzeyindeki temayı takip etmez.
 
 Tek istisna gerçek nesnelerdir: cihaz çerçevesi içindeki ekran görüntüleri ve
 sergi duvarındaki ürün ikonları, duvara asılmış bir nesne gibi tek ve yumuşak
@@ -482,8 +514,12 @@ Dolgulu ikon kullanılmaz.
 
 ### Görseller
 
-Ürün ekran görüntüleri gerçek ürünlerden alınır. Stüdyo ve atmosfer
-fotoğrafları ticari kullanıma izin veren ücretsiz kaynaklardan (Unsplash,
+Ürün ekran görüntüleri gerçek ürünlerden alınır. Bir ürünün ekran görüntüsü
+yoksa, onun yerine ürünün renginde sade bir arayüz eskizi gösterilir
+(uygulamada liste, oyunda ızgara, web'de tarayıcı düzeni); boş çerçeve
+gösterilmez.
+
+Stüdyo ve atmosfer fotoğrafları ticari kullanıma izin veren ücretsiz kaynaklardan (Unsplash,
 Pexels) seçilir: doğal ışık, gerçek mekân, filtresiz. Her görselin kaynağı ve
 fotoğrafçısı `src/assets/CREDITS.md` dosyasında kayıt altına alınır.
 

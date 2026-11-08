@@ -9,9 +9,16 @@ const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 /* ---------- Page tint ---------- */
 
+/** Tints the page ground (used by the product wall). */
 function setTint(color: string | undefined) {
   if (color) root.style.setProperty("--rv-tint", color);
   else root.style.removeProperty("--rv-tint");
+}
+
+/** Tints only the dark showcase band, never the page or header. */
+function setBandTint(color: string | undefined) {
+  if (color) root.style.setProperty("--rv-band-tint", color);
+  else root.style.removeProperty("--rv-band-tint");
 }
 
 /* ---------- Product wall: lift, tilt and tint (event delegation, bound once) ---------- */
@@ -45,7 +52,7 @@ document.addEventListener("pointerout", (event) => {
   const icon = link.querySelector<HTMLElement>(".wall-icon");
   icon?.style.removeProperty("--rx");
   icon?.style.removeProperty("--ry");
-  if (!document.querySelector(".showcase.is-in-view")) setTint(undefined);
+  setTint(undefined);
 });
 
 /* ---------- Per page: reveal the wall and run the showcase ---------- */
@@ -84,7 +91,7 @@ function runShowcase() {
     screens.forEach((screen, i) => screen.classList.toggle("is-active", i === index));
     const step = steps[index];
     if (device && step) device.dataset.kind = step.dataset.kind ?? "phone";
-    if (showcase.classList.contains("is-in-view")) setTint(step?.dataset.color);
+    if (!reducedMotion.matches) setBandTint(step?.dataset.color);
   };
 
   const stepObserver = new IntersectionObserver(
@@ -100,12 +107,6 @@ function runShowcase() {
   const sectionObserver = new IntersectionObserver(
     ([entry]) => {
       showcase.classList.toggle("is-in-view", entry.isIntersecting);
-      if (entry.isIntersecting) {
-        const active = steps.find((s) => s.classList.contains("is-active")) ?? steps[0];
-        if (!reducedMotion.matches) setTint(active?.dataset.color);
-      } else {
-        setTint(undefined);
-      }
     },
     { rootMargin: "-30% 0px -30% 0px" },
   );
@@ -117,6 +118,7 @@ function runShowcase() {
 
 document.addEventListener("astro:page-load", () => {
   setTint(undefined);
+  setBandTint(undefined);
   revealWalls();
   runShowcase();
 });
