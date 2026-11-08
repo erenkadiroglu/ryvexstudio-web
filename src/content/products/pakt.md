@@ -24,6 +24,24 @@ faq:
     a: { tr: "Hayır. Pakt banka hesabınıza bağlanmaz; harcamaları siz eklersiniz.", en: "No. Pakt never connects to your bank; you add expenses yourself." }
   - q: { tr: "Verilerimi dışa aktarabilir miyim?", en: "Can I export my data?" }
     a: { tr: "Ayarlar bölümünden harcamalarınızı CSV dosyası olarak dışa aktarabilirsiniz.", en: "You can export your expenses as a CSV file from Settings." }
+features:
+  - title: { tr: "Tek bakışta bütçe", en: "Budget at a glance" }
+    text: { tr: "Ay sonuna ne kadar kaldığını ana ekranda görün.", en: "See what is left for the month on the home screen." }
+  - title: { tr: "Kategoriler", en: "Categories" }
+    text: { tr: "Harcamalarınızı kendi kategorilerinize ayırın.", en: "Sort spending into your own categories." }
+  - title: { tr: "CSV dışa aktarma", en: "CSV export" }
+    text: { tr: "Verilerinizi istediğiniz zaman dışa aktarın.", en: "Export your data whenever you like." }
+releases:
+  - version: "1.0.2"
+    date: 2026-04-10
+    notes:
+      tr: ["Kategori düzenleme ekranı iyileştirildi."]
+      en: ["Improved the category editor."]
+  - version: "1.0.0"
+    date: 2026-03-15
+    notes:
+      tr: ["İlk sürüm."]
+      en: ["First release."]
 order: 30
 sample: true
 ---

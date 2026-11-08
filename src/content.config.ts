@@ -69,6 +69,25 @@ const products = defineCollection({
           }),
         )
         .default([]),
+      /** Short feature highlights shown on the product page. */
+      features: z
+        .array(
+          z.object({
+            title: z.object({ tr: z.string(), en: z.string() }),
+            text: z.object({ tr: z.string(), en: z.string() }),
+          }),
+        )
+        .default([]),
+      /** Release history, newest first. */
+      releases: z
+        .array(
+          z.object({
+            version: z.string(),
+            date: z.coerce.date(),
+            notes: z.object({ tr: z.array(z.string()), en: z.array(z.string()) }),
+          }),
+        )
+        .default([]),
       /** Shown in the scrolling showcase on the home page. */
       featured: z.boolean().default(false),
       order: z.number().int().default(100),
