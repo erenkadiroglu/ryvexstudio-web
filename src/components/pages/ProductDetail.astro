@@ -1,0 +1,190 @@
+---
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import {
+  platformLabels,
+  productTagline,
+  typeLabels,
+  type Product,
+} from "@/lib/products";
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+
+const { product, lang } = Astro.props;
+const { data } = product;
+const { Content } = await render(product);
+
+const copy = {
+  tr: {
+    appStore: "App Store'dan indir",
+    googlePlay: "Google Play'den indir",
+    web: "Tarayıcıda aç",
+    screenshots: "Ekran görüntüleri",
+    screenshotsSoon: "Ekran görüntüleri yakında eklenecek.",
+    about: "Ne yapar",
+    facts: "Ürün bilgileri",
+    developer: "Geliştirici",
+    type: "Tür",
+    platform: "Platform",
+    version: "Sürüm",
+    released: "Yayın tarihi",
+    privacy: "Gizlilik politikası",
+    support: "Destek",
+    back: "Tüm ürünler",
+  },
+  en: {
+    appStore: "Download on the App Store",
+    googlePlay: "Get it on Google Play",
+    web: "Open in browser",
+    screenshots: "Screenshots",
+    screenshotsSoon: "Screenshots are coming soon.",
+    about: "What it does",
+    facts: "Product details",
+    developer: "Developer",
+    type: "Type",
+    platform: "Platform",
+    version: "Version",
+    released: "Released",
+    privacy: "Privacy policy",
+    support: "Support",
+    back: "All products",
+  },
+}[lang];
+
+const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const base = route("products", lang);
+const privacyHref = `${base}/${product.id}/${lang === "tr" ? "gizlilik" : "privacy"}`;
+const supportHref = `${base}/${product.id}/${lang === "tr" ? "destek" : "support"}`;
+
+const stores = [
+  data.links.appStore && { href: data.links.appStore, label: copy.appStore },
+  data.links.googlePlay && { href: data.links.googlePlay, label: copy.googlePlay },
+  data.links.web && { href: data.links.web, label: copy.web },
+].filter(Boolean) as { href: string; label: string }[];
+
+const facts = [
+  { label: copy.developer, value: site.name },
+  { label: copy.type, value: typeLabels[lang][data.type] },
+  { label: copy.platform, value: data.platforms.map((p) => platformLabels[lang][p]).join(", ") },
+  data.version && { label: copy.version, value: data.version, mono: true },
+  data.releaseDate && { label: copy.released, value: dateFormat.format(data.releaseDate) },
+].filter(Boolean) as { label: string; value: string; mono?: boolean }[];
+
+// The product's own colour, mixed 8% into the page surface, carries the screenshot strip.
+const stripStyle = `background-color: color-mix(in srgb, ${data.color} 8%, var(--color-surface));`;
+---
+
+<article>
+  <header class="container-page pt-14 pb-16 md:pt-20 md:pb-20">
+    <a href={base} class="text-label font-medium text-secondary hover:text-primary">{copy.back}</a>
+    <div class="mt-10 flex flex-col gap-8 md:flex-row md:items-center md:gap-10">
+      <Image
+        src={data.icon}
+        alt=""
+        width={128}
+        height={128}
+        class="shape-icon object-depth size-24 md:size-32"
+      />
+      <div>
+        <h1
+          class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl"
+        >
+          {data.name}
+        </h1>
+        <p class="mt-3 max-w-[44ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
+      </div>
+    </div>
+    {
+      stores.length > 0 && (
+        <ul class="mt-10 flex flex-wrap gap-3">
+          {stores.map((store) => (
+            <li>
+              <a
+                href={store.href}
+                rel="noopener"
+                class="inline-flex rounded-full bg-primary px-[22px] py-[14px] text-label font-medium text-surface transition-opacity duration-150 hover:opacity-85"
+              >
+                {store.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </header>
+
+  <section aria-label={copy.screenshots} class="container-page">
+    <div class="overflow-x-auto rounded-xl p-6 md:p-10" style={stripStyle}>
+      {
+        data.screenshots.length > 0 ? (
+          <ul class="flex gap-5">
+            {data.screenshots.map((shot, i) => (
+              <li class="shrink-0">
+                <Image
+                  src={shot}
+                  alt={`${data.name}, ${copy.screenshots.toLocaleLowerCase(lang)} ${i + 1}`}
+                  height={560}
+                  class="h-[420px] w-auto rounded-lg md:h-[560px]"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div class="flex gap-5" aria-hidden="true">
+            {[0, 1, 2, 3].map(() => (
+              <div
+                class="flex aspect-[9/19.5] h-[360px] shrink-0 items-center justify-center rounded-[28px] border border-outline bg-surface md:h-[480px]"
+              >
+                <Image src={data.icon} alt="" width={56} height={56} class="shape-icon size-14 opacity-90" />
+              </div>
+            ))}
+          </div>
+        )
+      }
+      {data.screenshots.length === 0 && <p class="sr-only">{copy.screenshotsSoon}</p>}
+    </div>
+  </section>
+
+  <div
+    class="container-page grid gap-12 py-section-mobile md:grid-cols-12 md:gap-6 md:py-section"
+  >
+    <section aria-labelledby="ne-yapar" class="md:col-span-6">
+      <h2 id="ne-yapar" class="text-headline-md font-semibold">{copy.about}</h2>
+      <div class="prose-product mt-5 max-w-[60ch] space-y-5 text-body-md text-secondary">
+        <Content />
+      </div>
+    </section>
+
+    <aside aria-labelledby="urun-bilgileri" class="md:col-span-5 md:col-start-8">
+      <div class="rounded-xl bg-neutral p-8">
+        <h2 id="urun-bilgileri" class="text-title font-semibold">{copy.facts}</h2>
+        <dl class="mt-5 text-body-sm">
+          {
+            facts.map((fact) => (
+              <div class="flex justify-between gap-6 border-t border-outline py-3">
+                <dt class="text-secondary">{fact.label}</dt>
+                <dd class:list={["text-right", fact.mono && "font-mono text-mono-sm"]}>
+                  {fact.value}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 border-t border-outline pt-4 text-body-sm">
+          <a href={privacyHref} class="link-inline">{copy.privacy}</a>
+          <a href={supportHref} class="link-inline">{copy.support}</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</article>

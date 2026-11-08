@@ -1,17 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { site } from "@/config/site";
+import HomePage from "@/components/pages/HomePage.astro";
 ---
 
 <BaseLayout>
-  <section class="container-page py-section-mobile md:py-section">
-    <h1
-      class="max-w-[10ch] text-display-mobile leading-[0.98] font-semibold tracking-[-0.045em] md:text-display"
-    >
-      {site.tagline.en}
-    </h1>
-    <p class="mt-6 max-w-[40ch] text-body-lg text-secondary">
-      Mobile apps, games and web products. All under one signature, made with the same care.
-    </p>
-  </section>
+  <HomePage lang="en" />
 </BaseLayout>

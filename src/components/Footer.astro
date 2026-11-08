@@ -1,28 +1,34 @@
 ---
 import Logo from "./Logo.astro";
 import { site } from "@/config/site";
-import { getLangFromUrl, localizePath, useTranslations } from "@/i18n/ui";
+import { getLangFromUrl, route, useTranslations } from "@/i18n/ui";
+import { getProducts } from "@/lib/products";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
+const products = (await getProducts()).slice(0, 5);
+const productBase = route("products", lang);
 
 const columns = [
   {
     title: t("footer.products"),
-    links: [{ href: localizePath("/urunler", lang), label: t("nav.products") }],
+    links: [
+      ...products.map((p) => ({ href: `${productBase}/${p.id}`, label: p.data.name })),
+      { href: productBase, label: t("footer.allProducts") },
+    ],
   },
   {
     title: t("footer.studio"),
     links: [
-      { href: localizePath("/studyo", lang), label: t("nav.studio") },
-      { href: localizePath("/basin", lang), label: t("footer.press") },
-      { href: localizePath("/iletisim", lang), label: t("nav.contact") },
+      { href: route("studio", lang), label: t("nav.studio") },
+      { href: route("press", lang), label: t("footer.press") },
+      { href: route("contact", lang), label: t("nav.contact") },
     ],
   },
   {
     title: t("footer.legal"),
-    links: [{ href: localizePath("/gizlilik", lang), label: t("footer.privacy") }],
+    links: [{ href: route("privacy", lang), label: t("footer.privacy") }],
   },
 ];
 ---
@@ -30,7 +36,7 @@ const columns = [
 <footer class="bg-neutral text-body-sm text-secondary">
   <div class="container-page grid gap-12 py-16 md:grid-cols-12">
     <div class="md:col-span-5">
-      <Logo href={localizePath("/", lang)} />
+      <Logo href={route("home", lang)} />
       <p class="mt-4 max-w-[32ch]">{site.tagline[lang]}</p>
     </div>
     <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
@@ -52,7 +58,7 @@ const columns = [
       }
     </div>
   </div>
-  <div class="container-page border-t border-outline py-6">
-    <p>© {year} {site.name}. {t("footer.rights")}</p>
+  <div class="container-page">
+    <p class="border-t border-outline py-6">© {year} {site.name}. {t("footer.rights")}</p>
   </div>
 </footer>

@@ -1,0 +1,16 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProductDetail from "@/components/pages/ProductDetail.astro";
+import { getProducts, productTagline, type Product } from "@/lib/products";
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props as { product: Product };
+---
+
+<BaseLayout title={product.data.name} description={productTagline(product, "en")}>
+  <ProductDetail product={product} lang="en" />
+</BaseLayout>

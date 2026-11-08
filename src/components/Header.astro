@@ -1,15 +1,15 @@
 ---
 import Logo from "./Logo.astro";
 import ThemeToggle from "./ThemeToggle.astro";
-import { getLangFromUrl, localizePath, useTranslations } from "@/i18n/ui";
+import { alternatePath, getLangFromUrl, route, useTranslations } from "@/i18n/ui";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const nav = [
-  { href: localizePath("/urunler", lang), label: t("nav.products") },
-  { href: localizePath("/studyo", lang), label: t("nav.studio") },
-  { href: localizePath("/iletisim", lang), label: t("nav.contact") },
+  { href: route("products", lang), label: t("nav.products") },
+  { href: route("studio", lang), label: t("nav.studio") },
+  { href: route("contact", lang), label: t("nav.contact") },
 ];
 
 const otherLang = lang === "tr" ? "en" : "tr";
@@ -19,7 +19,7 @@ const otherLang = lang === "tr" ? "en" : "tr";
   class="site-header sticky top-0 z-40 border-b border-transparent bg-surface transition-colors duration-150 data-[scrolled]:border-outline"
 >
   <div class="container-page flex h-[72px] items-center justify-between">
-    <Logo href={localizePath("/", lang)} />
+    <Logo href={route("home", lang)} />
 
     <nav aria-label={t("nav.menu")} class="flex items-center gap-1">
       <ul class="hidden items-center gap-1 md:flex">
@@ -37,7 +37,7 @@ const otherLang = lang === "tr" ? "en" : "tr";
         }
       </ul>
       <a
-        href={localizePath("/", otherLang)}
+        href={alternatePath(Astro.url, otherLang)}
         hreflang={otherLang}
         lang={otherLang}
         class="rounded-full px-3 py-2 text-label font-medium text-secondary transition-colors duration-150 hover:bg-neutral hover:text-primary"
@@ -45,11 +45,57 @@ const otherLang = lang === "tr" ? "en" : "tr";
         {otherLang.toUpperCase()}
       </a>
       <ThemeToggle />
+      <button
+        type="button"
+        class="menu-open inline-flex size-10 items-center justify-center rounded-full text-primary transition-colors duration-150 hover:bg-neutral md:hidden"
+        aria-label={t("nav.menu")}
+        aria-haspopup="dialog"
+      >
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 8h16M4 16h16"></path>
+        </svg>
+      </button>
     </nav>
   </div>
+
+  <dialog
+    class="mobile-menu m-0 h-dvh max-h-none w-full max-w-none bg-surface p-0 text-primary backdrop:bg-transparent md:hidden"
+    aria-label={t("nav.menu")}
+  >
+    <div class="container-page flex h-[72px] items-center justify-between">
+      <Logo href={route("home", lang)} />
+      <button
+        type="button"
+        class="menu-close inline-flex size-10 items-center justify-center rounded-full hover:bg-neutral"
+        aria-label={t("nav.close")}
+      >
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+    <ul class="container-page mt-8 space-y-2">
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href} class="block py-2 text-headline-lg font-semibold">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </dialog>
 </header>
 
 <script>
+  const menu = document.querySelector<HTMLDialogElement>(".mobile-menu");
+  document.querySelector(".menu-open")?.addEventListener("click", () => menu?.showModal());
+  document.querySelector(".menu-close")?.addEventListener("click", () => menu?.close());
+  window.matchMedia("(min-width: 960px)").addEventListener("change", (e) => {
+    if (e.matches) menu?.close();
+  });
+
   const header = document.querySelector<HTMLElement>(".site-header");
   if (header) {
     const update = () => header.toggleAttribute("data-scrolled", window.scrollY > 4);

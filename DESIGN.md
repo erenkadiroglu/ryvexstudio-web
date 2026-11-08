@@ -309,20 +309,21 @@ aynı özen.
 Mobil uygulamalar, oyunlar ve web projeleri.      (body-lg, 6 sütun)
 [Ürünleri keşfet]  [Stüdyoyu tanı]
 
- ┌──────┐     ┌──────┐     ┌──────┐     ┌──────┐   ← sergi duvarı
- │ ikon │     │ ikon │     │ ikon │     │ ikon │
- └──────┘     └──────┘     └──────┘     └──────┘
- Ürün adı     Ürün adı     Ürün adı     Ürün adı   ← künye: ad
- Oyun, iOS    Uygulama     Web          Oyun       ← künye: tür, platform
+ ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐    ← sergi duvarı
+ │ikon│  │ikon│  │ikon│  │ikon│  │ikon│  │ikon│
+ └────┘  └────┘  └────┘  └────┘  └────┘  └────┘
+ Ad      Ad      Ad      Ad      Ad      Ad        ← künye: ad
+ Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
 
 Footer
 ```
 
-Sergi duvarında ikonlar 4 sütunlu (mobilde 2 sütunlu) bir ızgaraya, eşit
-aralıklarla asılır. İkon boyutu masaüstünde 160px, mobilde 120px. Ürün sayısı
-4'ü aşınca duvar alt satıra geçer; kaydırmalı karusel kullanılmaz.
+Sergi duvarında ikonlar masaüstünde 6, tablette 3, mobilde 2 sütunlu bir
+ızgaraya, eşit aralıklarla asılır. İkon en fazla 160px'tir ve sütun genişliğine
+göre küçülür. Ürün sayısı sütun sayısını aşınca duvar alt satıra geçer;
+kaydırmalı karusel kullanılmaz.
 
 ### Ürünler sayfası
 
