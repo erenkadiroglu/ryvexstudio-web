@@ -539,6 +539,12 @@ açıksa kapatılır.
 - **Tema geçişi:** Yeni tema, tema düğmesinin bulunduğu noktadan başlayan bir
   daireyle sayfaya yayılır (700ms). Desteklemeyen tarayıcılarda tema anında
   değişir.
+- **Mıknatıslı butonlar:** Sayfanın ana çağrısı olan butonlar (`data-magnetic`)
+  imleç 40px yakına geldiğinde ona doğru en fazla 8px kayar (250ms). Yalnızca
+  fare gibi hassas imleçlerde çalışır.
+- **404:** Ürün ikonları bir kutunun içine düşer, birbirine çarpar ve fareyle
+  itilebilir. Mesaj ve ana sayfa linki bu oyundan bağımsızdır; hareket azaltma
+  açıkken ikonlar kutunun dibinde durağan durur.
 - **Kullanıcı eylemleri:** Buton zemin geçişleri 150ms, tema değişimi 200ms,
   mobil menü açılışı 240ms.
 

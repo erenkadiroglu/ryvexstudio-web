@@ -1,18 +1,179 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getProducts } from "@/lib/products";
+
+// A 404 page that doesn't take itself too seriously: the product icons fall
+// into a box and can be pushed around. The message and link work without it.
+const products = await getProducts();
+const sizes = [112, 96, 128, 88, 104, 120, 92, 100];
 ---
 
 <BaseLayout title="Sayfa bulunamadı">
-  <section class="container-page py-section-mobile text-center md:py-section">
-    <h1 class="text-headline-xl font-semibold">Bu sayfa burada değil.</h1>
-    <p class="mx-auto mt-4 max-w-[40ch] text-body-lg text-secondary">
-      Adres değişmiş ya da yanlış yazılmış olabilir.
+  <section class="container-page pt-20 pb-section-mobile text-center md:pt-28 md:pb-24">
+    <p class="text-body-sm text-secondary">404</p>
+    <h1 class="mt-3 text-headline-xl font-semibold tracking-[-0.035em]">Bu sayfa burada değil.</h1>
+    <p class="mx-auto mt-4 max-w-[44ch] text-body-lg text-secondary">
+      Adres değişmiş ya da yanlış yazılmış olabilir. Bu arada ürünlerimiz de yerlerinden düşmüş gibi.
+    </p>
+    <p class="mx-auto mt-2 max-w-[44ch] text-body-md text-secondary" lang="en">
+      This page isn't here. The address may have changed or been mistyped.
     </p>
     <a
       href="/"
+      data-magnetic
       class="mt-8 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
     >
       Ana sayfaya dön
     </a>
   </section>
+
+  <div class="container-page pb-section-mobile md:pb-section" aria-hidden="true">
+    <div class="playground relative h-[420px] overflow-hidden rounded-xl bg-neutral md:h-[460px]">
+      {
+        products.map((product, i) => {
+          const size = sizes[i % sizes.length];
+          return (
+            <Image
+              src={product.data.icon}
+              alt=""
+              width={size}
+              height={size}
+              loading="eager"
+              class="body shape-icon object-depth absolute top-0 left-0 select-none"
+              style={`width:${size}px;height:${size}px;opacity:0`}
+              draggable="false"
+            />
+          );
+        })
+      }
+    </div>
+  </div>
 </BaseLayout>
+
+<script>
+  type Body = { el: HTMLElement; x: number; y: number; vx: number; vy: number; r: number; a: number; va: number };
+
+  function start() {
+    const box = document.querySelector<HTMLElement>(".playground");
+    if (!box) return;
+    const els = [...box.querySelectorAll<HTMLElement>(".body")];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = box.clientWidth;
+    let H = box.clientHeight;
+
+    // Icons are treated as circles: simple, stable, and close enough for rounded squares.
+    const bodies: Body[] = els.map((el, i) => {
+      const r = el.offsetWidth / 2;
+      return {
+        el,
+        r,
+        x: r + ((i * 0.37 + 0.1) % 1) * (W - 2 * r),
+        y: reduce ? H - r - (i % 2) * r * 1.6 : -r - i * 140,
+        vx: (Math.random() - 0.5) * 120,
+        vy: 0,
+        a: (Math.random() - 0.5) * 40,
+        va: (Math.random() - 0.5) * 120,
+      };
+    });
+
+    const draw = () => {
+      for (const b of bodies) {
+        b.el.style.opacity = "1";
+        b.el.style.transform = `translate(${b.x - b.r}px, ${b.y - b.r}px) rotate(${b.a}deg)`;
+      }
+    };
+
+    if (reduce) {
+      draw();
+      return;
+    }
+
+    const G = 2200;
+    const bounce = 0.35;
+    const pointer = { x: -1e4, y: -1e4, vx: 0, vy: 0, t: 0 };
+
+    box.addEventListener("pointermove", (e) => {
+      const rect = box.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const now = performance.now();
+      const dt = Math.max(16, now - pointer.t) / 1000;
+      pointer.vx = (x - pointer.x) / dt;
+      pointer.vy = (y - pointer.y) / dt;
+      pointer.x = x;
+      pointer.y = y;
+      pointer.t = now;
+    });
+    box.addEventListener("pointerleave", () => {
+      pointer.x = pointer.y = -1e4;
+    });
+    window.addEventListener("resize", () => {
+      W = box.clientWidth;
+      H = box.clientHeight;
+    });
+
+    let running = true;
+    document.addEventListener("astro:before-swap", () => (running = false), { once: true });
+
+    let last = performance.now();
+    const step = (now: number) => {
+      if (!running) return;
+      const dt = Math.min(0.032, (now - last) / 1000);
+      last = now;
+
+      for (const b of bodies) {
+        b.vy += G * dt;
+        // The pointer pushes nearby icons in the direction it is moving.
+        const dx = b.x - pointer.x;
+        const dy = b.y - pointer.y;
+        const d = Math.hypot(dx, dy);
+        if (d < b.r + 24) {
+          const n = d || 1;
+          b.vx += (dx / n) * 900 * dt * 10 + pointer.vx * 0.04;
+          b.vy += (dy / n) * 900 * dt * 10 + pointer.vy * 0.04;
+          b.va += pointer.vx * 0.05;
+        }
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        b.a += b.va * dt;
+        b.va *= 0.98;
+
+        if (b.y > H - b.r) { b.y = H - b.r; b.vy *= -bounce; b.vx *= 0.92; b.va *= 0.9; }
+        if (b.x < b.r) { b.x = b.r; b.vx *= -bounce; }
+        if (b.x > W - b.r) { b.x = W - b.r; b.vx *= -bounce; }
+      }
+
+      // Resolve overlaps between icons.
+      for (let i = 0; i < bodies.length; i++) {
+        for (let j = i + 1; j < bodies.length; j++) {
+          const a = bodies[i];
+          const c = bodies[j];
+          const dx = c.x - a.x;
+          const dy = c.y - a.y;
+          const d = Math.hypot(dx, dy) || 0.01;
+          const overlap = a.r + c.r - d;
+          if (overlap <= 0) continue;
+          const nx = dx / d;
+          const ny = dy / d;
+          a.x -= (nx * overlap) / 2;
+          a.y -= (ny * overlap) / 2;
+          c.x += (nx * overlap) / 2;
+          c.y += (ny * overlap) / 2;
+          const rel = (c.vx - a.vx) * nx + (c.vy - a.vy) * ny;
+          if (rel < 0) {
+            const imp = (-(1 + bounce) * rel) / 2;
+            a.vx -= imp * nx; a.vy -= imp * ny;
+            c.vx += imp * nx; c.vy += imp * ny;
+          }
+        }
+      }
+
+      draw();
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  document.addEventListener("astro:page-load", start, { once: true });
+</script>
