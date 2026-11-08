@@ -172,6 +172,22 @@
   }
 }
 
+/* The site's single orchestrated moment: products are hung on the wall once, on first load. */
+@keyframes wall-hang {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.wall-item {
+  animation: wall-hang 480ms var(--ease-settle) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

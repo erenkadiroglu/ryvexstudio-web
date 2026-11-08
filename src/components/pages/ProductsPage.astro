@@ -1,0 +1,60 @@
+---
+import ProductWall from "@/components/ProductWall";
+import { type Lang } from "@/i18n/ui";
+import { getProducts, toWallItem, typePluralLabels, typeSlugs } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const products = await getProducts();
+const items = products.map((p) => toWallItem(p, lang));
+
+const copy = {
+  tr: {
+    title: "Ürünler",
+    lede: "Uygulamalarımız, oyunlarımız ve web projelerimiz. Hepsi aynı özenle hazırlandı.",
+    all: "Tümü",
+    filterLabel: "Ürün türüne göre filtrele",
+    empty: "Bu türde henüz bir ürünümüz yok.",
+    param: "tur",
+  },
+  en: {
+    title: "Products",
+    lede: "Our apps, games and web products. Each one made with the same care.",
+    all: "All",
+    filterLabel: "Filter by product type",
+    empty: "We have no products of this type yet.",
+    param: "type",
+  },
+}[lang];
+
+const types = (["app", "game", "web"] as const).filter((type) =>
+  products.some((p) => p.data.type === type),
+);
+
+const filters = [
+  { value: "all" as const, label: copy.all, slug: "" },
+  ...types.map((type) => ({
+    value: type,
+    label: typePluralLabels[lang][type],
+    slug: lang === "tr" ? typeSlugs[type] : type,
+  })),
+];
+---
+
+<section class="container-page pt-20 pb-section-mobile md:pt-28 md:pb-section">
+  <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+    {copy.title}
+  </h1>
+  <p class="mt-5 mb-12 max-w-[48ch] text-body-lg text-secondary">{copy.lede}</p>
+  <ProductWall
+    client:load
+    items={items}
+    filters={filters}
+    filterParam={copy.param}
+    filterLabel={copy.filterLabel}
+    emptyText={copy.empty}
+  />
+</section>

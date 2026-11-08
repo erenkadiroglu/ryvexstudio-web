@@ -1,0 +1,95 @@
+---
+import { Image } from "astro:assets";
+import ProductWall from "@/components/ProductWall";
+import workspace from "@/assets/studio/workspace.jpg";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import { getProducts, toWallItem } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const products = await getProducts();
+const items = products.map((p) => toWallItem(p, lang));
+
+const copy = {
+  tr: {
+    lede: "Mobil uygulamalar, oyunlar ve web projeleri. Hepsi tek imza altında, aynı titizlikle.",
+    primary: "Ürünleri keşfet",
+    secondary: "Stüdyoyu tanı",
+    wallHeading: "Ürünlerimiz",
+    studioHeading: "Tek masadan, her ekrana",
+    studio: [
+      "Ryvex Studio, Eren Kadıoğlu tarafından kurulan bağımsız bir ürün stüdyosu. Uygulamalarımızı, oyunlarımızı ve web projelerimizi aynı masada tasarlıyor, aynı standartla yayınlıyoruz.",
+      "Her ürün, kendimiz kullanmak isteyeceğimiz seviyeye gelene kadar işleniyor. Ne yaptığını açıkça anlatan, verinize saygı gösteren ve açıldığında insanı yormayan ürünler yapıyoruz.",
+    ],
+    studioLink: "Stüdyo hakkında daha fazlası",
+    imageAlt: "Doğal ışık alan bir çalışma masasında dizüstü bilgisayar ve monitör",
+  },
+  en: {
+    lede: "Mobile apps, games and web products. All under one signature, made with the same care.",
+    primary: "Explore products",
+    secondary: "Meet the studio",
+    wallHeading: "Our products",
+    studioHeading: "One desk, every screen",
+    studio: [
+      "Ryvex Studio is an independent product studio founded by Eren Kadıoğlu. Our apps, games and web products are designed at the same desk and released to the same standard.",
+      "Every product is refined until it is something we would want to use ourselves. We make products that say clearly what they do, respect your data and never wear you out.",
+    ],
+    studioLink: "More about the studio",
+    imageAlt: "A laptop and monitor on a desk in natural light",
+  },
+}[lang];
+---
+
+<section class="container-page pt-20 pb-24 md:pt-32 md:pb-32">
+  <h1
+    class="max-w-[9ch] text-display-mobile leading-[0.98] font-semibold tracking-[-0.045em] md:text-display"
+  >
+    {site.tagline[lang]}
+  </h1>
+  <p class="mt-8 max-w-[38ch] text-body-lg text-secondary">{copy.lede}</p>
+  <div class="mt-10 flex flex-wrap gap-3">
+    <a
+      href={route("products", lang)}
+      class="inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+    >
+      {copy.primary}
+    </a>
+    <a
+      href={route("studio", lang)}
+      class="inline-flex rounded-full border border-outline bg-surface px-[21px] py-[13px] text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral"
+    >
+      {copy.secondary}
+    </a>
+  </div>
+</section>
+
+<section aria-labelledby="duvar" class="container-page pb-section-mobile md:pb-section">
+  <h2 id="duvar" class="sr-only">{copy.wallHeading}</h2>
+  <ProductWall items={items} animate />
+</section>
+
+<section
+  aria-labelledby="studyo"
+  class="container-page grid items-center gap-12 pb-section-mobile md:grid-cols-12 md:pb-section"
+>
+  <div class="md:col-span-5">
+    <h2 id="studyo" class="text-headline-lg font-semibold">{copy.studioHeading}</h2>
+    {copy.studio.map((paragraph) => <p class="mt-5 max-w-[52ch] text-body-md text-secondary">{paragraph}</p>)}
+    <a href={route("studio", lang)} class="link-inline mt-6 inline-block text-body-md">
+      {copy.studioLink}
+    </a>
+  </div>
+  <div class="md:col-span-6 md:col-start-7">
+    <Image
+      src={workspace}
+      alt={copy.imageAlt}
+      widths={[640, 960, 1280]}
+      sizes="(min-width: 960px) 50vw, 100vw"
+      class="aspect-[4/3] w-full rounded-lg object-cover"
+    />
+  </div>
+</section>
