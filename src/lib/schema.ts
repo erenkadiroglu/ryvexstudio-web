@@ -11,7 +11,7 @@ export function organizationSchema(lang: Lang) {
     "@id": organizationId,
     name: site.name,
     url: site.url,
-    logo: `${site.url}/press/ryvex-studio-symbol.png`,
+    logo: `${site.url}/brand/ryvex-studio-symbol.png`,
     description: site.description[lang],
     founder: { "@type": "Person", name: site.founder },
     email: site.contactEmail,
