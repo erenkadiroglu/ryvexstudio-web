@@ -361,7 +361,7 @@ Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Ne yapıyoruz
-┌ ikonlar ┐    ┌ ikonlar ┐    ┌ ikonlar ┐        ← 3 sütun, 4:3 panelde o türün ikonları
+┌ renk+ekran ┐  ┌ renk+ekran ┐  ┌ Yakında ┐     ← 3 sütun, 4:5 panel: ürün renkleri, ikonlar, alttan yükselen gerçek ekranlar
 Uygulamalar    Oyunlar        Web
 link           link           link               ← filtreli ürün listesi
 
@@ -381,9 +381,12 @@ Stüdyo hakkında tek cümle
 Footer
 ```
 
-Ana sayfa sırası: hero, sergi duvarı, tek cümlelik manifesto, Ne yapıyoruz
-(türün ürün ikonları ve ad; açıklama yok), koyu vitrin bandı, Günlükten ve
-vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
+Ana sayfa sırası: hero, sergi duvarı, ekran şeridi, tek cümlelik manifesto,
+Ne yapıyoruz (türün renkleri, ikonları ve gerçek ekranları; açıklama yok), koyu
+vitrin bandı, Günlükten ve vişne kapanış bandı. Ekran şeridi bütün gerçek ekran
+görüntülerini telefon çerçevelerinde, kenardan kenara ve yavaşça kayan tek bir
+sırada gösterir; üzerine gelince ya da odaklanınca durur, hareket azaltma
+açıkken durağandır ve yana kaydırılabilir. Stüdyo sayfasında da yer alır. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
 bilgi kendi sayfasında durur. Sitede kişi fotoğrafı, stok fotoğraf ve yapay zekâ ile üretilmiş görsel kullanılmaz.
 
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
@@ -506,6 +509,8 @@ Hareket ürünleri sahneye taşımak için vardır, süs için değil. Hepsi
 `cubic-bezier(0.2, 0.7, 0.2, 1)` eğrisini kullanır ve `prefers-reduced-motion`
 açıksa kapatılır.
 
+- **Hero ışıltısı:** Uçan ikonların arkasında, ilk üç ürünün renklerinden
+  bulanık ve hafif bir ışık durur; koyu temada daha da sönüktür.
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
   (900ms, satırlar arası 110ms). Ardından giriş metni ve butonlar 12px aşağıdan
   yerine oturur. Sağda ürün ikonları elle yerleştirilmiş bir kompozisyonda
