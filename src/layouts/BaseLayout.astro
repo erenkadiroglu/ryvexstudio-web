@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import { ClientRouter } from "astro:transitions";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { site } from "@/config/site";
@@ -67,15 +68,26 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     }
 
     <script is:inline>
-      // Apply the saved theme before first paint. Light is the default.
+      // Apply the saved theme before first paint, and again after every client-side navigation.
+      // Light is the default.
       (function () {
-        var theme = "light";
-        try {
-          if (localStorage.getItem("rv-theme") === "dark") theme = "dark";
-        } catch (e) {}
-        document.documentElement.dataset.theme = theme;
+        function applyTheme(doc) {
+          var theme = "light";
+          try {
+            if (localStorage.getItem("rv-theme") === "dark") theme = "dark";
+          } catch (e) {}
+          doc.documentElement.dataset.theme = theme;
+        }
+        applyTheme(document);
+        if (!window.__rvThemeBound) {
+          window.__rvThemeBound = true;
+          document.addEventListener("astro:before-swap", function (e) {
+            applyTheme(e.newDocument);
+          });
+        }
       })();
     </script>
+    <ClientRouter fallback="swap" />
   </head>
   <body class="flex min-h-dvh flex-col">
     <a
@@ -89,5 +101,8 @@ const ogImageUrl = new URL(ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
+    <script>
+      import "@/scripts/motion";
+    </script>
   </body>
 </html>

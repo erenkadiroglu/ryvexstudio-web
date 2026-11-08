@@ -1,5 +1,6 @@
 import { useEffect, useId, useState, type KeyboardEvent } from "react";
 import type { ProductType, WallItem } from "@/lib/products";
+import { iconTransitionName } from "@/lib/transitions";
 
 type Filter = "all" | ProductType;
 
@@ -18,7 +19,7 @@ interface Props {
   filterParam?: string;
   filterLabel?: string;
   emptyText?: string;
-  /** Plays the one-time "hung on the wall" entrance on first load. */
+  /** Hangs the products on the wall once, when the wall scrolls into view. */
   animate?: boolean;
 }
 
@@ -100,14 +101,17 @@ export default function ProductWall({
       {visible.length === 0 ? (
         <p className="text-body-md text-secondary">{emptyText}</p>
       ) : (
-        <ul className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-6">
+        <ul
+          className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-6"
+          data-reveal={animate ? "" : undefined}
+        >
           {visible.map((item, index) => (
             <li
               key={item.id}
               className={animate ? "wall-item" : undefined}
-              style={animate ? { animationDelay: `${index * 60}ms` } : undefined}
+              style={animate ? { animationDelay: `${index * 80}ms` } : undefined}
             >
-              <a href={item.href} className="group block">
+              <a href={item.href} className="wall-link group block" data-color={item.color}>
                 <img
                   src={item.iconSrc}
                   alt=""
@@ -115,7 +119,8 @@ export default function ProductWall({
                   height={160}
                   loading={index < 6 ? "eager" : "lazy"}
                   decoding="async"
-                  className="shape-icon object-depth aspect-square w-full max-w-[160px]"
+                  className="wall-icon shape-icon object-depth aspect-square w-full max-w-[160px]"
+                  style={{ viewTransitionName: iconTransitionName(item.id) }}
                 />
                 <span className="mt-5 block text-title font-semibold decoration-1 underline-offset-[3px] group-hover:underline">
                   {item.name}
