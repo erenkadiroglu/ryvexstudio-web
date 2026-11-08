@@ -86,7 +86,7 @@
 
   /* Layout */
   --container-content: 1240px;
-  --spacing-section: 160px;
+  --spacing-section: 128px;
   --spacing-section-mobile: 96px;
 
   /* Breakpoints */
@@ -292,7 +292,7 @@
   animation-delay: calc(var(--i, 0) * 90ms + 450ms);
 }
 
-/* Hero: the product phones drift slowly, each on its own rhythm. */
+/* Hero: product icons drift slowly, each on its own rhythm. */
 @keyframes drift {
   0%,
   100% {
@@ -443,6 +443,39 @@ html[data-theme="dark"] .showcase-band {
   display: block;
 }
 
+/* Screen reel: real screens glide past in one endless row; hovering holds it still. */
+@keyframes reel {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.screen-reel-track {
+  animation: reel 80s linear infinite;
+}
+
+.screen-reel:hover .screen-reel-track,
+.screen-reel:focus-within .screen-reel-track {
+  animation-play-state: paused;
+}
+
+/* Hero: soft light in the products' own colours behind the floating icons. */
+.hero-glow {
+  position: absolute;
+  inset: -12% -18%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side at 30% 35%, color-mix(in srgb, var(--c1) 30%, transparent), transparent),
+    radial-gradient(closest-side at 72% 58%, color-mix(in srgb, var(--c2) 26%, transparent), transparent),
+    radial-gradient(closest-side at 45% 80%, color-mix(in srgb, var(--c3) 24%, transparent), transparent);
+  filter: blur(24px);
+}
+
+html[data-theme="dark"] .hero-glow {
+  opacity: 0.7;
+}
+
 /* Showcase: a device that changes screens as the story scrolls. */
 .showcase-device {
   transition:
@@ -493,8 +526,13 @@ html[data-theme="dark"] .showcase-band {
 }
 
 /* Hero icons fly down and land on the product wall as the page scrolls. */
-.hero-phone {
+.hero-depth {
   will-change: transform;
+}
+
+[data-reveal].is-landing .wall-item {
+  opacity: 1;
+  animation: none;
 }
 
 /* Theme switch: the new theme spreads in a circle from the toggle. */
@@ -545,6 +583,15 @@ html.theme-switching::view-transition-group(*) {
 
   .manifesto-word {
     color: var(--rv-primary);
+  }
+
+  /* The reel stands still; it can be scrolled sideways instead. */
+  .screen-reel {
+    overflow-x: auto;
+  }
+
+  .screen-reel-track {
+    animation: none !important;
   }
 
   .showcase-screen:not(.is-active) {

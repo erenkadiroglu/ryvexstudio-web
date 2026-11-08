@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import PhoneFrame from "@/components/PhoneFrame.astro";
 import { route, type Lang } from "@/i18n/ui";
 import { typeSlugs, type Product, type ProductType } from "@/lib/products";
 
@@ -50,6 +51,12 @@ const copy = {
 }[lang];
 
 const types: ProductType[] = ["app", "game", "web"];
+// A soft wash from the first product's colour into the second's (or into the page).
+const panelStyle = (list: Product[]) => {
+  const a = list[0].data.color;
+  const b = list[1]?.data.color ?? a;
+  return `background: linear-gradient(150deg, color-mix(in srgb, ${a} 22%, var(--rv-surface)), color-mix(in srgb, ${b} 18%, var(--rv-surface)));`;
+};
 const param = lang === "tr" ? "tur" : "type";
 ---
 
@@ -66,24 +73,46 @@ const param = lang === "tr" ? "tur" : "type";
         const slug = lang === "tr" ? typeSlugs[type] : type;
         return (
           <article class="group flex flex-col">
-            <!-- The products of this kind, by their own icons; no stock photography. -->
+            <!-- The products of this kind: their own colours, icons and real screens. -->
             <div
               class:list={[
-                "flex aspect-[16/10] flex-wrap content-center items-center justify-center gap-6 rounded-xl p-8 md:aspect-[4/3]",
-                "bg-neutral",
+                "relative aspect-[16/11] overflow-hidden rounded-xl md:aspect-[4/5]",
+                ofType.length === 0 && "flex items-center justify-center bg-neutral",
               ]}
+              style={ofType.length > 0 ? panelStyle(ofType) : undefined}
             >
               {ofType.length === 0 && <span class="text-title font-medium text-secondary">{copy.soon}</span>}
-              {ofType.map((product) => (
-                <Image
-                  src={product.data.icon}
-                  alt={product.data.name}
-                  title={product.data.name}
-                  widths={[112, 224]}
-                  sizes="112px"
-                  class="shape-icon object-depth size-24 transition-transform duration-700 ease-[var(--ease-settle)] group-hover:-translate-y-1 md:size-28"
-                />
-              ))}
+              {ofType.length > 0 && (
+                <ul class="absolute top-6 left-6 flex gap-2" aria-label={item.title}>
+                  {ofType.map((product) => (
+                    <li>
+                      <Image
+                        src={product.data.icon}
+                        alt={product.data.name}
+                        title={product.data.name}
+                        widths={[44, 88]}
+                        sizes="44px"
+                        class="shape-icon object-depth size-11"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {ofType.length > 0 && (
+                <div class="absolute inset-x-0 bottom-0 flex translate-y-[38%] justify-center gap-4 transition-transform duration-700 ease-[var(--ease-settle)] group-hover:translate-y-[34%]" aria-hidden="true">
+                  {ofType.slice(0, 2).map((product, i) =>
+                    product.data.screenshots[0] ? (
+                      <PhoneFrame
+                        src={product.data.screenshots[0].src}
+                        alt=""
+                        width={ofType.length > 1 ? 150 : 170}
+                        class="phone-compact"
+                        style={ofType.length > 1 ? `rotate:${i === 0 ? -4 : 4}deg` : undefined}
+                      />
+                    ) : null,
+                  )}
+                </div>
+              )}
             </div>
             <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
             {ofType.length > 0 && (

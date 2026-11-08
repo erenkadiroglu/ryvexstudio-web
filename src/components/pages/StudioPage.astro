@@ -3,6 +3,7 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
 import Process from "@/components/Process.astro";
+import ScreenReel from "@/components/ScreenReel.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, productCaption } from "@/lib/products";
@@ -58,7 +59,9 @@ const copy = {
   </p>
 </section>
 
-<section aria-labelledby="aile" class="container-page pb-section-mobile md:pb-section">
+<ScreenReel products={products} lang={lang} />
+
+<section aria-labelledby="aile" class="container-page py-section-mobile md:py-section">
   <h2 id="aile" class="text-headline-lg font-semibold">{copy.familyTitle}</h2>
   <ul class="mt-10 flex flex-wrap gap-x-12 gap-y-10">
     {

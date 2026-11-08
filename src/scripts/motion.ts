@@ -160,31 +160,72 @@ function runShowcase() {
   observers.push(stepObserver, sectionObserver);
 }
 
-/* ---------- Hero: the phones follow the pointer and part as you scroll ---------- */
+/* ---------- Hero: depth parallax, then the icons land on the wall ---------- */
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 function runHero() {
-  const phones = [...document.querySelectorAll<HTMLElement>(".hero-phone")];
-  // Hidden on small screens, and still for visitors who prefer reduced motion.
-  if (!phones.length || reducedMotion.matches || phones[0].offsetParent === null) return;
+  const icons = [...document.querySelectorAll<HTMLElement>(".hero-depth")];
+  const wall = document.querySelector<HTMLElement>("[data-reveal]");
+  // Hero icons are hidden on small screens; the wall then uses its normal reveal.
+  if (!icons.length || !wall || reducedMotion.matches || icons[0].offsetParent === null) return false;
 
+  wall.classList.add("is-landing");
+  const items = [...wall.querySelectorAll<HTMLElement>("[data-product]")];
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  let flights: { el: HTMLElement; float: HTMLElement; depth: number; dx: number; dy: number; scale: number }[] = [];
+  let landAt = 1;
   let frame = 0;
+
+  const measure = () => {
+    icons.forEach((el) => (el.style.transform = "none"));
+    const sy = window.scrollY;
+    flights = icons.flatMap((el) => {
+      const target = items.find((li) => li.dataset.product === el.dataset.product)?.querySelector("img");
+      const float = el.firstElementChild as HTMLElement | null;
+      if (!target || !float) return [];
+      const a = el.getBoundingClientRect();
+      const b = target.getBoundingClientRect();
+      return [{
+        el,
+        float,
+        depth: Number(el.dataset.depth ?? 0.5),
+        dx: b.left - a.left,
+        dy: b.top + sy - (a.top + sy),
+        scale: b.width / a.width,
+      }];
+    });
+    const wallTop = wall.getBoundingClientRect().top + sy;
+    landAt = Math.max(120, wallTop - window.innerHeight * 0.45);
+  };
 
   const render = () => {
     frame = 0;
     pointer.x += (pointer.tx - pointer.x) * 0.08;
     pointer.y += (pointer.ty - pointer.y) * 0.08;
-    // Over the first screen of scrolling the side phones drift apart and up; the front one rises less.
-    const progress = clamp(window.scrollY / window.innerHeight);
-    phones.forEach((phone, i) => {
-      const depth = Number(phone.dataset.depth ?? 0.5);
-      const side = i === 0 ? 0 : i === 1 ? -1 : 1;
-      const x = pointer.x * 24 * depth + side * 40 * progress;
-      const y = pointer.y * 16 * depth - 90 * progress * (1.2 - depth);
-      phone.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
-    });
+    const e = easeInOut(clamp(window.scrollY / landAt));
+    const landed = e >= 0.999;
+
+    for (const f of flights) {
+      const px = pointer.x * 28 * f.depth * (1 - e);
+      const py = pointer.y * 20 * f.depth * (1 - e);
+      const s = 1 + (f.scale - 1) * e;
+      f.el.style.transform = `translate3d(${f.dx * e + px}px, ${f.dy * e + py}px, 0) scale(${s})`;
+      f.el.style.transformOrigin = "0 0";
+      f.el.style.opacity = landed ? "0" : "1";
+      // Calm the drift to zero as the icon approaches its place, so it lands straight.
+      f.float.style.setProperty("--k", (1 - clamp(e * 2.5)).toFixed(3));
+    }
+
+    for (const li of items) {
+      const hasFlight = flights.some((f) => f.el.dataset.product === li.dataset.product);
+      const img = li.querySelector<HTMLElement>("img");
+      const text = [...li.querySelectorAll<HTMLElement>("a > span")];
+      if (img) img.style.opacity = hasFlight ? (landed ? "1" : "0") : String(clamp((e - 0.6) / 0.4));
+      text.forEach((t) => (t.style.opacity = String(clamp((e - 0.7) / 0.3))));
+    }
+
     if (Math.abs(pointer.tx - pointer.x) > 0.001 || Math.abs(pointer.ty - pointer.y) > 0.001) schedule();
   };
 
@@ -194,6 +235,7 @@ function runHero() {
 
   const { signal } = pageListeners;
   window.addEventListener("scroll", schedule, { passive: true, signal });
+  window.addEventListener("resize", () => { measure(); schedule(); }, { signal });
   if (finePointer.matches) {
     window.addEventListener(
       "pointermove",
@@ -205,7 +247,14 @@ function runHero() {
       { passive: true, signal },
     );
   }
-  render();
+
+  // Measure once images have their final size.
+  const ready = icons.map((el) => el.querySelector("img")).filter(Boolean) as HTMLImageElement[];
+  Promise.all(ready.map((img) => (img.complete ? Promise.resolve() : img.decode().catch(() => {})))).then(() => {
+    measure();
+    render();
+  });
+  return true;
 }
 
 /* ---------- Manifesto: words fill with ink as you read ---------- */

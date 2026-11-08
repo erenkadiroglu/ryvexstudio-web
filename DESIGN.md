@@ -89,7 +89,7 @@ spacing:
   xl: 40px
   2xl: 64px
   3xl: 96px
-  section: 160px
+  section: 128px
   section-mobile: 96px
   gutter: 24px
   margin-mobile: 20px
@@ -233,7 +233,7 @@ Kitle çoğunlukla Türkiye'de, telefondan gezen ve mağazaya geçmeden önce
 sonra açık bilgiyle cevap verir: her ürünün kim tarafından yapıldığı, nerede
 indirileceği, gizlilik politikası ve destek adresi her zaman bir tık uzaktadır.
 
-Sitenin cesur anları ürünlerin etrafında toplanır: hero'da süzülen ürün telefonları,
+Sitenin cesur anları ürünlerin etrafında toplanır: hero'da süzülen ikonlar,
 dokunuşa cevap veren sergi duvarı, kaydırdıkça ekran değiştiren vitrin ve bir
 ikonun ürün sayfasına uçtuğu geçiş. Metinler, menüler ve yasal sayfalar sakin
 ve sessiz kalır. Vişne sayfa başına bir ya da iki yerde görünür. Renk ve enerji
@@ -340,7 +340,7 @@ boşlukları mobilde 20px, tablette 40px, masaüstünde 64px. Kırılma noktalar
 Hizalama soldandır. Ortalanmış metin yalnızca 404 sayfası gibi tek mesajlı
 ekranlarda kullanılır.
 
-Bölümler arasında masaüstünde 160px, mobilde 96px boşluk vardır. Hiyerarşi önce
+Bölümler arasında masaüstünde 128px, mobilde 96px boşluk vardır. Hiyerarşi önce
 boşlukla kurulur.
 
 ### Ana sayfa
@@ -348,9 +348,9 @@ boşlukla kurulur.
 ```text
 [R] Ryvex Studio                  Ürünler   Stüdyo   İletişim   [tema]
 ----------------------------------------------------------------------
-Her ekranda                        ┌─┐ ┌───┐ ┌─┐   ← üç ürünün gerçek ekranı,
-aynı özen.                         │ │ │   │ │ │     telefon çerçevesinde
-                                   └─┘ └───┘ └─┘     (5 sütun, yalnızca geniş ekran)
+Her ekranda                          ┌──┐   ┌──┐   ← süzülen ikonlar
+aynı özen.                         ┌──┐   ┌───┐      (5 sütun, yalnızca
+                                         ┌──┐  ┌──┐     masaüstü)
 Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
 [Ürünleri keşfet]  [Stüdyoyu tanı]
 
@@ -508,10 +508,9 @@ açıksa kapatılır.
 
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
   (900ms, satırlar arası 110ms). Ardından giriş metni ve butonlar 12px aşağıdan
-  yerine oturur. Sağda üç ürünün ilk ekran görüntüsü telefon çerçevelerinde
-  belirir: biri önde, ikisi arkada hafif açıyla. Her telefon kendi ritminde
-  (8-10 saniye) birkaç piksel yukarı aşağı süzülür. Geniş ekran altında bu
-  kompozisyon gösterilmez.
+  yerine oturur. Sağda ürün ikonları elle yerleştirilmiş bir kompozisyonda
+  belirir ve her biri kendi ritminde (6,5-10 saniye) birkaç piksel yukarı aşağı
+  süzülür. Mobilde bu kompozisyon gösterilmez.
 - **Sergi duvarı:** Duvar ekrana girdiğinde ikonlar soldan sağa, 80ms arayla
   asılır; bu bir kez olur. Fareyle üzerine gelinen ikon 6px kalkar, gölgesi
   derinleşir ve imleci takip ederek en fazla 8 derece eğilir. Bu sırada sayfa
@@ -527,10 +526,12 @@ açıksa kapatılır.
 - **Sayfa geçişleri:** Sayfalar arası geçiş 260ms'lik çapraz geçiştir. Bir ürün
   ikonu, sergi duvarından ürün sayfasına ve oradan gizlilik ile destek
   sayfalarına aynı ikon olarak uçar (520ms).
-- **Hero derinliği:** Hero'daki telefonlar imleci derinliklerine göre takip
-  eder (öndeki en fazla 24px, arkadakiler daha az). Sayfa aşağı kaydırıldıkça
-  yandaki telefonlar hafifçe açılır ve yukarı kayar. Hareket azaltma açıkken
-  telefonlar durağandır.
+- **Hero derinliği ve iniş:** Hero'daki ikonlar imleci derinliklerine göre
+  takip eder (yakındakiler en fazla 28px, uzaktakiler daha az). Sayfa aşağı
+  kaydırıldıkça her ikon, sergi duvarındaki kendi yerine uçar, boyutu duvar
+  ikonuna eşitlenir ve süzülme hareketi sıfıra iner; duvara vardığında duvar
+  ikonu onun yerini alır. Künyeler inişin son yüzde 30'unda belirir. Mobilde ve
+  hareket azaltma açıkken duvar normal biçimde asılır.
 - **Manifesto:** Kelimeler okundukça `muted` tonundan Mürekkep'e dolar
   (280ms). `muted` büyük metinde 3:1 kontrastı korur; dolmamış metin de
   okunur kalır.

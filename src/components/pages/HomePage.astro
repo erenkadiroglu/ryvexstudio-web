@@ -1,11 +1,12 @@
 ---
-import PhoneFrame from "@/components/PhoneFrame.astro";
+import { Image } from "astro:assets";
 import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
 import Manifesto from "@/components/Manifesto.astro";
 import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
+import ScreenReel from "@/components/ScreenReel.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, toWallItem } from "@/lib/products";
@@ -19,14 +20,22 @@ const products = await getProducts();
 const items = products.map((p) => toWallItem(p, lang));
 const featured = products.filter((p) => p.data.featured);
 
-// The hero shows the products themselves: three real screens, the first in front.
-const heroPhones = products.filter((p) => p.data.screenshots[0]).slice(0, 3);
-// Front, left and right places; depth is how strongly each follows the pointer and the scroll.
-const phonePlaces = [
-  { width: 252, left: "calc(50% - 126px)", top: "0px", r: "0deg", dy: "-10px", d: "9s", depth: 1, z: 3 },
-  { width: 204, left: "calc(50% - 262px)", top: "78px", r: "-7deg", dy: "-8px", d: "8s", depth: 0.55, z: 2 },
-  { width: 204, left: "calc(50% + 58px)", top: "78px", r: "7deg", dy: "-12px", d: "10s", depth: 0.7, z: 1 },
+// Hand-placed composition for the drifting icons on the right of the hero.
+const constellation = [
+  // depth: how strongly the icon follows the pointer (near icons move more).
+  { top: "2%", left: "48%", size: 136, r: "4deg", dy: "-12px", d: "9s", depth: 0.8 },
+  { top: "30%", left: "4%", size: 108, r: "-6deg", dy: "-9px", d: "7.5s", depth: 0.6 },
+  { top: "40%", left: "60%", size: 150, r: "-3deg", dy: "-14px", d: "10s", depth: 1 },
+  { top: "72%", left: "24%", size: 92, r: "5deg", dy: "-8px", d: "8s", depth: 0.45 },
+  { top: "4%", left: "10%", size: 72, r: "8deg", dy: "-7px", d: "6.5s", depth: 0.3 },
+  { top: "78%", left: "74%", size: 80, r: "-8deg", dy: "-10px", d: "8.5s", depth: 0.35 },
 ];
+const floating = products.slice(0, constellation.length);
+// With only a few products, give them the largest, most central spots.
+const spots =
+  floating.length < constellation.length
+    ? [...constellation].sort((a, b) => b.size - a.size)
+    : constellation;
 
 const copy = {
   tr: {
@@ -34,18 +43,32 @@ const copy = {
     primary: "Ürünleri keşfet",
     secondary: "Stüdyoyu tanı",
     wallHeading: "Ürünlerimiz",
+    studioHeading: "Tek masadan, her ekrana",
+    studio: [
+      `Ryvex Studio, ${site.founder} tarafından kurulan bağımsız bir ürün stüdyosu. Uygulamalarımızı, oyunlarımızı ve web projelerimizi aynı masada tasarlıyor, aynı standartla yayınlıyoruz.`,
+      "Her ürün, kendimiz kullanmak isteyeceğimiz seviyeye gelene kadar işleniyor. Ne yaptığını açıkça anlatan, verinize saygı gösteren ve açıldığında insanı yormayan ürünler yapıyoruz.",
+    ],
+    studioLink: "Stüdyo hakkında daha fazlası",
+    imageAlt: `Ryvex Studio'nun kurucusu ${site.founder}`,
   },
   en: {
     lede: "Mobile apps, games and web products. All under one signature, made with the same care.",
     primary: "Explore products",
     secondary: "Meet the studio",
     wallHeading: "Our products",
+    studioHeading: "One desk, every screen",
+    studio: [
+      `Ryvex Studio is an independent product studio founded by ${site.founder}. Our apps, games and web products are designed at the same desk and released to the same standard.`,
+      "Every product is refined until it is something we would want to use ourselves. We make products that say clearly what they do, respect your data and never wear you out.",
+    ],
+    studioLink: "More about the studio",
+    imageAlt: `${site.founder}, founder of Ryvex Studio`,
   },
 }[lang];
 ---
 
-<section class="container-page grid items-center gap-10 pt-20 pb-24 md:pt-28 md:pb-32 lg:grid-cols-12">
-  <div class="lg:col-span-7">
+<section class="container-page grid items-center gap-10 pt-20 pb-24 md:grid-cols-12 md:pt-28 md:pb-32">
+  <div class="md:col-span-7">
     <h1
       class="text-display-mobile leading-[0.98] font-semibold tracking-[-0.045em] md:text-display"
       aria-label={site.tagline[lang]}
@@ -78,18 +101,31 @@ const copy = {
     </div>
   </div>
 
-  <div class="hero-phones relative hidden h-[620px] lg:col-span-5 lg:block" aria-hidden="true">
+  <div class="relative isolate hidden h-[460px] md:col-span-5 md:block" aria-hidden="true">
+    <div
+      class="hero-glow"
+      style={`--c1:${floating[0]?.data.color ?? "#8e1b3b"};--c2:${floating[1]?.data.color ?? "#8e1b3b"};--c3:${floating[2]?.data.color ?? "#8e1b3b"}`}
+    ></div>
     {
-      heroPhones.map((product, i) => {
-        const place = phonePlaces[i];
+      floating.map((product, i) => {
+        const spot = spots[i];
         return (
           <div
-            class="hero-phone absolute"
-            style={`left:${place.left};top:${place.top};z-index:${place.z}`}
-            data-depth={place.depth}
+            class="hero-depth absolute"
+            style={`top:${spot.top};left:${spot.left}`}
+            data-product={product.id}
+            data-depth={spot.depth}
           >
-            <div class="hero-float" style={`--i:${i};--r:${place.r};--dy:${place.dy};--d:${place.d}`}>
-              <PhoneFrame src={product.data.screenshots[0].src} alt="" width={place.width} loading="eager" />
+            <div class="hero-float" style={`--i:${i};--r:${spot.r};--dy:${spot.dy};--d:${spot.d}`}>
+              <Image
+                src={product.data.icon}
+                alt=""
+                width={spot.size}
+                height={spot.size}
+                loading="eager"
+                class="shape-icon object-depth"
+                style={`width:${spot.size}px;height:${spot.size}px`}
+              />
             </div>
           </div>
         );
@@ -102,6 +138,8 @@ const copy = {
   <h2 id="duvar" class="sr-only">{copy.wallHeading}</h2>
   <ProductWall items={items} animate />
 </section>
+
+<ScreenReel products={products} lang={lang} />
 
 <Manifesto lang={lang} />
 
