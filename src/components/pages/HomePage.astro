@@ -5,6 +5,7 @@ import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
 import Process from "@/components/Process.astro";
 import Manifesto from "@/components/Manifesto.astro";
+import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
 import workspace from "@/assets/studio/workspace.jpg";
 import { site } from "@/config/site";
@@ -137,6 +138,8 @@ const copy = {
 {featured.length > 0 && <Showcase products={featured} lang={lang} />}
 
 <Process lang={lang} />
+
+<JournalTeaser lang={lang} />
 
 <section
   aria-labelledby="studyo"

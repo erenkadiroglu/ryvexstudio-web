@@ -2,6 +2,7 @@ import type { APIRoute, GetStaticPaths } from "astro";
 import { site } from "@/config/site";
 import { getProducts, productTagline } from "@/lib/products";
 import { productIconDataUri, renderOgImage, type OgOptions } from "@/lib/og";
+import { getPosts, postSlug } from "@/lib/journal";
 
 export const getStaticPaths = (async () => {
   const products = await getProducts();
@@ -18,6 +19,14 @@ export const getStaticPaths = (async () => {
           subtitle: productTagline(product, lang),
           icon: await productIconDataUri(product.id),
         },
+      });
+    }
+  }
+  for (const lang of ["tr", "en"] as const) {
+    for (const post of await getPosts(lang)) {
+      paths.push({
+        params: { slug: `journal/${lang}-${postSlug(post)}` },
+        props: { title: post.data.title, subtitle: post.data.description },
       });
     }
   }
