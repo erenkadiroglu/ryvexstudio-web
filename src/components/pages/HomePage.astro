@@ -3,11 +3,9 @@ import { Image } from "astro:assets";
 import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
-import Process from "@/components/Process.astro";
 import Manifesto from "@/components/Manifesto.astro";
 import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
-import founder from "@/assets/studio/founder.png";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, toWallItem } from "@/lib/products";
@@ -142,33 +140,6 @@ const copy = {
 
 {featured.length > 0 && <Showcase products={featured} lang={lang} />}
 
-<Process lang={lang} />
-
 <JournalTeaser lang={lang} />
-
-<section
-  aria-labelledby="studyo"
-  class="container-page grid items-center gap-12 pb-section-mobile md:grid-cols-12 md:pb-section"
->
-  <div class="md:col-span-5">
-    <h2 id="studyo" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.studioHeading}</h2>
-    {copy.studio.map((paragraph) => <p class="mt-5 max-w-[52ch] text-body-md text-secondary">{paragraph}</p>)}
-    <a href={route("studio", lang)} class="link-inline mt-6 inline-block text-body-md">
-      {copy.studioLink}
-    </a>
-  </div>
-  <!-- The founder, not a stock photo: the studio's promise is a named person behind every product. -->
-  <div class="md:col-span-6 md:col-start-7">
-    <div class="flex aspect-[4/3] items-end justify-center overflow-hidden rounded-xl bg-neutral">
-      <Image
-        src={founder}
-        alt={copy.imageAlt}
-        widths={[320, 480, 640]}
-        sizes="(min-width: 960px) 360px, 60vw"
-        class="h-[92%] w-auto"
-      />
-    </div>
-  </div>
-</section>
 
 <ClosingBand lang={lang} />

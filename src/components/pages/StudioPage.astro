@@ -2,11 +2,11 @@
 import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
+import Process from "@/components/Process.astro";
 import desk from "@/assets/studio/desk.jpg";
-import founder from "@/assets/studio/founder.png";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
-import { getProducts } from "@/lib/products";
+import { getProducts, productCaption } from "@/lib/products";
 import { studioFaq } from "@/data/studio-faq";
 
 interface Props {
@@ -15,81 +15,40 @@ interface Props {
 
 const { lang } = Astro.props;
 const products = await getProducts();
-const counts = {
-  app: products.filter((p) => p.data.type === "app").length,
-  game: products.filter((p) => p.data.type === "game").length,
-  web: products.filter((p) => p.data.type === "web").length,
-};
-
-const joinWith = (word: string) => (parts: (string | 0 | false)[]) => {
-  const list = parts.filter(Boolean) as string[];
-  return list.length > 1 ? `${list.slice(0, -1).join(", ")} ${word} ${list.at(-1)}` : (list[0] ?? "");
-};
-const joinTr = joinWith("ve");
-const joinEn = joinWith("and");
+const productBase = route("products", lang);
 
 const copy = {
   tr: {
     title: "Stüdyo",
-    lede: "Uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyoyuz.",
+    lede: "Uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyo.",
     imageAlt: "Ahşap bir masanın üzerinde defter, kahve fincanı ve dizüstü bilgisayar",
-    story: [
-      `Ryvex Studio, ${site.founder} tarafından kurulan bağımsız bir ürün stüdyosu. Farklı mağazalarda ve farklı adreslerde dağınık duran uygulamaları, oyunları ve web projelerini tek bir imza altında toplamak için kuruldu.`,
-      "Çok ürün çıkarmak için acele etmiyoruz. Her ürünü kendimiz kullanmak isteyeceğimiz seviyeye gelene kadar işliyoruz. Ne yaptığını açıkça anlatan, gereksiz izin istemeyen, açıldığında insanı yormayan ürünler yapıyoruz.",
-      "Bir Ryvex ürününü sevdiyseniz, diğerlerinde de aynı özeni bulacaksınız. Bulamazsanız bize yazın; okuyoruz.",
-    ],
-    founderLabel: "Kurucu",
-    founderBio: [
-      `${site.founder}, Ryvex Studio'nun kurucusu. Mobil uygulamaları, oyunları ve web projelerini kendisi tasarlıyor ve geliştiriyor.`,
-      "Ryvex Studio'yu, farklı yerlerde ayrı ayrı yayınladığı ürünleri tek bir imza altında toplamak için kurdu. Her ürünün arkasında o var; bir sorunuz olduğunda karşınızda gerçek biri var.",
-    ],
-    founderAlt: `${site.founder}, kollarını kavuşturmuş, siyah polo tişörtle`,
+    statement: `Ryvex Studio, ${site.founder} tarafından, dağınık duran ürünleri tek bir imza altında toplamak için kuruldu.`,
     principlesTitle: "Neye önem veriyoruz",
     principles: [
-      ["Özen", "Her ürün, kullanmak isteyeceğimiz seviyeye gelmeden yayınlanmaz. Detaylar tesadüf değildir."],
-      ["Tek imza", "Uygulama, oyun ya da web; hepsi aynı standarttan geçer."],
-      ["Şeffaflık", "Ürünlerimiz ne yaptığını ve hangi veriyi kullandığını açıkça söyler. Gizlilik politikası her üründe bir tık uzaktadır."],
-      ["Ulaşılabilirlik", "Ürünlerin arkasında adı bilinen bir kurucu ve gerçek bir destek kanalı var."],
-      ["Keyif", "İyi bir araç da iyi bir oyun da kullanırken insanı mutlu etmelidir."],
+      ["Özen", "Detaylar tesadüf değil."],
+      ["Tek imza", "Her ürün aynı standarttan geçer."],
+      ["Şeffaflık", "Ne yaptığımızı açıkça söyleriz."],
+      ["Ulaşılabilirlik", "Her sorunun cevabı var."],
+      ["Keyif", "Kullanması insanı mutlu etmeli."],
     ],
-    faqTitle: "Sık sorulan sorular",
     familyTitle: "Ryvex ailesi",
-    family: `Bugün ailede ${joinTr([counts.app && `${counts.app} uygulama`, counts.game && `${counts.game} oyun`, counts.web && `${counts.web} web projesi`])} var.`,
-    familyLink: "Ürünleri gör",
-    contactTitle: "Bize ulaşın",
-    contactText: "Bir sorunuz, öneriniz ya da iş birliği fikriniz varsa yazın.",
-    contactLink: "İletişim sayfası",
+    faqTitle: "Sık sorulan sorular",
   },
   en: {
     title: "Studio",
-    lede: "We are an independent studio making apps, games and web products.",
+    lede: "An independent studio making apps, games and web products.",
     imageAlt: "A notebook, a cup of coffee and a laptop on a wooden desk",
-    story: [
-      `Ryvex Studio is an independent product studio founded by ${site.founder}. It was set up to bring apps, games and web products that were scattered across stores and addresses under one signature.`,
-      "We are in no hurry to ship many products. Each one is refined until it is something we would want to use ourselves. We make products that say clearly what they do, ask for no unnecessary permissions and never wear you out.",
-      "If you like one Ryvex product, you will find the same care in the others. If you don't, write to us; we read every message.",
-    ],
-    founderLabel: "Founder",
-    founderBio: [
-      `${site.founder} is the founder of Ryvex Studio, and designs and builds its mobile apps, games and web products.`,
-      "Ryvex Studio was founded to bring products that had been released separately under one signature. The founder stands behind every product; when you have a question, there is a real person on the other side.",
-    ],
-    founderAlt: `${site.founder}, arms crossed, wearing a black polo shirt`,
+    statement: `Ryvex Studio was founded by ${site.founder} to bring scattered products together under one signature.`,
     principlesTitle: "What we care about",
     principles: [
-      ["Care", "No product ships before it is something we would want to use. Details are never an accident."],
-      ["One signature", "App, game or web product, each one meets the same standard."],
-      ["Transparency", "Our products say clearly what they do and what data they use. Every product's privacy policy is one click away."],
-      ["Reachability", "Behind every product is a named founder and a real support channel."],
-      ["Delight", "A good tool and a good game should both make you happy to use them."],
+      ["Care", "Details are never an accident."],
+      ["One signature", "Every product meets the same standard."],
+      ["Transparency", "We say plainly what we do."],
+      ["Reachability", "Every question gets an answer."],
+      ["Delight", "Using it should feel good."],
     ],
-    faqTitle: "Frequently asked questions",
     familyTitle: "The Ryvex family",
-    family: `Today the family has ${joinEn([counts.app && `${counts.app} app${counts.app === 1 ? "" : "s"}`, counts.game && `${counts.game} game${counts.game === 1 ? "" : "s"}`, counts.web && `${counts.web} web product${counts.web === 1 ? "" : "s"}`])}.`,
-    familyLink: "See the products",
-    contactTitle: "Get in touch",
-    contactText: "If you have a question, a suggestion or an idea to work on together, write to us.",
-    contactLink: "Contact page",
+    faqTitle: "Frequently asked questions",
   },
 }[lang];
 ---
@@ -107,44 +66,50 @@ const copy = {
   />
 </div>
 
-<section class="container-page grid gap-6 py-section-mobile md:grid-cols-12 md:py-section">
-  <div class="space-y-5 text-body-lg text-secondary md:col-span-7 md:col-start-6">
-    {copy.story.map((paragraph, i) => <p class:list={[i === 0 && "text-primary"]}>{paragraph}</p>)}
-  </div>
+<section class="container-page py-section-mobile md:py-section">
+  <p class="max-w-[24ch] text-[2rem] leading-[1.15] font-semibold tracking-[-0.03em] md:text-[3rem] md:leading-[1.1]">
+    {copy.statement}
+  </p>
 </section>
 
-<section aria-labelledby="kurucu" class="container-page pb-section-mobile md:pb-section">
-  <div class="grid items-end gap-10 overflow-hidden rounded-xl bg-neutral md:grid-cols-12 md:gap-6">
-    <div class="px-8 pt-10 md:col-span-6 md:col-start-1 md:px-12 md:pt-12 md:pb-14">
-      <p class="text-body-sm text-secondary">{copy.founderLabel}</p>
-      <h2 id="kurucu" class="mt-2 text-headline-xl font-semibold tracking-[-0.035em]">{site.founder}</h2>
-      {copy.founderBio.map((p) => <p class="mt-5 max-w-[46ch] text-body-lg text-secondary">{p}</p>)}
-    </div>
-    <div class="flex justify-center md:col-span-5 md:col-start-8 md:justify-end md:pr-10">
-      <Image
-        src={founder}
-        alt={copy.founderAlt}
-        widths={[320, 480, 640]}
-        sizes="(min-width: 960px) 360px, 70vw"
-        class="h-auto w-[70%] max-w-[360px] md:w-full"
-      />
-    </div>
-  </div>
+<section aria-labelledby="aile" class="container-page pb-section-mobile md:pb-section">
+  <h2 id="aile" class="text-headline-lg font-semibold">{copy.familyTitle}</h2>
+  <ul class="mt-10 flex flex-wrap gap-x-12 gap-y-10">
+    {
+      products.map((product) => (
+        <li>
+          <a href={`${productBase}/${product.id}`} class="wall-link group block w-[140px]" data-color={product.data.color}>
+            <Image
+              src={product.data.icon}
+              alt=""
+              width={140}
+              height={140}
+              class="wall-icon shape-icon object-depth size-[140px]"
+            />
+            <span class="mt-4 block text-title font-semibold group-hover:underline">{product.data.name}</span>
+            <span class="mt-1 block text-body-sm text-secondary">{productCaption(product, lang)}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </section>
 
 <section aria-labelledby="ilkeler" class="container-page pb-section-mobile md:pb-section">
   <h2 id="ilkeler" class="text-headline-lg font-semibold">{copy.principlesTitle}</h2>
-  <dl class="mt-10 grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3">
+  <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
     {
-      copy.principles.map(([term, text]) => (
-        <div>
-          <dt class="text-title font-semibold">{term}</dt>
-          <dd class="mt-2 max-w-[40ch] text-body-md text-secondary">{text}</dd>
-        </div>
+      copy.principles.map(([term, text], i) => (
+        <li class:list={["rounded-xl p-6", i === 0 ? "bg-tertiary text-on-tertiary" : "bg-neutral"]}>
+          <h3 class="text-headline-md font-semibold">{term}</h3>
+          <p class:list={["mt-8 text-body-sm", i === 0 ? "opacity-90" : "text-secondary"]}>{text}</p>
+        </li>
       ))
     }
-  </dl>
+  </ul>
 </section>
+
+<Process lang={lang} compact />
 
 <section aria-labelledby="sss" class="container-page pb-section-mobile md:grid md:grid-cols-12 md:gap-6 md:pb-section">
   <h2 id="sss" class="text-headline-lg font-semibold md:col-span-4">{copy.faqTitle}</h2>
@@ -170,19 +135,6 @@ const copy = {
         </details>
       ))
     }
-  </div>
-</section>
-
-<section class="container-page grid gap-12 pb-section-mobile md:grid-cols-2 md:pb-section">
-  <div class="rounded-xl bg-neutral p-8 md:p-10">
-    <h2 class="text-headline-md font-semibold">{copy.familyTitle}</h2>
-    <p class="mt-3 text-body-md text-secondary">{copy.family}</p>
-    <a href={route("products", lang)} class="link-inline mt-6 inline-block">{copy.familyLink}</a>
-  </div>
-  <div class="rounded-xl bg-neutral p-8 md:p-10">
-    <h2 class="text-headline-md font-semibold">{copy.contactTitle}</h2>
-    <p class="mt-3 text-body-md text-secondary">{copy.contactText}</p>
-    <a href={route("contact", lang)} class="link-inline mt-6 inline-block">{copy.contactLink}</a>
   </div>
 </section>
 
