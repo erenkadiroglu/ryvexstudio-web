@@ -24,6 +24,7 @@ faq:
     a: { tr: "Her gün gece yarısı, cihazınızın saat dilimine göre.", en: "Every day at midnight, in your device's time zone." }
   - q: { tr: "Serim neden sıfırlandı?", en: "Why did my streak reset?" }
     a: { tr: "Bir günü kaçırdığınızda seri sıfırlanır. Cihazın tarih ve saatini elle değiştirmek de seriyi sıfırlayabilir.", en: "Missing a day resets your streak. Changing the device date or time manually can also reset it." }
+featured: true
 order: 20
 sample: true
 ---

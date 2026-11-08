@@ -69,6 +69,8 @@ const products = defineCollection({
           }),
         )
         .default([]),
+      /** Shown in the scrolling showcase on the home page. */
+      featured: z.boolean().default(false),
       order: z.number().int().default(100),
       draft: z.boolean().default(false),
       /** Placeholder entries used until real products are added. Remove before launch. */

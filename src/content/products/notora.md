@@ -24,6 +24,7 @@ faq:
     a: { tr: "Yalnızca cihazınızda. Notora notlarınızı herhangi bir sunucuya göndermez.", en: "Only on your device. Notora never sends your notes to a server." }
   - q: { tr: "Telefon değiştirirsem notlarım taşınır mı?", en: "Will my notes move to a new phone?" }
     a: { tr: "Cihazınızın kendi yedekleme özelliği (iCloud veya Google yedekleme) açıksa notlarınız yedekle birlikte taşınır.", en: "If your device backup (iCloud or Google backup) is on, your notes move with the backup." }
+featured: true
 order: 10
 sample: true
 ---
