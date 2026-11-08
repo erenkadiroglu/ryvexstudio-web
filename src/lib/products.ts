@@ -56,6 +56,7 @@ export interface WallItem {
   caption: string;
   href: string;
   iconSrc: string;
+  color: string;
 }
 
 export function toWallItem(product: Product, lang: Lang): WallItem {
@@ -67,5 +68,6 @@ export function toWallItem(product: Product, lang: Lang): WallItem {
     caption: productCaption(product, lang),
     href: `${base}/${product.id}`,
     iconSrc: product.data.icon.src,
+    color: product.data.color,
   };
 }

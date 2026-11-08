@@ -33,20 +33,23 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     );
   }
 
-  document.querySelectorAll<HTMLButtonElement>(".theme-toggle").forEach((button) => {
-    sync(button, document.documentElement.dataset.theme ?? "light");
+  // Runs on the first load and after every client-side navigation.
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLButtonElement>(".theme-toggle").forEach((button) => {
+      sync(button, document.documentElement.dataset.theme ?? "light");
 
-    button.addEventListener("click", () => {
-      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-      document.documentElement.dataset.theme = next;
-      try {
-        localStorage.setItem(STORAGE_KEY, next);
-      } catch {
-        /* storage unavailable: theme still applies for this visit */
-      }
-      document
-        .querySelectorAll<HTMLButtonElement>(".theme-toggle")
-        .forEach((b) => sync(b, next));
+      button.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch {
+          /* storage unavailable: theme still applies for this visit */
+        }
+        document
+          .querySelectorAll<HTMLButtonElement>(".theme-toggle")
+          .forEach((b) => sync(b, next));
+      });
     });
   });
 </script>

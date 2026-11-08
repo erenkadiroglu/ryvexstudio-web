@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { render } from "astro:content";
 import { site } from "@/config/site";
+import { iconTransitionName } from "@/lib/transitions";
 import { route, type Lang } from "@/i18n/ui";
 import {
   platformLabels,
@@ -94,6 +95,7 @@ const stripStyle = `background-color: color-mix(in srgb, ${data.color} 8%, var(-
         width={128}
         height={128}
         class="shape-icon object-depth size-24 md:size-32"
+        style={`view-transition-name: ${iconTransitionName(product.id)}`}
       />
       <div>
         <h1

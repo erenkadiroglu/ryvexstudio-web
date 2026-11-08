@@ -26,6 +26,7 @@ faq:
     a: { tr: "Hayır. Planlarınız size özel bir bağlantıyla saklanır.", en: "No. Your plans are saved under a private link." }
   - q: { tr: "Paylaştığım planı kimler görebilir?", en: "Who can see a plan I share?" }
     a: { tr: "Yalnızca bağlantıya sahip olan kişiler. Bağlantıyı istediğiniz zaman iptal edebilirsiniz.", en: "Only people who have the link. You can revoke the link at any time." }
+featured: true
 order: 50
 sample: true
 ---

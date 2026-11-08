@@ -102,9 +102,16 @@
   --ease-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+/* The page ground can take a faint tint of the product the visitor is looking at. */
+:root {
+  --rv-tint: var(--rv-surface);
+  --rv-page: color-mix(in srgb, var(--rv-tint) 6%, var(--rv-surface));
+}
+
 @layer base {
   html {
-    background-color: var(--color-surface);
+    background-color: var(--rv-page);
+    transition: background-color 500ms var(--ease-settle);
     color: var(--color-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -172,11 +179,22 @@
   }
 }
 
-/* The site's single orchestrated moment: products are hung on the wall once, on first load. */
-@keyframes wall-hang {
+/* ---------- Motion ---------- */
+
+/* Hero: each headline line rises out of its own mask, then the rest settles in. */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes settle {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -184,11 +202,156 @@
   }
 }
 
-.wall-item {
-  animation: wall-hang 480ms var(--ease-settle) both;
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero-line > span {
+  display: block;
+  animation: rise 900ms var(--ease-settle) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 100ms);
+}
+
+.hero-settle {
+  animation: settle 700ms var(--ease-settle) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 450ms);
+}
+
+/* Hero: product icons drift slowly, each on its own rhythm. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translate3d(0, var(--dy, -10px), 0) rotate(calc(var(--r, 0deg) * -1));
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.8;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.hero-float {
+  animation:
+    appear 900ms var(--ease-settle) both,
+    drift var(--d, 8s) ease-in-out infinite;
+  animation-delay:
+    calc(var(--i, 0) * 120ms + 300ms),
+    calc(var(--i, 0) * -1.3s);
+}
+
+/* Product wall: items are hung on the wall once, when the wall scrolls into view. */
+@keyframes wall-hang {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+[data-reveal] .wall-item {
+  opacity: 0;
+}
+
+[data-reveal].is-visible .wall-item {
+  animation: wall-hang 600ms var(--ease-settle) both;
+}
+
+/* Product wall: icons lift and tilt toward the pointer. */
+.wall-icon {
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))
+    translateY(var(--lift, 0px));
+  transition:
+    transform 450ms var(--ease-settle),
+    box-shadow 450ms var(--ease-settle);
+  will-change: transform;
+}
+
+.wall-link:hover .wall-icon,
+.wall-link:focus-visible .wall-icon {
+  --lift: -6px;
+  box-shadow: 0 34px 60px -28px rgb(28 20 24 / 0.38);
+}
+
+.wall-link.is-tilting .wall-icon {
+  transition:
+    transform 120ms linear,
+    box-shadow 450ms var(--ease-settle);
+}
+
+/* Showcase: a device that changes screens as the story scrolls. */
+.showcase-device {
+  transition:
+    aspect-ratio 700ms var(--ease-settle),
+    width 700ms var(--ease-settle),
+    border-radius 700ms var(--ease-settle);
+}
+
+.showcase-screen {
+  opacity: 0;
+  scale: 1.04;
+  transition:
+    opacity 600ms var(--ease-settle),
+    scale 900ms var(--ease-settle);
+}
+
+.showcase-screen.is-active {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Inactive steps step back through color, not opacity, so text keeps its contrast. */
+.showcase-step h3 {
+  color: var(--color-secondary);
+  transition: color 500ms var(--ease-settle);
+}
+
+.showcase-step.is-active h3 {
+  color: var(--color-primary);
+}
+
+/* Page transitions: a quick cross-fade, while shared product icons morph between pages. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-settle);
+}
+
+::view-transition-group(*) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-settle);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  [data-reveal] .wall-item,
+  .showcase-screen {
+    opacity: 1;
+  }
+
+  .showcase-screen:not(.is-active) {
+    opacity: 0;
+  }
+
   *,
   *::before,
   *::after {

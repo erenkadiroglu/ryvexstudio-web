@@ -18,7 +18,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 ---
 
 <header
-  class="site-header sticky top-0 z-40 border-b border-transparent bg-surface transition-colors duration-150 data-[scrolled]:border-outline"
+  class="site-header sticky top-0 z-40 border-b border-transparent bg-[var(--rv-page)] transition-[background-color,border-color] duration-500 data-[scrolled]:border-outline"
 >
   <div class="container-page flex h-[72px] items-center justify-between">
     <Logo href={route("home", lang)} />
@@ -96,17 +96,23 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 </header>
 
 <script>
-  const menu = document.querySelector<HTMLDialogElement>(".mobile-menu");
-  document.querySelector(".menu-open")?.addEventListener("click", () => menu?.showModal());
-  document.querySelector(".menu-close")?.addEventListener("click", () => menu?.close());
+  const getMenu = () => document.querySelector<HTMLDialogElement>(".mobile-menu");
+  const updateHeader = () =>
+    document
+      .querySelector<HTMLElement>(".site-header")
+      ?.toggleAttribute("data-scrolled", window.scrollY > 4);
+
+  // Window-level listeners are registered once; element listeners on every page load.
+  window.addEventListener("scroll", updateHeader, { passive: true });
   window.matchMedia("(min-width: 960px)").addEventListener("change", (e) => {
-    if (e.matches) menu?.close();
+    if (e.matches) getMenu()?.close();
   });
 
-  const header = document.querySelector<HTMLElement>(".site-header");
-  if (header) {
-    const update = () => header.toggleAttribute("data-scrolled", window.scrollY > 4);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-  }
+  document.addEventListener("astro:page-load", () => {
+    const menu = getMenu();
+    document.querySelector(".menu-open")?.addEventListener("click", () => menu?.showModal());
+    document.querySelector(".menu-close")?.addEventListener("click", () => menu?.close());
+    menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => menu.close()));
+    updateHeader();
+  });
 </script>

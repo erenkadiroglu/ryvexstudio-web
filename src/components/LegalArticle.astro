@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { route, type Lang } from "@/i18n/ui";
 import type { Product } from "@/lib/products";
+import { iconTransitionName } from "@/lib/transitions";
 
 interface Props {
   product: Product;
@@ -25,7 +26,14 @@ const updatedLabel = lang === "tr" ? "Son güncelleme" : "Last updated";
 <article class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
   <div class="max-w-[64ch]">
     <a href={productHref} class="inline-flex items-center gap-3 text-label font-medium text-secondary hover:text-primary">
-      <Image src={product.data.icon} alt="" width={32} height={32} class="shape-icon size-8" />
+      <Image
+        src={product.data.icon}
+        alt=""
+        width={32}
+        height={32}
+        class="shape-icon size-8"
+        style={`view-transition-name: ${iconTransitionName(product.id)}`}
+      />
       {product.data.name}
     </a>
     <h1 class="mt-8 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">

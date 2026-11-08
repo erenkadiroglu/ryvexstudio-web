@@ -218,9 +218,11 @@ Kitle çoğunlukla Türkiye'de, telefondan gezen ve mağazaya geçmeden önce
 sonra açık bilgiyle cevap verir: her ürünün kim tarafından yapıldığı, nerede
 indirileceği, gizlilik politikası ve destek adresi her zaman bir tık uzaktadır.
 
-Sitenin tek cesur anı, ana sayfadaki sergi duvarıdır. Geri kalan her şey sakin,
-düzenli ve sessizdir. Vişne sayfa başına bir ya da iki yerde görünür. Renk ve
-enerji ürünlerin kendi ikonlarından gelir.
+Sitenin cesur anları ürünlerin etrafında toplanır: hero'da süzülen ikonlar,
+dokunuşa cevap veren sergi duvarı, kaydırdıkça ekran değiştiren vitrin ve bir
+ikonun ürün sayfasına uçtuğu geçiş. Metinler, menüler ve yasal sayfalar sakin
+ve sessiz kalır. Vişne sayfa başına bir ya da iki yerde görünür. Renk ve enerji
+ürünlerin kendi ikonlarından gelir.
 
 Varsayılan tema aydınlıktır. Karanlık tema, aydınlığın birebir karşılığıdır;
 ayrı bir tasarım değildir.
@@ -448,14 +450,30 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
 
 ### Hareket
 
-Sitede tek bir düzenlenmiş hareket anı vardır: ana sayfa ilk açıldığında sergi
-duvarındaki ikonlar soldan sağa sırayla duvara asılır (opaklık 0'dan 1'e ve
-8px aşağıdan yerine; her ikon 60ms arayla; toplam en fazla 600ms;
-`cubic-bezier(0.2, 0.7, 0.2, 1)`).
+Hareket ürünleri sahneye taşımak için vardır, süs için değil. Hepsi
+`cubic-bezier(0.2, 0.7, 0.2, 1)` eğrisini kullanır ve `prefers-reduced-motion`
+açıksa kapatılır.
 
-Bunun dışındaki tüm hareketler kullanıcı eylemine cevaptır: buton zemin
-geçişleri 150ms, tema değişimi 200ms, mobil menü açılışı 240ms.
-`prefers-reduced-motion` açıksa tüm hareketler kapatılır.
+- **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
+  (900ms, satırlar arası 110ms). Ardından giriş metni ve butonlar 12px aşağıdan
+  yerine oturur. Sağda ürün ikonları elle yerleştirilmiş bir kompozisyonda
+  belirir ve her biri kendi ritminde (6,5-10 saniye) birkaç piksel yukarı aşağı
+  süzülür. Mobilde bu kompozisyon gösterilmez.
+- **Sergi duvarı:** Duvar ekrana girdiğinde ikonlar soldan sağa, 80ms arayla
+  asılır; bu bir kez olur. Fareyle üzerine gelinen ikon 6px kalkar, gölgesi
+  derinleşir ve imleci takip ederek en fazla 8 derece eğilir. Bu sırada sayfa
+  zemini o ürünün renginin yüzde 6'lık tonuna geçer (500ms). Dokunmatik
+  cihazlarda eğim yoktur.
+- **Kaydırmalı vitrin:** Öne çıkan ürünler (`featured`) için. Masaüstünde solda
+  sabit bir cihaz durur; sağdaki metin adımları kaydırıldıkça cihazın ekranı
+  çapraz geçişle değişir. Web ürünlerinde cihaz telefondan tarayıcı penceresine
+  dönüşür (700ms). Aktif olmayan adımların başlığı ikincil renge çekilir; sayfa
+  zemini aktif ürünün tonunu alır. Mobilde cihaz her adımın içinde durağandır.
+- **Sayfa geçişleri:** Sayfalar arası geçiş 260ms'lik çapraz geçiştir. Bir ürün
+  ikonu, sergi duvarından ürün sayfasına ve oradan gizlilik ile destek
+  sayfalarına aynı ikon olarak uçar (520ms).
+- **Kullanıcı eylemleri:** Buton zemin geçişleri 150ms, tema değişimi 200ms,
+  mobil menü açılışı 240ms.
 
 ### İkonlar
 
@@ -475,15 +493,18 @@ fotoğrafçısı `src/assets/CREDITS.md` dosyasında kayıt altına alınır.
   anlam taşır.
 - **Do** hiyerarşiyi önce boşlukla, sonra boyutla kur.
 - **Do** gizlilik ve destek linklerini her ürün sayfasında aynı yerde tut.
-- **Do** her ürünün kendi rengini yalnızca kendi ikonunda ve şeridinde kullan.
+- **Do** her ürünün kendi rengini yalnızca kendi ikonunda, şeridinde, vitrin
+  ekranında ve sayfa zemininin çok hafif tonunda kullan.
 - **Do** iki temayı da aynı özenle tasarla; karanlık tema sonradan eklenmiş bir
   filtre gibi görünmesin.
 - **Don't** zemini kreme ya da kırık beyaza çevirme.
 - **Don't** başlıkların üstüne büyük harfli küçük etiketler koyma.
 - **Don't** başlıkta tek bir kelimeyi renklendirme, italik ya da kalın yapma.
 - **Don't** buton ve link metinlerinin sonuna ok işareti ekleme.
-- **Don't** her bölüme kayarak belirme animasyonu koyma. Tek hareket anı sergi
-  duvarıdır.
+- **Don't** her bölüme kayarak belirme animasyonu koyma. Hareket yalnızca
+  ürünlerin etrafında ve kullanıcının eylemine cevap olarak kullanılır.
+- **Don't** soluklaştırmak için metne saydamlık verme; kontrast düşer. Renk
+  tonuyla geri çekil.
 - **Don't** içerikleri birbirinin aynısı, gölgeli, aynı köşeli kartlara bölme.
 - **Don't** süs amaçlı gradyan, parıltı ya da bulanık cam efekti kullanma.
 - **Don't** sıralı olmayan içerikte numara kullanma (01, 02, 03).
