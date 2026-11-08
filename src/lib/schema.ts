@@ -53,3 +53,21 @@ export function productSchema(product: Product, lang: Lang) {
     inLanguage: lang === "tr" ? "tr-TR" : "en-US",
   };
 }
+
+export function articleSchema(
+  post: { title: string; description: string; date: Date },
+  url: string,
+  lang: Lang,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date.toISOString().slice(0, 10),
+    url: `${site.url}${url}`,
+    inLanguage: lang === "tr" ? "tr-TR" : "en-US",
+    author: { "@type": "Person", name: site.founder },
+    publisher: { "@id": organizationId },
+  };
+}
