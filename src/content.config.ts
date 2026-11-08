@@ -10,7 +10,10 @@ const products = defineCollection({
     z.object({
       name: z.string(),
       type: z.enum(["app", "game", "web"]),
-      tagline: z.string(),
+      tagline: z.object({
+        tr: z.string(),
+        en: z.string().optional(),
+      }),
       color: hexColor,
       icon: image(),
       platforms: z.array(z.enum(["ios", "android", "web"])).min(1),
@@ -28,6 +31,8 @@ const products = defineCollection({
       privacyUpdated: z.coerce.date().optional(),
       order: z.number().int().default(100),
       draft: z.boolean().default(false),
+      /** Placeholder entries used until real products are added. Remove before launch. */
+      sample: z.boolean().default(false),
     }),
 });
 
