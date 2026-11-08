@@ -20,6 +20,7 @@ export const ui = {
     "footer.studio": "Stüdyo",
     "footer.legal": "Yasal",
     "footer.press": "Basın kiti",
+    "footer.allProducts": "Tüm ürünler",
     "footer.privacy": "Gizlilik",
     "footer.rights": "Tüm hakları saklıdır.",
     "skip.content": "İçeriğe geç",
@@ -36,6 +37,7 @@ export const ui = {
     "footer.studio": "Studio",
     "footer.legal": "Legal",
     "footer.press": "Press kit",
+    "footer.allProducts": "All products",
     "footer.privacy": "Privacy",
     "footer.rights": "All rights reserved.",
     "skip.content": "Skip to content",
@@ -51,6 +53,39 @@ export function getLangFromUrl(url: URL): Lang {
 
 export function useTranslations(lang: Lang) {
   return (key: UiKey): string => ui[lang][key] ?? ui[defaultLang][key];
+}
+
+/** Localized paths for every top-level page. Turkish is unprefixed. */
+export const routes = {
+  home: { tr: "/", en: "/en" },
+  products: { tr: "/urunler", en: "/en/products" },
+  studio: { tr: "/studyo", en: "/en/studio" },
+  contact: { tr: "/iletisim", en: "/en/contact" },
+  press: { tr: "/basin", en: "/en/press" },
+  privacy: { tr: "/gizlilik", en: "/en/privacy" },
+} as const satisfies Record<string, Record<Lang, string>>;
+
+export type RouteName = keyof typeof routes;
+
+export function route(name: RouteName, lang: Lang): string {
+  return routes[name][lang];
+}
+
+/**
+ * Path of the same page in the other language. Product detail pages share
+ * their slug across languages; anything unknown falls back to the home page.
+ */
+export function alternatePath(url: URL, target: Lang): string {
+  const path = url.pathname.replace(/\/$/, "") || "/";
+  for (const paths of Object.values(routes)) {
+    for (const p of Object.values(paths)) {
+      if (path === p) return paths[target];
+      if (path.startsWith(`${p}/`) && p !== "/" && p !== "/en") {
+        return `${paths[target]}${path.slice(p.length)}`;
+      }
+    }
+  }
+  return routes.home[target];
 }
 
 /** Turkish routes are unprefixed; English routes live under /en. */
