@@ -1,0 +1,461 @@
+---
+version: alpha
+name: Ryvex Studio Web
+description: ryvexstudio.com ürün vitrini ve stüdyo sitesi için görsel sistem.
+brand: ./BRAND.md
+colors:
+  primary: "#1C1418"
+  secondary: "#5E5459"
+  tertiary: "#8E1B3B"
+  tertiary-hover: "#74142F"
+  neutral: "#F4F2F3"
+  neutral-strong: "#EAE6E8"
+  outline: "#E2DDE0"
+  surface: "#FFFFFF"
+  on-tertiary: "#FFFFFF"
+  primary-dark: "#F2ECEE"
+  secondary-dark: "#A99DA3"
+  tertiary-dark: "#D9567A"
+  tertiary-hover-dark: "#E57A97"
+  neutral-dark: "#211A1D"
+  neutral-strong-dark: "#2B2226"
+  outline-dark: "#33292E"
+  surface-dark: "#160F12"
+  on-tertiary-dark: "#160F12"
+typography:
+  display:
+    fontFamily: Geist
+    fontSize: 6rem
+    fontWeight: 600
+    lineHeight: 0.98
+    letterSpacing: -0.045em
+  headline-xl:
+    fontFamily: Geist
+    fontSize: 3.5rem
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: -0.035em
+  headline-lg:
+    fontFamily: Geist
+    fontSize: 2.25rem
+    fontWeight: 600
+    lineHeight: 1.12
+    letterSpacing: -0.025em
+  headline-md:
+    fontFamily: Geist
+    fontSize: 1.5rem
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: -0.015em
+  title:
+    fontFamily: Geist
+    fontSize: 1.125rem
+    fontWeight: 600
+    lineHeight: 1.35
+    letterSpacing: -0.01em
+  body-lg:
+    fontFamily: Geist
+    fontSize: 1.25rem
+    fontWeight: 400
+    lineHeight: 1.55
+    letterSpacing: -0.01em
+  body-md:
+    fontFamily: Geist
+    fontSize: 1.0625rem
+    fontWeight: 400
+    lineHeight: 1.6
+  body-sm:
+    fontFamily: Geist
+    fontSize: 0.9375rem
+    fontWeight: 400
+    lineHeight: 1.5
+  label:
+    fontFamily: Geist
+    fontSize: 0.875rem
+    fontWeight: 500
+    lineHeight: 1.3
+  mono-sm:
+    fontFamily: Geist Mono
+    fontSize: 0.8125rem
+    fontWeight: 400
+    lineHeight: 1.4
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 40px
+  2xl: 64px
+  3xl: 96px
+  section: 160px
+  section-mobile: 96px
+  gutter: 24px
+  margin-mobile: 20px
+  margin-tablet: 40px
+  margin-desktop: 64px
+  content-max: 1240px
+  measure: 64ch
+rounded:
+  sm: 8px
+  md: 12px
+  lg: 20px
+  xl: 24px
+  icon: 22.5%
+  full: 999px
+components:
+  button-primary:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-tertiary}"
+    typography: "{typography.label}"
+    rounded: "{rounded.full}"
+    padding: 14px 22px
+  button-primary-hover:
+    backgroundColor: "{colors.tertiary-hover}"
+    textColor: "{colors.on-tertiary}"
+  button-secondary:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.primary}"
+    typography: "{typography.label}"
+    rounded: "{rounded.full}"
+    padding: 13px 21px
+  button-secondary-hover:
+    backgroundColor: "{colors.neutral}"
+    textColor: "{colors.primary}"
+  link-inline:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.tertiary}"
+    typography: "{typography.body-md}"
+  product-tile:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.primary}"
+    typography: "{typography.title}"
+    rounded: "{rounded.icon}"
+  product-label:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.secondary}"
+    typography: "{typography.body-sm}"
+  segmented-filter:
+    backgroundColor: "{colors.neutral}"
+    textColor: "{colors.secondary}"
+    typography: "{typography.label}"
+    rounded: "{rounded.full}"
+    padding: 4px
+  segmented-filter-active:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.primary}"
+  product-facts:
+    backgroundColor: "{colors.neutral}"
+    textColor: "{colors.primary}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.xl}"
+    padding: 32px
+  screenshot-strip:
+    backgroundColor: "{colors.neutral}"
+    rounded: "{rounded.xl}"
+    padding: 40px
+  header:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.primary}"
+    typography: "{typography.label}"
+    height: 72px
+  footer:
+    backgroundColor: "{colors.neutral}"
+    textColor: "{colors.secondary}"
+    typography: "{typography.body-sm}"
+    padding: 64px
+  button-primary-dark:
+    backgroundColor: "{colors.tertiary-dark}"
+    textColor: "{colors.on-tertiary-dark}"
+  body-dark:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.primary-dark}"
+---
+
+# Ryvex Studio Web
+
+## Overview
+
+Bu tasarım sistemi, [Ryvex Studio markasını](./BRAND.md) ryvexstudio.com için
+uygular: ana sayfa, ürünler, ürün detay sayfaları, stüdyo, iletişim, basın kiti
+ve her ürünün gizlilik ve destek sayfaları.
+
+Temel fikir: **bir stüdyonun sergi duvarı.** Site bir yazılım ajansı sayfası
+değil, beyaz bir duvara asılmış eserlerin sergisidir. Ürün ikonları duvardaki
+çerçeveli eserlerdir. Her birinin altında, müzelerdeki gibi küçük bir künye
+durur: ürünün adı, türü ve platformu. Ziyaretçi bir şey satın almaya değil,
+bir koleksiyonu gezmeye gelmiş gibi hissetmelidir.
+
+Kitle çoğunlukla Türkiye'de, telefondan gezen ve mağazaya geçmeden önce
+"bunlar ciddi mi" diye bakan kullanıcılardır. Site bu soruya önce düzenle,
+sonra açık bilgiyle cevap verir: her ürünün kim tarafından yapıldığı, nerede
+indirileceği, gizlilik politikası ve destek adresi her zaman bir tık uzaktadır.
+
+Sitenin tek cesur anı, ana sayfadaki sergi duvarıdır. Geri kalan her şey sakin,
+düzenli ve sessizdir. Vişne sayfa başına bir ya da iki yerde görünür. Renk ve
+enerji ürünlerin kendi ikonlarından gelir.
+
+Varsayılan tema aydınlıktır. Karanlık tema, aydınlığın birebir karşılığıdır;
+ayrı bir tasarım değildir.
+
+## Colors
+
+Temiz beyaz zemin, vişne izli koyu mürekkep ve tek derin vurgu. Değerler
+markanın onaylı renklerinden birebir alınmıştır; rol adları bu yüzeye özgüdür.
+
+| Rol | Marka rengi | Değer | Kaynak |
+|---|---|---|---|
+| `surface` | Beyaz (zorunlu) | `#FFFFFF` | Birebir |
+| `primary` | Mürekkep (zorunlu) | `#1C1418` | Birebir |
+| `tertiary` | Vişne (zorunlu) | `#8E1B3B` | Birebir |
+| `tertiary-hover` | yok | `#74142F` | Vişne'den türetildi |
+| `secondary` | yok | `#5E5459` | Mürekkep'ten türetildi |
+| `neutral` | yok | `#F4F2F3` | Mürekkep'ten türetildi |
+| `neutral-strong` | yok | `#EAE6E8` | Mürekkep'ten türetildi |
+| `outline` | yok | `#E2DDE0` | Mürekkep'ten türetildi |
+| `on-tertiary` | Beyaz | `#FFFFFF` | Birebir |
+
+- **Surface, Beyaz (#FFFFFF):** Sayfa zemini. Krem ya da kırık beyaza
+  çevrilmez.
+- **Primary, Mürekkep (#1C1418):** Tüm başlıklar ve metinler. Saf siyah
+  kullanılmaz.
+- **Secondary (#5E5459):** İkincil metinler, künyeler, açıklamalar. Beyaz
+  üzerinde yaklaşık 7:1 kontrast verir.
+- **Tertiary, Vişne (#8E1B3B):** Birincil buton, metin içi linkler, logo
+  sembolü ve klavye odak halkası. Başka hiçbir yerde kullanılmaz. Beyaz
+  üzerinde yaklaşık 9:1 kontrast verir.
+- **Neutral (#F4F2F3) ve Neutral strong (#EAE6E8):** Ürün künye kutusu, ekran
+  görüntüsü şeridi, filtre zemini ve footer. Vişneye doğru çok hafif ısınmış bir
+  gri; saf gri değil.
+- **Outline (#E2DDE0):** Ayırıcı çizgiler ve ikincil buton kenarlığı.
+
+### Karanlık tema
+
+Karanlık tema, her rolün karşılığını taşır. Zemin Mürekkep'ten türetilir; saf
+siyah kullanılmaz.
+
+| Rol | Değer | Kaynak |
+|---|---|---|
+| `surface-dark` | `#160F12` | Mürekkep'ten türetildi |
+| `neutral-dark` | `#211A1D` | Mürekkep'ten türetildi |
+| `neutral-strong-dark` | `#2B2226` | Mürekkep'ten türetildi |
+| `outline-dark` | `#33292E` | Mürekkep'ten türetildi |
+| `primary-dark` | `#F2ECEE` | Beyaz'dan türetildi |
+| `secondary-dark` | `#A99DA3` | Mürekkep'ten türetildi |
+| `tertiary-dark` | `#D9567A` | Vişne'den açıltıldı |
+| `tertiary-hover-dark` | `#E57A97` | Vişne'den açıltıldı |
+| `on-tertiary-dark` | `#160F12` | Mürekkep'ten türetildi |
+
+Koyu zeminde derin vişne okunmaz. Bu yüzden karanlık temada vurgu, aynı tonun
+açık hâlidir (`#D9567A`). Bu bir yeniden tanımlama değil, aynı rengin koyu zemine
+uyarlanmasıdır. Logo sembolü karanlık temada da `#8E1B3B` kalır, çünkü kendi
+dolgusu içinde durur.
+
+### Ürün renkleri
+
+Her ürün kendi rengini getirir. Ürün rengi yalnızca o ürünün ikonunda ve detay
+sayfasındaki ekran görüntüsü şeridinin zemininde (ürün renginin beyazla yüzde 8
+karışımı) kullanılır. Ürün rengi asla buton, link ya da başlık rengi olmaz;
+o roller markaya aittir.
+
+### Tema davranışı
+
+İlk ziyarette tema aydınlıktır. Header'daki tema düğmesiyle karanlığa geçilir ve
+tercih tarayıcıda saklanır. Tema, sayfa çizilmeden önce uygulanır; yanlış temada
+yanıp sönme olmaz.
+
+## Typography
+
+Tek aile: Geist. Markanın sesi başlıkta da metinde de aynıdır; hiyerarşi boyut,
+ağırlık ve boşlukla kurulur.
+
+- **Display (6rem):** Yalnızca ana sayfa başlığı. Sayfada bir kez. Mobilde
+  3.25rem'e iner. Sıkı satır aralığı ve negatif harf aralığı, başlığı bir logo
+  gibi okunur kılar.
+- **Headline xl (3.5rem):** Alt sayfaların başlığı ve ürün adı. Mobilde 2.5rem.
+- **Headline lg (2.25rem):** Bölüm başlıkları.
+- **Headline md (1.5rem):** Alt bölüm başlıkları.
+- **Title (1.125rem):** Sergi duvarındaki ürün adları, liste başlıkları.
+- **Body lg (1.25rem):** Giriş paragrafları ve ürün tek cümlelik tanıtımları.
+- **Body md (1.0625rem):** Tüm akan metin. Satır uzunluğu en fazla 64 karakter.
+- **Body sm (0.9375rem):** Künyeler, footer, yardımcı metin.
+- **Label (0.875rem, 500):** Buton, navigasyon ve filtre metinleri. Normal yazım,
+  büyük harf yok.
+- **Mono sm (Geist Mono):** Yalnızca sürüm numaraları ve sürüm notu tarihleri.
+  Künyelerde, etiketlerde ya da süs amacıyla kullanılmaz.
+
+Sayfa dili `tr` olarak işaretlenir; böylece "i/İ" ve "ı/I" dönüşümleri doğru
+yapılır. Tipografide büyük harf dönüşümü kullanılmaz.
+
+## Layout
+
+12 sütunlu ızgara, içerik en fazla 1240px genişlikte, sütun arası 24px. Kenar
+boşlukları mobilde 20px, tablette 40px, masaüstünde 64px. Kırılma noktaları
+640px, 960px ve 1280px.
+
+Hizalama soldandır. Ortalanmış metin yalnızca 404 sayfası gibi tek mesajlı
+ekranlarda kullanılır.
+
+Bölümler arasında masaüstünde 160px, mobilde 96px boşluk vardır. Hiyerarşi önce
+boşlukla kurulur.
+
+### Ana sayfa
+
+```text
+[R] Ryvex Studio                  Ürünler   Stüdyo   İletişim   [tema]
+----------------------------------------------------------------------
+Her ekranda                                   (display, 8 sütun, sol)
+aynı özen.
+
+Mobil uygulamalar, oyunlar ve web projeleri.      (body-lg, 6 sütun)
+[Ürünleri keşfet]  [Stüdyoyu tanı]
+
+ ┌──────┐     ┌──────┐     ┌──────┐     ┌──────┐   ← sergi duvarı
+ │ ikon │     │ ikon │     │ ikon │     │ ikon │
+ └──────┘     └──────┘     └──────┘     └──────┘
+ Ürün adı     Ürün adı     Ürün adı     Ürün adı   ← künye: ad
+ Oyun, iOS    Uygulama     Web          Oyun       ← künye: tür, platform
+
+Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
+
+Footer
+```
+
+Sergi duvarında ikonlar 4 sütunlu (mobilde 2 sütunlu) bir ızgaraya, eşit
+aralıklarla asılır. İkon boyutu masaüstünde 160px, mobilde 120px. Ürün sayısı
+4'ü aşınca duvar alt satıra geçer; kaydırmalı karusel kullanılmaz.
+
+### Ürünler sayfası
+
+Başlık, altında tür filtresi (Tümü, Uygulamalar, Oyunlar, Web) ve aynı sergi
+duvarı. Filtre değiştiğinde yalnızca görünen ürünler değişir; sayfa yeniden
+yüklenmez ve adres çubuğu güncellenir (`/urunler?tur=oyun`).
+
+### Ürün detay sayfası
+
+```text
+[ikon 128px]  Ürün adı                              (headline-xl)
+              Tek cümlelik tanıtım                  (body-lg)
+              [App Store]  [Google Play]  [Web'de aç]
+
+┌──────────────────────────────────────────────────────────┐
+│  ekran   ekran   ekran   ekran   →  (yatay kaydırma)     │ ← ürün rengi %8
+└──────────────────────────────────────────────────────────┘
+
+Ne yapar (kısa paragraflar)          ┌ Ürün bilgileri ─────┐
+                                     │ Geliştirici  Ryvex  │
+                                     │ Tür          Oyun   │
+                                     │ Platform     iOS    │
+                                     │ Sürüm        1.2.0  │
+                                     │ Gizlilik  · Destek  │
+                                     └─────────────────────┘
+```
+
+### Gizlilik ve destek sayfaları
+
+Tek sütun, 64 karakter satır uzunluğu, başlıklar arasında net boşluk. Sayfanın
+üstünde ürün ikonu, ürün adı ve son güncelleme tarihi bulunur. Bu sayfalar
+mağaza inceleme ekipleri tarafından okunur; süsleme yapılmaz.
+
+## Elevation & Depth
+
+Arayüz öğelerinde gölge yoktur. Kartlar, butonlar, header ve menüler düzdür.
+Derinlik yalnızca zemin tonu farkıyla (`surface` → `neutral` → `neutral-strong`)
+kurulur.
+
+Tek istisna gerçek nesnelerdir: cihaz çerçevesi içindeki ekran görüntüleri ve
+sergi duvarındaki ürün ikonları, duvara asılmış bir nesne gibi tek ve yumuşak
+bir gölge taşır: `0 24px 48px -24px rgba(28, 20, 24, 0.28)`. Karanlık temada bu
+gölge kaldırılır, yerine `outline-dark` renginde 1px kenar kullanılır.
+
+Header sabit kalır; sayfa kaydırılınca altında 1px `outline` çizgisi belirir.
+Bulanık cam efekti kullanılmaz.
+
+## Shapes
+
+Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
+
+- **Ürün ikonları:** Kenar uzunluğunun yüzde 22,5'i, uygulama ikonu biçimi.
+  Logo sembolü de aynı biçimdedir. Bu, markanın "çerçeve" fikrinin sitedeki
+  karşılığıdır.
+- **Butonlar, filtreler, mağaza rozetleri:** Tam yuvarlak uçlar (999px).
+- **Büyük bloklar** (künye kutusu, ekran görüntüsü şeridi): 24px.
+- **Fotoğraflar:** 20px.
+- **Form alanları:** 12px.
+- **Küçük öğeler** (tooltip, bildirim): 8px.
+
+## Components
+
+- **Header:** 72px yükseklik. Solda logo (sembol + "Ryvex Studio"), sağda
+  navigasyon, dil seçici (TR / EN) ve tema düğmesi. Mobilde navigasyon tam ekran
+  bir menüye dönüşür; logo her zaman kelime logosuyla birlikte görünür.
+- **Tema düğmesi:** Güneş ve ay ikonu arasında geçen tek düğme. Erişilebilir
+  adı mevcut duruma göre "Karanlık temaya geç" ya da "Aydınlık temaya geç".
+- **Birincil buton:** Vişne zemin, beyaz metin, tam yuvarlak. Üzerine gelince
+  zemin `tertiary-hover` olur. Sayfa başına en fazla bir tane.
+- **İkincil buton:** Beyaz zemin, `outline` kenarlık, Mürekkep metin. Üzerine
+  gelince zemin `neutral` olur.
+- **Metin içi link:** Vişne metin, 1px alt çizgi, alt çizgi metinden 3px uzakta.
+  Üzerine gelince alt çizgi 2px olur.
+- **Ürün kutucuğu (sergi duvarı):** İkon, altında ürün adı (title) ve künye
+  (body-sm, `secondary`): tür ve platform, virgülle ayrılmış. Bütün kutucuk tek
+  bir link. Üzerine gelince yalnızca ürün adının altı çizilir; ikon büyümez,
+  kart kalkmaz.
+- **Tür filtresi:** `neutral` zeminli tek bir hap; içinde seçenekler. Seçili
+  seçenek beyaz zemin ve Mürekkep metin alır. Klavyeyle ok tuşlarıyla gezilir.
+- **Mağaza rozetleri:** Apple ve Google'ın resmi rozetleri, kendi kurallarına
+  uygun boyut ve boşlukla. Renkleri değiştirilmez. Aydınlık temada siyah,
+  karanlık temada beyaz kenarlıklı siyah sürümleri kullanılır.
+- **Ürün bilgileri kutusu:** `neutral` zemin, 24px köşe. Etiket ve değer iki
+  sütunda; satırlar arasında `outline` çizgi. Gizlilik ve Destek linkleri her
+  zaman bu kutuda bulunur.
+- **Ekran görüntüsü şeridi:** Ürün renginin yüzde 8'lik tonu üzerinde, yatay
+  kaydırmalı. Görüntüler cihaz oranında, 20px köşeli.
+- **Footer:** `neutral` zemin. Solda logo ve slogan; sağda üç kolon: Ürünler,
+  Stüdyo, Yasal. En altta "© 2026 Ryvex Studio" ve dil seçici.
+- **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
+  uzakta. Karanlık temada `tertiary-dark`. Hiçbir zaman kaldırılmaz.
+
+### Hareket
+
+Sitede tek bir düzenlenmiş hareket anı vardır: ana sayfa ilk açıldığında sergi
+duvarındaki ikonlar soldan sağa sırayla duvara asılır (opaklık 0'dan 1'e ve
+8px aşağıdan yerine; her ikon 60ms arayla; toplam en fazla 600ms;
+`cubic-bezier(0.2, 0.7, 0.2, 1)`).
+
+Bunun dışındaki tüm hareketler kullanıcı eylemine cevaptır: buton zemin
+geçişleri 150ms, tema değişimi 200ms, mobil menü açılışı 240ms.
+`prefers-reduced-motion` açıksa tüm hareketler kapatılır.
+
+### İkonlar
+
+Arayüz ikonları Lucide setinden, 1.5px çizgi kalınlığında, 20px boyutunda.
+Dolgulu ikon kullanılmaz.
+
+### Görseller
+
+Ürün ekran görüntüleri gerçek ürünlerden alınır. Stüdyo ve atmosfer
+fotoğrafları ticari kullanıma izin veren ücretsiz kaynaklardan (Unsplash,
+Pexels) seçilir: doğal ışık, gerçek mekân, filtresiz. Her görselin kaynağı ve
+fotoğrafçısı `src/assets/CREDITS.md` dosyasında kayıt altına alınır.
+
+## Do's and Don'ts
+
+- **Do** vişneyi sayfa başına bir ya da iki yerde kullan. Nadir olduğu için
+  anlam taşır.
+- **Do** hiyerarşiyi önce boşlukla, sonra boyutla kur.
+- **Do** gizlilik ve destek linklerini her ürün sayfasında aynı yerde tut.
+- **Do** her ürünün kendi rengini yalnızca kendi ikonunda ve şeridinde kullan.
+- **Do** iki temayı da aynı özenle tasarla; karanlık tema sonradan eklenmiş bir
+  filtre gibi görünmesin.
+- **Don't** zemini kreme ya da kırık beyaza çevirme.
+- **Don't** başlıkların üstüne büyük harfli küçük etiketler koyma.
+- **Don't** başlıkta tek bir kelimeyi renklendirme, italik ya da kalın yapma.
+- **Don't** buton ve link metinlerinin sonuna ok işareti ekleme.
+- **Don't** her bölüme kayarak belirme animasyonu koyma. Tek hareket anı sergi
+  duvarıdır.
+- **Don't** içerikleri birbirinin aynısı, gölgeli, aynı köşeli kartlara bölme.
+- **Don't** süs amaçlı gradyan, parıltı ya da bulanık cam efekti kullanma.
+- **Don't** sıralı olmayan içerikte numara kullanma (01, 02, 03).
+- **Don't** Geist Mono'yu künye ya da etiket süsü olarak kullanma.
+- **Don't** ürün rengini buton, link ya da başlık rengi yapma.
+- **Don't** mağaza rozetlerini yeniden çizme ya da renklendirme.
