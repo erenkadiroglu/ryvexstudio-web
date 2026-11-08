@@ -1,4 +1,5 @@
 ---
+import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
 import desk from "@/assets/studio/desk.jpg";
@@ -115,3 +116,5 @@ const copy = {
     <a href={route("contact", lang)} class="link-inline mt-6 inline-block">{copy.contactLink}</a>
   </div>
 </section>
+
+<ClosingBand lang={lang} />

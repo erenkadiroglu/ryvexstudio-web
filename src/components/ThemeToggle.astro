@@ -39,16 +39,33 @@ const t = useTranslations(getLangFromUrl(Astro.url));
       sync(button, document.documentElement.dataset.theme ?? "light");
 
       button.addEventListener("click", () => {
-        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
+        const root = document.documentElement;
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        const apply = () => {
+          root.dataset.theme = next;
+          document
+            .querySelectorAll<HTMLButtonElement>(".theme-toggle")
+            .forEach((b) => sync(b, next));
+        };
         try {
           localStorage.setItem(STORAGE_KEY, next);
         } catch {
           /* storage unavailable: theme still applies for this visit */
         }
+
+        // The new theme spreads in a circle from the button, where the browser supports it.
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!document.startViewTransition || reduce) {
+          apply();
+          return;
+        }
+        const rect = button.getBoundingClientRect();
+        root.style.setProperty("--tx", `${rect.left + rect.width / 2}px`);
+        root.style.setProperty("--ty", `${rect.top + rect.height / 2}px`);
+        root.classList.add("theme-switching");
         document
-          .querySelectorAll<HTMLButtonElement>(".theme-toggle")
-          .forEach((b) => sync(b, next));
+          .startViewTransition(apply)
+          .finished.finally(() => root.classList.remove("theme-switching"));
       });
     });
   });

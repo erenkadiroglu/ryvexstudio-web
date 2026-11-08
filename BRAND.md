@@ -2,7 +2,7 @@
 name: "Ryvex Studio"
 tagline: "Her ekranda aynı özen."
 specVersion: "0.3.0"
-version: 4
+version: 5
 language: tr
 type: master
 ---
@@ -198,6 +198,31 @@ sayfası ve sosyal medya profillerinde kullanılır.
 - Destek sayfası: "Bir sorun mu var? Buradayız."
 - Gizlilik sayfası: "Verileriniz sizindir. Ne topladığımızı açıkça yazıyoruz."
 - Basın sayfası: "Ryvex Studio hakkında bilmeniz gereken her şey."
+
+### Manifesto
+
+Çok ürün yapmak kolay.
+
+Biz az ürün yapıyoruz. Her birini, kendimiz kullanmak isteyeceğimiz hâle
+gelene kadar işliyoruz.
+
+Bir uygulama, açıldığında ne yapacağını bilmelidir. Bir oyun, kısa bir molayı
+güzelleştirmelidir. Bir web sayfası, kurulum istemeden çalışmalıdır.
+
+Detaylar tesadüf değildir. Bir butonun yeri, bir cümlenin uzunluğu, bir
+geçişin süresi; hepsi bir karardır.
+
+Verinize saygı, sonradan eklenen bir ayar değildir. En baştan tasarıma
+katılır.
+
+Arkamızda adı bilinen bir kurucu var. Bir sorunuz olduğunda, karşınızda biri
+var.
+
+Telefonda, tarayıcıda ya da bir oyunun içinde; ekran değişiyor.
+
+Özen değişmiyor.
+
+Ryvex Studio.
 
 ### Message Pillars
 

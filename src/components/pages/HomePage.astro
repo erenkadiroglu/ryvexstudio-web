@@ -4,6 +4,8 @@ import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
 import Process from "@/components/Process.astro";
+import Manifesto from "@/components/Manifesto.astro";
+import ClosingBand from "@/components/ClosingBand.astro";
 import workspace from "@/assets/studio/workspace.jpg";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
@@ -20,12 +22,13 @@ const featured = products.filter((p) => p.data.featured);
 
 // Hand-placed composition for the drifting icons on the right of the hero.
 const constellation = [
-  { top: "2%", left: "48%", size: 136, r: "4deg", dy: "-12px", d: "9s" },
-  { top: "30%", left: "4%", size: 108, r: "-6deg", dy: "-9px", d: "7.5s" },
-  { top: "40%", left: "60%", size: 150, r: "-3deg", dy: "-14px", d: "10s" },
-  { top: "72%", left: "24%", size: 92, r: "5deg", dy: "-8px", d: "8s" },
-  { top: "4%", left: "10%", size: 72, r: "8deg", dy: "-7px", d: "6.5s" },
-  { top: "78%", left: "74%", size: 80, r: "-8deg", dy: "-10px", d: "8.5s" },
+  // depth: how strongly the icon follows the pointer (near icons move more).
+  { top: "2%", left: "48%", size: 136, r: "4deg", dy: "-12px", d: "9s", depth: 0.8 },
+  { top: "30%", left: "4%", size: 108, r: "-6deg", dy: "-9px", d: "7.5s", depth: 0.6 },
+  { top: "40%", left: "60%", size: 150, r: "-3deg", dy: "-14px", d: "10s", depth: 1 },
+  { top: "72%", left: "24%", size: 92, r: "5deg", dy: "-8px", d: "8s", depth: 0.45 },
+  { top: "4%", left: "10%", size: 72, r: "8deg", dy: "-7px", d: "6.5s", depth: 0.3 },
+  { top: "78%", left: "74%", size: 80, r: "-8deg", dy: "-10px", d: "8.5s", depth: 0.35 },
 ];
 const floating = products.slice(0, constellation.length);
 
@@ -98,18 +101,22 @@ const copy = {
         const spot = constellation[i];
         return (
           <div
-            class="hero-float absolute"
-            style={`top:${spot.top};left:${spot.left};--i:${i};--r:${spot.r};--dy:${spot.dy};--d:${spot.d}`}
+            class="hero-depth absolute"
+            style={`top:${spot.top};left:${spot.left}`}
+            data-product={product.id}
+            data-depth={spot.depth}
           >
-            <Image
-              src={product.data.icon}
-              alt=""
-              width={spot.size}
-              height={spot.size}
-              loading="eager"
-              class="shape-icon object-depth"
-              style={`width:${spot.size}px;height:${spot.size}px`}
-            />
+            <div class="hero-float" style={`--i:${i};--r:${spot.r};--dy:${spot.dy};--d:${spot.d}`}>
+              <Image
+                src={product.data.icon}
+                alt=""
+                width={spot.size}
+                height={spot.size}
+                loading="eager"
+                class="shape-icon object-depth"
+                style={`width:${spot.size}px;height:${spot.size}px`}
+              />
+            </div>
           </div>
         );
       })
@@ -121,6 +128,8 @@ const copy = {
   <h2 id="duvar" class="sr-only">{copy.wallHeading}</h2>
   <ProductWall items={items} animate />
 </section>
+
+<Manifesto lang={lang} />
 
 <Disciplines products={products} lang={lang} />
 
@@ -149,3 +158,5 @@ const copy = {
     />
   </div>
 </section>
+
+<ClosingBand lang={lang} />

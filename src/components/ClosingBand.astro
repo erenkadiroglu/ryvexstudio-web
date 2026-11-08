@@ -1,0 +1,66 @@
+---
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  tr: {
+    heading: "Bir fikriniz mi var?",
+    text: "Sorularınızı, önerilerinizi ve iş birliği fikirlerinizi okuyoruz. Her mesaja cevap veriyoruz.",
+    cta: "Bize yazın",
+  },
+  en: {
+    heading: "Have an idea?",
+    text: "We read every question, suggestion and idea for working together, and we reply to every message.",
+    cta: "Write to us",
+  },
+}[lang];
+---
+
+<!-- Full-bleed brand band. Colors are fixed brand values, so it reads the same in both themes. -->
+<section
+  class="relative overflow-hidden bg-[#8E1B3B] text-[#FFFFFF] [&_a:focus-visible]:outline-[#FFFFFF]"
+  aria-labelledby="kapanis"
+>
+  <svg
+    class="pointer-events-none absolute -right-24 -bottom-40 size-[520px] opacity-[0.09] md:-right-16 md:size-[640px]"
+    viewBox="0 0 64 64"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g fill="none" stroke="#FFFFFF" stroke-width="8">
+      <path d="M24 16V48"></path>
+      <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"></path>
+      <path d="M31 34L64 67"></path>
+    </g>
+  </svg>
+
+  <div class="container-page relative py-24 md:py-36">
+    <h2
+      id="kapanis"
+      class="max-w-[12ch] text-[3rem] leading-[1] font-semibold tracking-[-0.04em] md:text-[5.5rem]"
+    >
+      {copy.heading}
+    </h2>
+    <p class="mt-6 max-w-[44ch] text-body-lg text-[#FFFFFF]/85">{copy.text}</p>
+    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a
+        href={route("contact", lang)}
+        class="inline-flex rounded-full bg-[#FFFFFF] px-[26px] py-[16px] text-label font-medium text-[#8E1B3B] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]"
+      >
+        {copy.cta}
+      </a>
+      <a
+        href={`mailto:${site.contactEmail}`}
+        class="text-body-md text-[#FFFFFF] underline decoration-[#FFFFFF]/40 underline-offset-4 hover:decoration-[#FFFFFF]"
+      >
+        {site.contactEmail}
+      </a>
+    </div>
+  </div>
+</section>

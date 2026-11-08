@@ -1,4 +1,5 @@
 ---
+import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import ScreenSketch from "@/components/ScreenSketch.astro";
 import { render } from "astro:content";
@@ -202,3 +203,5 @@ const stripStyle = `background-color: color-mix(in srgb, ${data.color} 8%, var(-
     </aside>
   </div>
 </article>
+
+<ClosingBand lang={lang} />
