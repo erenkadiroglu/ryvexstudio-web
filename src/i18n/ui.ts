@@ -27,6 +27,7 @@ export const ui = {
     "footer.kvkk": "KVKK Aydınlatma Metni",
     "footer.cookies": "Çerez Politikası",
     "footer.rights": "Tüm hakları saklıdır.",
+    "footer.follow": "Takip edin",
     "skip.content": "İçeriğe geç",
   },
   en: {
@@ -48,6 +49,7 @@ export const ui = {
     "footer.kvkk": "Personal Data Notice",
     "footer.cookies": "Cookie Policy",
     "footer.rights": "All rights reserved.",
+    "footer.follow": "Follow us",
     "skip.content": "Skip to content",
   },
 } as const;

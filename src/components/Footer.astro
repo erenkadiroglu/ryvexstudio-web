@@ -44,6 +44,22 @@ const columns = [
     <div class="md:col-span-5">
       <Logo href={route("home", lang)} />
       <p class="mt-4 max-w-[32ch]">{site.tagline[lang]}</p>
+      <h2 class="sr-only">{t("footer.follow")}</h2>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {
+          site.social.map((s) => (
+            <li>
+              <a
+                href={s.url}
+                rel="me noopener"
+                class="inline-flex rounded-full border border-outline px-4 py-2 text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral-strong"
+              >
+                {s.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
     <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
       {
