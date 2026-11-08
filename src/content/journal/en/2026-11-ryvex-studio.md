@@ -13,7 +13,7 @@ Ryvex Studio was founded to bring that together. Mobile apps, games and web prod
 
 ## What does one signature mean?
 
-Each product answers a different need. One keeps your notes in order, one is played in a short break, one plans a trip in the browser. But all of them pass the same question: **Would we want to use this ourselves?**
+Each product answers a different need. FileConvert handles your PDF and file tasks without them ever leaving your phone. PathWords is a puzzle game you play in a short break that teaches English words along the way. But all of them pass the same question: **Would we want to use this ourselves?**
 
 Until the answer is yes, the product doesn't ship.
 
