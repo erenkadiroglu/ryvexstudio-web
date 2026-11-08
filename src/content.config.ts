@@ -26,7 +26,10 @@ const products = defineCollection({
           web: z.url().optional(),
         })
         .default({}),
-      screenshots: z.array(image()).default([]),
+      /** Real screenshots from a phone or emulator, in the order they are shown. */
+      screenshots: z
+        .array(z.object({ src: image(), alt: z.object({ tr: z.string(), en: z.string() }) }))
+        .default([]),
       version: z.string().optional(),
       releaseDate: z.coerce.date().optional(),
       supportEmail: z.email().optional(),

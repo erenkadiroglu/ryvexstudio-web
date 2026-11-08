@@ -7,6 +7,13 @@ tagline:
   en: "Scan your Okey rack with the camera and instantly see your sets and whether you can open your hand."
 color: "#9A5A2B"
 icon: ../../assets/products/persayar.png
+screenshots:
+  - src: ../../assets/screenshots/persayar/01-seri.png
+    alt: { tr: "Seri dizilmiş ıstaka: 103 puan, el açılabilir", en: "Rack sorted into runs: 103 points, the hand can open" }
+  - src: ../../assets/screenshots/persayar/02-cift.png
+    alt: { tr: "Çift dizilmiş ıstaka: 6 çift, el açılabilir", en: "Rack sorted into pairs: 6 pairs, the hand can open" }
+  - src: ../../assets/screenshots/persayar/03-baraj.png
+    alt: { tr: "Baraj Ayarları: seri ve çift barajı", en: "Threshold settings for runs and pairs" }
 platforms: [android]
 supportEmail: "destek@ryvexstudio.com"
 privacyUpdated: 2026-11-08

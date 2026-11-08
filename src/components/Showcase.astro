@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import PhoneFrame from "@/components/PhoneFrame.astro";
 import { route, type Lang } from "@/i18n/ui";
 import { comingSoonLabel, productCaption, productTagline, type Product } from "@/lib/products";
 
@@ -65,7 +66,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
                 <div class="showcase-screen absolute inset-0" style={product.data.screenshots[0] ? undefined : panel(product.data.color)}>
                   {product.data.screenshots[0] ? (
                     <Image
-                      src={product.data.screenshots[0]}
+                      src={product.data.screenshots[0].src}
                       alt=""
                       class="absolute inset-0 size-full object-cover object-top"
                       widths={[400, 800]}
@@ -93,12 +94,17 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
               data-kind={kindOf(product)}
             >
               <div
-                class="relative mb-8 flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-xl md:hidden"
+                class:list={[
+                  "relative mb-8 flex w-full items-center justify-center overflow-hidden rounded-xl md:hidden",
+                  product.data.screenshots[0] ? "pt-10" : "aspect-[16/10]",
+                ]}
                 style={panel(product.data.color)}
                 aria-hidden="true"
               >
                 {product.data.screenshots[0] ? (
-                  <Image src={product.data.screenshots[0]} alt="" widths={[400, 800]} sizes="100vw" class="absolute inset-0 size-full object-cover" />
+                  <div class="-mb-24">
+                    <PhoneFrame src={product.data.screenshots[0].src} alt="" width={210} />
+                  </div>
                 ) : (
                   <Image src={product.data.icon} alt="" widths={[112, 224]} sizes="112px" class="shape-icon object-depth size-28" />
                 )}

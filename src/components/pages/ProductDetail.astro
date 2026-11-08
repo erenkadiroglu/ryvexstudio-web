@@ -123,7 +123,7 @@ const related = [
 ].slice(0, 3);
 const kind = data.type === "web" ? "browser" : "phone";
 // Only real material is shown: a screenshot in a device, or else the product's own icon.
-const shot = data.screenshots[0];
+const shot = data.screenshots[0]?.src;
 ---
 
 <article>
@@ -204,12 +204,13 @@ const shot = data.screenshots[0];
         <div class="container-page pb-16 md:pb-20">
           <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots}>
             <ul class="flex gap-6 pt-1 pb-12 md:gap-8">
-              {data.screenshots.map((image, i) => {
-                const alt = `${data.name}, ${copy.screenshots.toLocaleLowerCase(lang)} ${i + 1}`;
+              {data.screenshots.map((screenshot) => {
+                const image = screenshot.src;
+                const alt = `${data.name}: ${screenshot.alt[lang]}`;
                 return (
                   <li class="shrink-0">
                     {kind === "phone" ? (
-                      <PhoneFrame src={image} alt={alt} width={232} />
+                      <PhoneFrame src={image} alt={alt} width={232} class="phone-compact" />
                     ) : (
                       <Image src={image} alt={alt} height={400} class="h-[300px] w-auto rounded-lg border border-outline md:h-[400px]" />
                     )}
