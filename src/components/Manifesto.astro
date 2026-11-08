@@ -1,0 +1,35 @@
+---
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const text = {
+  tr: "Çok ürün yapmak kolay. Biz az ürün yapıyoruz ve her birini, kendimiz kullanmak isteyeceğimiz hâle gelene kadar işliyoruz. Telefonda, tarayıcıda ya da bir oyunun içinde; ekran değişiyor, özen değişmiyor.",
+  en: "Making many products is easy. We make few, and refine each one until it is something we would want to use ourselves. On a phone, in a browser or inside a game, the screen changes. The care does not.",
+}[lang];
+
+const words = text.split(" ");
+---
+
+<section
+  class="manifesto container-page py-section-mobile md:py-section"
+  aria-label={lang === "tr" ? "Manifesto" : "Manifesto"}
+>
+  <p
+    class="max-w-[22ch] text-[2rem] leading-[1.15] font-semibold tracking-[-0.03em] md:text-[3.5rem] md:leading-[1.08]"
+  >
+    {
+      words.map((word, i) => (
+        <>
+          <span class="manifesto-word">{word}</span>
+          {i < words.length - 1 && " "}
+        </>
+      ))
+    }
+  </p>
+  <p class="mt-10 text-title font-semibold text-tertiary">Ryvex Studio</p>
+</section>
