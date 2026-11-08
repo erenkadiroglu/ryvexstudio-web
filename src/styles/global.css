@@ -18,6 +18,7 @@
   --rv-on-tertiary: #ffffff;
   --rv-object-shadow: 0 24px 48px -24px rgb(28 20 24 / 0.28);
   --rv-object-border: transparent;
+  --rv-muted: #8a8186;
   color-scheme: light;
 }
 
@@ -33,6 +34,7 @@
   --rv-on-tertiary: #160f12;
   --rv-object-shadow: none;
   --rv-object-border: #33292e;
+  --rv-muted: #7a6f74;
   color-scheme: dark;
 }
 
@@ -224,10 +226,11 @@
 @keyframes drift {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
+    transform: translate3d(0, 0, 0) rotate(calc(var(--r, 0deg) * var(--k, 1)));
   }
   50% {
-    transform: translate3d(0, var(--dy, -10px), 0) rotate(calc(var(--r, 0deg) * -1));
+    transform: translate3d(0, calc(var(--dy, -10px) * var(--k, 1)), 0)
+      rotate(calc(var(--r, 0deg) * var(--k, 1) * -1));
   }
 }
 
@@ -334,6 +337,49 @@ html[data-theme="dark"] .showcase-band {
   color: var(--rv-primary);
 }
 
+/* Manifesto: words fill with ink as the visitor reads down the page.
+   Unlit words use --rv-muted, which keeps 3:1 contrast for large text. */
+.manifesto-word {
+  color: var(--rv-muted);
+  transition: color 280ms var(--ease-settle);
+}
+
+.manifesto-word.is-lit {
+  color: var(--rv-primary);
+}
+
+/* Hero icons fly down and land on the product wall as the page scrolls. */
+.hero-depth {
+  will-change: transform;
+}
+
+[data-reveal].is-landing .wall-item {
+  opacity: 1;
+  animation: none;
+}
+
+/* Theme switch: the new theme spreads in a circle from the toggle. */
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--tx, 100%) var(--ty, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--tx, 100%) var(--ty, 0));
+  }
+}
+
+html.theme-switching::view-transition-old(root) {
+  animation: none;
+}
+
+html.theme-switching::view-transition-new(root) {
+  animation: theme-reveal 700ms var(--ease-settle);
+}
+
+html.theme-switching::view-transition-group(*) {
+  animation-duration: 0s;
+}
+
 /* Page transitions: a quick cross-fade, while shared product icons morph between pages. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -356,6 +402,10 @@ html[data-theme="dark"] .showcase-band {
   [data-reveal] .wall-item,
   .showcase-screen {
     opacity: 1;
+  }
+
+  .manifesto-word {
+    color: var(--rv-primary);
   }
 
   .showcase-screen:not(.is-active) {

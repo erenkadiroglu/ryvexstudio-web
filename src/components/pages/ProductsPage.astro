@@ -1,4 +1,5 @@
 ---
+import ClosingBand from "@/components/ClosingBand.astro";
 import ProductWall from "@/components/ProductWall";
 import { type Lang } from "@/i18n/ui";
 import { getProducts, toWallItem, typePluralLabels, typeSlugs } from "@/lib/products";
@@ -58,3 +59,5 @@ const filters = [
     emptyText={copy.empty}
   />
 </section>
+
+<ClosingBand lang={lang} />

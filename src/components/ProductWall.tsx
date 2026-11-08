@@ -108,6 +108,7 @@ export default function ProductWall({
           {visible.map((item, index) => (
             <li
               key={item.id}
+              data-product={item.id}
               className={animate ? "wall-item" : undefined}
               style={animate ? { animationDelay: `${index * 80}ms` } : undefined}
             >

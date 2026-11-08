@@ -13,6 +13,7 @@ colors:
   outline: "#E2DDE0"
   surface: "#FFFFFF"
   on-tertiary: "#FFFFFF"
+  muted: "#8A8186"
   primary-dark: "#F2ECEE"
   secondary-dark: "#A99DA3"
   tertiary-dark: "#D9567A"
@@ -22,6 +23,7 @@ colors:
   outline-dark: "#33292E"
   surface-dark: "#160F12"
   on-tertiary-dark: "#160F12"
+  muted-dark: "#7A6F74"
 typography:
   display:
     fontFamily: Geist
@@ -169,6 +171,16 @@ components:
   divider:
     backgroundColor: "{colors.outline}"
     height: 1px
+  manifesto-word:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.muted}"
+  manifesto-word-lit:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.primary}"
+  closing-band:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-tertiary}"
+    padding: 96px
   button-primary-dark:
     backgroundColor: "{colors.tertiary-dark}"
     textColor: "{colors.on-tertiary-dark}"
@@ -197,6 +209,9 @@ components:
   divider-dark:
     backgroundColor: "{colors.outline-dark}"
     height: 1px
+  manifesto-word-dark:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.muted-dark}"
 ---
 
 # Ryvex Studio Web
@@ -368,6 +383,14 @@ Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
 Footer
 ```
 
+Ana sayfa sırası: hero, sergi duvarı, manifesto, Ne yapıyoruz, koyu vitrin
+bandı, Nasıl çalışıyoruz, stüdyo ve vişne kapanış bandı. Manifesto büyük
+tipografiyle (masaüstünde 3.5rem) tek bir paragraftır ve altında vişne renkli
+"Ryvex Studio" imzası durur. Kapanış bandı kenardan kenara Vişne zeminde,
+beyaz dev başlık ve beyaz butonla sayfayı bitirir; sağ alt köşesinde sembolün
+yüzde 9 opaklıkta, banttan taşan büyük bir kopyası durur. Bant ana sayfa,
+ürünler, ürün detay ve stüdyo sayfalarının sonunda yer alır.
+
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
 sayfanın ortasında ritmi değiştiren tek koyu alandır. "Nasıl çalışıyoruz"
 gerçek bir sıra olduğu için numaralıdır; vişne noktalar adımları çizgiye bağlar.
@@ -504,6 +527,18 @@ açıksa kapatılır.
 - **Sayfa geçişleri:** Sayfalar arası geçiş 260ms'lik çapraz geçiştir. Bir ürün
   ikonu, sergi duvarından ürün sayfasına ve oradan gizlilik ile destek
   sayfalarına aynı ikon olarak uçar (520ms).
+- **Hero derinliği ve iniş:** Hero'daki ikonlar imleci derinliklerine göre
+  takip eder (yakındakiler en fazla 28px, uzaktakiler daha az). Sayfa aşağı
+  kaydırıldıkça her ikon, sergi duvarındaki kendi yerine uçar, boyutu duvar
+  ikonuna eşitlenir ve süzülme hareketi sıfıra iner; duvara vardığında duvar
+  ikonu onun yerini alır. Künyeler inişin son yüzde 30'unda belirir. Mobilde ve
+  hareket azaltma açıkken duvar normal biçimde asılır.
+- **Manifesto:** Kelimeler okundukça `muted` tonundan Mürekkep'e dolar
+  (280ms). `muted` büyük metinde 3:1 kontrastı korur; dolmamış metin de
+  okunur kalır.
+- **Tema geçişi:** Yeni tema, tema düğmesinin bulunduğu noktadan başlayan bir
+  daireyle sayfaya yayılır (700ms). Desteklemeyen tarayıcılarda tema anında
+  değişir.
 - **Kullanıcı eylemleri:** Buton zemin geçişleri 150ms, tema değişimi 200ms,
   mobil menü açılışı 240ms.
 
