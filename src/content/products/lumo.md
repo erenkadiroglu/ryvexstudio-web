@@ -23,6 +23,10 @@ faq:
     a: { tr: "Bu bir örnek üründür; yayındaki gerçek ürün için bu cevap güncellenecektir.", en: "This is a sample product; this answer will be updated for the real product." }
   - q: { tr: "Neden bildirim göndermiyor?", en: "Why doesn't it send notifications?" }
     a: { tr: "Lumo gece kullanımı için tasarlandı ve bilerek bildirim göndermez.", en: "Lumo is built for night-time use and deliberately sends no notifications." }
+aboutEn: |
+  Lumo tracks your bed and wake times and shows your weekly routine in simple charts.
+
+  It is designed for night use: dark screens, low brightness and no notifications.
 features:
   - title: { tr: "Uyku düzeni", en: "Sleep routine" }
     text: { tr: "Yatma ve kalkma saatlerinizi haftalık olarak görün.", en: "See your bed and wake times week by week." }

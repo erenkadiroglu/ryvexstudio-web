@@ -24,6 +24,10 @@ faq:
     a: { tr: "Yalnızca cihazınızda. Notora notlarınızı herhangi bir sunucuya göndermez.", en: "Only on your device. Notora never sends your notes to a server." }
   - q: { tr: "Telefon değiştirirsem notlarım taşınır mı?", en: "Will my notes move to a new phone?" }
     a: { tr: "Cihazınızın kendi yedekleme özelliği (iCloud veya Google yedekleme) açıksa notlarınız yedekle birlikte taşınır.", en: "If your device backup (iCloud or Google backup) is on, your notes move with the backup." }
+aboutEn: |
+  Notora is built for writing your thoughts down quickly and finding them again easily. Tags, pinned notes and offline use, all on one screen.
+
+  Your notes are stored on your device. No account needed.
 features:
   - title: { tr: "Etiketlerle düzen", en: "Organised with tags" }
     text: { tr: "Notlarınızı etiketlerle gruplayın, tek dokunuşla filtreleyin.", en: "Group notes with tags and filter them with a single tap." }

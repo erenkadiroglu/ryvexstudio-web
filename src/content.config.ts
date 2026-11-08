@@ -69,6 +69,11 @@ const products = defineCollection({
           }),
         )
         .default([]),
+      /**
+       * English version of the product description. The Markdown body is Turkish;
+       * paragraphs here are separated by a blank line.
+       */
+      aboutEn: z.string().optional(),
       /** Short feature highlights shown on the product page. */
       features: z
         .array(

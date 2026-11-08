@@ -26,6 +26,10 @@ faq:
     a: { tr: "Hayır. Planlarınız size özel bir bağlantıyla saklanır.", en: "No. Your plans are saved under a private link." }
   - q: { tr: "Paylaştığım planı kimler görebilir?", en: "Who can see a plan I share?" }
     a: { tr: "Yalnızca bağlantıya sahip olan kişiler. Bağlantıyı istediğiniz zaman iptal edebilirsiniz.", en: "Only people who have the link. You can revoke the link at any time." }
+aboutEn: |
+  Rota takes the places you want to visit and the days you will stay, and builds a plan laid out day by day.
+
+  It runs in the browser with nothing to install. You can share your plan with a link.
 features:
   - title: { tr: "Gün gün plan", en: "Day-by-day plan" }
     text: { tr: "Gideceğiniz yerleri ve günleri girin, plan kendiliğinden oluşsun.", en: "Enter places and days; the plan builds itself." }
