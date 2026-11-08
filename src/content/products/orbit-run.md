@@ -14,6 +14,16 @@ version: "1.2.0"
 releaseDate: 2026-04-15
 supportEmail: "destek@ryvexstudio.com"
 privacyUpdated: 2026-10-01
+privacy:
+  dataCollected:
+    - data: { tr: "En yüksek skor ve ayarlar", en: "High score and settings" }
+      purpose: { tr: "Rekorunuzu ve tercihlerinizi saklamak", en: "Keeping your best score and preferences" }
+      storage: device
+faq:
+  - q: { tr: "Oyunda reklam var mı?", en: "Are there ads in the game?" }
+    a: { tr: "Bu bir örnek üründür; yayındaki gerçek ürün için bu cevap güncellenecektir.", en: "This is a sample product; this answer will be updated for the real product." }
+  - q: { tr: "Skorum kayboldu, ne yapabilirim?", en: "I lost my score, what can I do?" }
+    a: { tr: "Skorlar cihazınızda saklanır. Uygulamayı silmek skorları da siler.", en: "Scores are stored on your device. Deleting the app also deletes them." }
 order: 40
 sample: true
 ---
