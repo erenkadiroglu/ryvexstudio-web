@@ -1,0 +1,154 @@
+---
+import LegalDocument, { type LegalSection } from "@/components/LegalDocument.astro";
+import { site } from "@/config/site";
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const updated = new Date("2026-11-08");
+const email = site.contactEmail;
+
+const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
+  tr: {
+    title: "KVKK Aydınlatma Metni",
+    lede: `Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca, ryvexstudio.com web sitesi ve iletişim kanallarımız aracılığıyla işlenen kişisel verileriniz hakkında sizi bilgilendirmek için hazırlanmıştır. Ürünlerimizde işlenen veriler için her ürünün kendi gizlilik politikasına bakınız.`,
+    sections: [
+      {
+        heading: "Veri sorumlusu",
+        paragraphs: [
+          `Kişisel verileriniz, veri sorumlusu sıfatıyla ${site.name} adına ${site.founder} tarafından işlenmektedir. Bize ${email} adresinden ulaşabilirsiniz.`,
+        ],
+      },
+      {
+        heading: "İşlenen kişisel veriler",
+        list: [
+          "İletişim bilgileri: Bize e-posta gönderdiğinizde e-posta adresiniz, adınız (paylaşırsanız) ve mesajınızın içeriği.",
+          "İşlem güvenliği bilgileri: Siteyi ziyaret ettiğinizde barındırma sağlayıcısının tuttuğu IP adresi, tarayıcı türü ve erişim zamanı gibi sunucu kayıtları.",
+        ],
+      },
+      {
+        heading: "İşleme amaçları",
+        list: [
+          "Sorularınızı, destek taleplerinizi ve başvurularınızı yanıtlamak.",
+          "Web sitesinin güvenliğini sağlamak, hataları tespit etmek ve gidermek.",
+          "Hukuki yükümlülüklerimizi yerine getirmek ve yetkili kurumların taleplerini karşılamak.",
+        ],
+      },
+      {
+        heading: "Toplama yöntemi ve hukuki sebep",
+        paragraphs: [
+          "Kişisel verileriniz, bize e-posta ile ulaştığınızda ve siteyi ziyaret ettiğinizde elektronik ortamda, kısmen otomatik yollarla toplanır.",
+          "Bu veriler KVKK'nın 5. maddesinin 2. fıkrasında yer alan; bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması (c), hukuki yükümlülüğün yerine getirilmesi (ç) ve temel hak ve özgürlüklerinize zarar vermemek kaydıyla meşru menfaatimiz için zorunlu olması (f) hukuki sebeplerine dayanılarak işlenir.",
+        ],
+      },
+      {
+        heading: "Aktarım",
+        paragraphs: [
+          "Kişisel verileriniz satılmaz ve pazarlama amacıyla kimseyle paylaşılmaz. Veriler yalnızca hizmetin sunulması için gerekli olduğu ölçüde, e-posta ve barındırma hizmeti aldığımız sağlayıcılarla ve kanunen yetkili kamu kurum ve kuruluşlarıyla paylaşılabilir.",
+          "Bu sağlayıcıların sunucuları yurt dışında bulunabilir. Bu durumda aktarım, KVKK'nın 9. maddesinde öngörülen usul ve esaslara uygun olarak yapılır.",
+        ],
+      },
+      {
+        heading: "Saklama süresi",
+        paragraphs: [
+          "Yazışmalarınız talebiniz sonuçlandıktan sonra makul bir süre, sunucu kayıtları ise ilgili mevzuatın öngördüğü süre boyunca saklanır. Sürenin dolmasıyla veriler silinir, yok edilir ya da anonim hâle getirilir.",
+        ],
+      },
+      {
+        heading: "Haklarınız",
+        paragraphs: ["KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:"],
+        list: [
+          "Kişisel verilerinizin işlenip işlenmediğini öğrenme ve işlenmişse buna ilişkin bilgi talep etme.",
+          "İşlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme.",
+          "Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme.",
+          "Eksik veya yanlış işlenmişse düzeltilmesini isteme.",
+          "KVKK'nın 7. maddesindeki şartlar çerçevesinde silinmesini veya yok edilmesini isteme.",
+          "Düzeltme, silme ve yok etme işlemlerinin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme.",
+          "Münhasıran otomatik sistemlerle analiz edilmesi sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme.",
+          "Kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde zararın giderilmesini talep etme.",
+        ],
+      },
+      {
+        heading: "Başvuru",
+        paragraphs: [
+          `Haklarınıza ilişkin taleplerinizi, kimliğinizi doğrulamamıza yetecek bilgilerle birlikte ${email} adresine e-posta ile iletebilirsiniz. Başvurunuz, talebin niteliğine göre en geç otuz gün içinde ücretsiz olarak sonuçlandırılır.`,
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Personal Data Notice",
+    lede: `This notice is provided under Article 10 of the Turkish Personal Data Protection Law No. 6698 ("KVKK") to inform you about the personal data processed through the ryvexstudio.com website and our contact channels. For data processed in our products, see each product's own privacy policy.`,
+    sections: [
+      {
+        heading: "Data controller",
+        paragraphs: [
+          `Your personal data is processed by ${site.founder}, as data controller, on behalf of ${site.name}. You can reach us at ${email}.`,
+        ],
+      },
+      {
+        heading: "Personal data processed",
+        list: [
+          "Contact details: when you email us, your email address, your name (if you share it) and the content of your message.",
+          "Security information: server logs kept by the hosting provider when you visit the website, such as IP address, browser type and time of access.",
+        ],
+      },
+      {
+        heading: "Purposes of processing",
+        list: [
+          "Answering your questions, support requests and applications.",
+          "Keeping the website secure and finding and fixing errors.",
+          "Meeting our legal obligations and responding to requests from competent authorities.",
+        ],
+      },
+      {
+        heading: "Method of collection and legal basis",
+        paragraphs: [
+          "Your personal data is collected electronically, partly by automated means, when you email us and when you visit the website.",
+          "It is processed on the legal bases in Article 5(2) of the KVKK: being directly related to the conclusion or performance of a contract (c), compliance with a legal obligation (ç), and our legitimate interest, provided it does not harm your fundamental rights and freedoms (f).",
+        ],
+      },
+      {
+        heading: "Transfers",
+        paragraphs: [
+          "Your personal data is never sold or shared for marketing. It may be shared only as far as needed to provide the service, with the email and hosting providers we use, and with public authorities legally entitled to request it.",
+          "These providers' servers may be located outside Türkiye. In that case, transfers are made in line with Article 9 of the KVKK.",
+        ],
+      },
+      {
+        heading: "Retention",
+        paragraphs: [
+          "Correspondence is kept for a reasonable period after your request is resolved, and server logs for the period required by the relevant legislation. After that, the data is deleted, destroyed or anonymised.",
+        ],
+      },
+      {
+        heading: "Your rights",
+        paragraphs: ["Under Article 11 of the KVKK, you have the right to:"],
+        list: [
+          "Learn whether your personal data is processed and, if so, request information about it.",
+          "Learn the purpose of processing and whether it is used accordingly.",
+          "Know the third parties in Türkiye or abroad to whom it is transferred.",
+          "Ask for it to be corrected if it is incomplete or inaccurate.",
+          "Ask for it to be deleted or destroyed under the conditions in Article 7 of the KVKK.",
+          "Ask for corrections, deletions and destructions to be notified to the third parties it was transferred to.",
+          "Object to a result against you that arises solely from automated analysis.",
+          "Claim compensation if you suffer damage from unlawful processing.",
+        ],
+      },
+      {
+        heading: "How to apply",
+        paragraphs: [
+          `Send requests about your rights to ${email}, with enough information for us to verify your identity. Requests are resolved free of charge within thirty days at the latest, depending on their nature.`,
+        ],
+      },
+    ],
+  },
+};
+
+const c = content[lang];
+---
+
+<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />

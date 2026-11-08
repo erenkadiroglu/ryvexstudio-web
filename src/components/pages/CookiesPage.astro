@@ -1,0 +1,94 @@
+---
+import LegalDocument, { type LegalSection } from "@/components/LegalDocument.astro";
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const updated = new Date("2026-11-08");
+
+const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
+  tr: {
+    title: "Çerez Politikası",
+    lede: "Kısaca: ryvexstudio.com çerez kullanmaz. Bu sayfa, bunun ne anlama geldiğini ve tarayıcınızda saklanan tek bilgiyi açıklar.",
+    sections: [
+      {
+        heading: "Çerez nedir?",
+        paragraphs: [
+          "Çerezler, ziyaret ettiğiniz sitelerin tarayıcınıza kaydettiği küçük metin dosyalarıdır. Genellikle oturum bilgisi, tercihler, ziyaretçi istatistikleri ve reklam takibi için kullanılır.",
+        ],
+      },
+      {
+        heading: "Bu sitede çerez kullanılıyor mu?",
+        paragraphs: [
+          "Hayır. ryvexstudio.com çerez yerleştirmez; ziyaretçi istatistiği, reklam ya da pazarlama amaçlı takip aracı kullanmaz. Yazı tipleri sitenin kendi sunucusundan yüklenir, bu yüzden üçüncü taraf servislerin çerezleri de tarayıcınıza gelmez.",
+          "Bu nedenle sitede bir çerez onay penceresi bulunmaz.",
+        ],
+      },
+      {
+        heading: "Tarayıcınızda saklanan tek bilgi",
+        paragraphs: [
+          "Aydınlık ya da karanlık temayı seçtiğinizde, bu tercih tarayıcınızın yerel depolama alanında (localStorage) \"rv-theme\" adıyla saklanır. Bu bilgi bize gönderilmez, sizi tanımlamaz ve yalnızca bir sonraki ziyaretinizde seçtiğiniz temayı göstermek için kullanılır.",
+          "Tarayıcınızın site verilerini temizleyerek bu tercihi istediğiniz zaman silebilirsiniz.",
+        ],
+      },
+      {
+        heading: "Ürünlerimiz",
+        paragraphs: [
+          "Mobil uygulamalarımız, oyunlarımız ve web ürünlerimizin verileri nasıl kullandığı, her ürünün kendi gizlilik politikasında açıklanır.",
+        ],
+      },
+      {
+        heading: "Değişiklikler",
+        paragraphs: [
+          "Siteye ileride çerez kullanan bir araç eklenirse, bu politika güncellenir ve gerekiyorsa onayınız istenir.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Cookie Policy",
+    lede: "In short: ryvexstudio.com does not use cookies. This page explains what that means and the one piece of information stored in your browser.",
+    sections: [
+      {
+        heading: "What are cookies?",
+        paragraphs: [
+          "Cookies are small text files that websites store in your browser. They are usually used for sessions, preferences, visitor statistics and advertising tracking.",
+        ],
+      },
+      {
+        heading: "Does this site use cookies?",
+        paragraphs: [
+          "No. ryvexstudio.com sets no cookies and uses no visitor statistics, advertising or marketing trackers. Fonts are served from the site itself, so no third-party service cookies reach your browser either.",
+          "That is why the site has no cookie consent banner.",
+        ],
+      },
+      {
+        heading: "The one thing stored in your browser",
+        paragraphs: [
+          "When you choose the light or dark theme, the choice is stored in your browser's local storage under the name \"rv-theme\". It is never sent to us, does not identify you, and is used only to show your chosen theme on your next visit.",
+          "You can remove it at any time by clearing your browser's site data.",
+        ],
+      },
+      {
+        heading: "Our products",
+        paragraphs: [
+          "How our mobile apps, games and web products use data is explained in each product's own privacy policy.",
+        ],
+      },
+      {
+        heading: "Changes",
+        paragraphs: [
+          "If a tool that uses cookies is ever added to the site, this policy will be updated and your consent requested where required.",
+        ],
+      },
+    ],
+  },
+};
+
+const c = content[lang];
+---
+
+<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />
