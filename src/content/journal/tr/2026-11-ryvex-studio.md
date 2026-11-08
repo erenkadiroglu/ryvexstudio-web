@@ -13,7 +13,7 @@ Ryvex Studio bu dağınıklığı toplamak için kuruldu. Mobil uygulamalar, oyu
 
 ## Tek imza ne demek?
 
-Her ürün farklı bir ihtiyaca cevap veriyor. FileConvert, PDF ve dosya işlerinizi telefonunuzdan çıkarmadan hallediyor. PathWords, kısa bir molada oynanan ve İngilizce kelime öğreten bir bulmaca oyunu. Ama hepsi aynı sorudan geçiyor: **Bunu kendimiz kullanmak ister miydik?**
+Her ürün farklı bir ihtiyaca cevap veriyor. FileConvert, PDF ve dosya işlerinizi telefonunuzdan çıkarmadan hallediyor. PathWords, kısa bir molada oynanan ve İngilizce kelime öğreten bir bulmaca oyunu. PerSayar, Okey ıstakanızı kamerayla okuyup perlerinizi sayıyor. Ama hepsi aynı sorudan geçiyor: **Bunu kendimiz kullanmak ister miydik?**
 
 Cevap evet olana kadar ürün yayınlanmıyor.
 

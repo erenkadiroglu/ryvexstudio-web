@@ -7,6 +7,15 @@ tagline:
   en: "Trace winding paths through letters, find hidden English words and learn their Turkish meanings."
 color: "#2E9D57"
 icon: ../../assets/products/pathwords.png
+screenshots:
+  - src: ../../assets/screenshots/pathwords/01-oyun.png
+    alt: { tr: "Oyun içi bulmaca: harfler patika boyunca birleştiriliyor", en: "A puzzle in play: letters joined along a path" }
+  - src: ../../assets/screenshots/pathwords/02-menu.png
+    alt: { tr: "Ana menü: bölüm ilerlemesi ve oyun modları", en: "Main menu with level progress and game modes" }
+  - src: ../../assets/screenshots/pathwords/03-tamamlandi.png
+    alt: { tr: "Bölüm tamamlandı: süre, yıldızlar ve öğrenilen kelimeler", en: "Level complete with time, stars and the words learned" }
+  - src: ../../assets/screenshots/pathwords/04-defter.png
+    alt: { tr: "Kelime Defteri: öğrenilen kelimeler, anlamları ve örnek cümleler", en: "Word book with learned words, meanings and example sentences" }
 platforms: [ios, android]
 links:
   googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.pathwords"

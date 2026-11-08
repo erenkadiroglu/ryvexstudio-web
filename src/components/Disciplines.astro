@@ -1,8 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import apps from "@/assets/categories/apps.jpg";
-import games from "@/assets/categories/games.jpg";
-import web from "@/assets/categories/web.jpg";
 import { route, type Lang } from "@/i18n/ui";
 import { typeSlugs, type Product, type ProductType } from "@/lib/products";
 
@@ -21,17 +18,14 @@ const copy = {
       app: {
         title: "Uygulamalar",
         link: "Uygulamaları gör",
-        alt: "Ahşap bir masanın üzerinde duran akıllı telefon",
       },
       game: {
         title: "Oyunlar",
         link: "Oyunları gör",
-        alt: "Sarı bir zeminde iki oyun kolu",
       },
       web: {
         title: "Web",
         link: "Web projelerini gör",
-        alt: "Aydınlık bir masada kod açık dizüstü bilgisayar",
       },
     },
   },
@@ -42,23 +36,19 @@ const copy = {
       app: {
         title: "Apps",
         link: "See the apps",
-        alt: "A smartphone lying on a wooden desk",
       },
       game: {
         title: "Games",
         link: "See the games",
-        alt: "Two game controllers on a yellow background",
       },
       web: {
         title: "Web",
         link: "See the web products",
-        alt: "A laptop with code on a bright desk",
       },
     },
   },
 }[lang];
 
-const photos: Record<ProductType, ImageMetadata> = { app: apps, game: games, web };
 const types: ProductType[] = ["app", "game", "web"];
 const param = lang === "tr" ? "tur" : "type";
 ---
@@ -76,32 +66,25 @@ const param = lang === "tr" ? "tur" : "type";
         const slug = lang === "tr" ? typeSlugs[type] : type;
         return (
           <article class="group flex flex-col">
-            <div class="overflow-hidden rounded-xl">
-              <Image
-                src={photos[type]}
-                alt={item.alt}
-                widths={[480, 720, 960]}
-                sizes="(min-width: 960px) 33vw, 100vw"
-                class="aspect-[16/10] w-full object-cover md:aspect-[4/5] transition-transform duration-700 ease-[var(--ease-settle)] group-hover:scale-[1.03]"
-              />
+            <!-- The products of this kind, by their own icons; no stock photography. -->
+            <div
+              class:list={[
+                "flex aspect-[16/10] flex-wrap content-center items-center justify-center gap-6 rounded-xl p-8 md:aspect-[4/3]",
+                ofType.length > 0 ? "bg-neutral" : "border border-dashed border-outline",
+              ]}
+            >
+              {ofType.map((product) => (
+                <Image
+                  src={product.data.icon}
+                  alt={product.data.name}
+                  title={product.data.name}
+                  widths={[112, 224]}
+                  sizes="112px"
+                  class="shape-icon object-depth size-24 transition-transform duration-700 ease-[var(--ease-settle)] group-hover:-translate-y-1 md:size-28"
+                />
+              ))}
             </div>
             <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
-            {ofType.length > 0 && (
-              <ul class="mt-5 flex flex-wrap gap-2" aria-label={item.title}>
-                {ofType.map((product) => (
-                  <li>
-                    <Image
-                      src={product.data.icon}
-                      alt={product.data.name}
-                      title={product.data.name}
-                      width={36}
-                      height={36}
-                      class="shape-icon size-9"
-                    />
-                  </li>
-                ))}
-              </ul>
-            )}
             {ofType.length > 0 ? (
               <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
                 {item.link}

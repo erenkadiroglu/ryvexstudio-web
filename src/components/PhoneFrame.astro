@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  /** A real screenshot taken on a phone or emulator (portrait, about 9:20). */
+  src: ImageMetadata;
+  alt: string;
+  /** Outer width of the phone in CSS pixels; the bezel and corners scale with it. */
+  width: number;
+  class?: string;
+  loading?: "eager" | "lazy";
+  style?: string;
+}
+
+const { src, alt, width, class: className, loading = "lazy", style } = Astro.props;
+
+// Proportions of a current flat-screen Android phone with a centred punch-hole camera.
+const bezel = Math.round(width * 0.034);
+const radius = Math.round(width * 0.155);
+const camera = Math.max(6, Math.round(width * 0.036));
+---
+
+<div
+  class:list={["phone", className]}
+  style={`width:${width}px; padding:${bezel}px; border-radius:${radius}px;${style ? ` ${style}` : ""}`}
+>
+  <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
+    <Image
+      src={src}
+      alt={alt}
+      widths={[width, width * 2]}
+      sizes={`${width}px`}
+      loading={loading}
+      class="size-full object-cover object-top"
+    />
+  </div>
+  <span
+    class="phone-camera"
+    style={`width:${camera}px; height:${camera}px; top:${bezel + camera}px`}
+    aria-hidden="true"
+  ></span>
+</div>

@@ -7,6 +7,17 @@ tagline:
   en: "Convert, merge and edit PDFs and files without them ever leaving your phone."
 color: "#3352E8"
 icon: ../../assets/products/fileconvert.png
+screenshots:
+  - src: ../../assets/screenshots/fileconvert/01-ana.png
+    alt: { tr: "Ana ekran: araçlar ve PDF küçültme kartı", en: "Home screen with the tools and the shrink PDF card" }
+  - src: ../../assets/screenshots/fileconvert/02-donustur.png
+    alt: { tr: "Hızlı Dönüştür: PDF ile Word, Excel, PowerPoint ve JPG arasında dönüştürme", en: "Quick Convert between PDF, Word, Excel, PowerPoint and JPG" }
+  - src: ../../assets/screenshots/fileconvert/03-birlestir.png
+    alt: { tr: "Birleştir: üç PDF tek dosyada toplanıyor", en: "Merge: three PDFs combined into one file" }
+  - src: ../../assets/screenshots/fileconvert/04-sikistir.png
+    alt: { tr: "Sıkıştırma sonucu: 3,3 MB dosya 164 KB oldu", en: "Compression result: a 3.3 MB file down to 164 KB" }
+  - src: ../../assets/screenshots/fileconvert/05-duzenle.png
+    alt: { tr: "PDF Düzenle: vurgu, kalem ve metin araçları", en: "Edit PDF with highlight, pen and text tools" }
 platforms: [android]
 links:
   googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.fileconvert"
