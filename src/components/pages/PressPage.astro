@@ -1,0 +1,189 @@
+---
+import { Image } from "astro:assets";
+import PageIntro from "@/components/PageIntro.astro";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import { getProducts, productCaption } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const products = await getProducts();
+const productBase = route("products", lang);
+
+const colors = [
+  { name: lang === "tr" ? "Vişne" : "Vişne (cherry)", hex: "#8E1B3B", text: "#FFFFFF" },
+  { name: lang === "tr" ? "Mürekkep" : "Mürekkep (ink)", hex: "#1C1418", text: "#FFFFFF" },
+  { name: lang === "tr" ? "Beyaz" : "Beyaz (white)", hex: "#FFFFFF", text: "#1C1418" },
+];
+
+const copy = {
+  tr: {
+    title: "Basın kiti",
+    lede: "Ryvex Studio hakkında yazmak için ihtiyacınız olan her şey.",
+    aboutTitle: "Hakkımızda",
+    short: "Ryvex Studio, mobil uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyodur.",
+    long: `Ryvex Studio, ${site.founder} tarafından kurulan bağımsız bir dijital ürün stüdyosudur. Mobil uygulamalar, oyunlar ve web projeleri tek bir imza ve aynı kalite standardıyla tasarlanıp geliştirilir. Stüdyonun sloganı: "${site.tagline.tr}"`,
+    shortLabel: "Kısa tanıtım",
+    longLabel: "Uzun tanıtım",
+    factsTitle: "Künye",
+    facts: [
+      ["Kurucu", site.founder],
+      ["Web sitesi", "ryvexstudio.com"],
+      ["Basın iletişimi", site.contactEmail],
+    ],
+    logoTitle: "Logo",
+    logoText:
+      "Sembolü olduğu gibi kullanın: esnetmeyin, döndürmeyin, yeniden renklendirmeyin ve efekt eklemeyin. Çevresinde en az sembol yüksekliğinin yarısı kadar boşluk bırakın.",
+    logoNote: "Tam logo paketi hazırlanıyor.",
+    svg: "SVG indir",
+    png: "PNG indir (1024 piksel)",
+    colorsTitle: "Renkler",
+    productsTitle: "Ürünler",
+    contactTitle: "Basın iletişimi",
+    contactText: "Röportaj, görsel ya da bilgi talepleriniz için yazın.",
+  },
+  en: {
+    title: "Press kit",
+    lede: "Everything you need to write about Ryvex Studio.",
+    aboutTitle: "About",
+    short: "Ryvex Studio is an independent studio making mobile apps, games and web products.",
+    long: `Ryvex Studio is an independent digital product studio founded by ${site.founder}. Its mobile apps, games and web products are designed and built under one signature, to the same standard of quality. The studio's tagline: "${site.tagline.en}"`,
+    shortLabel: "Short description",
+    longLabel: "Long description",
+    factsTitle: "Fact sheet",
+    facts: [
+      ["Founder", site.founder],
+      ["Website", "ryvexstudio.com"],
+      ["Press contact", site.contactEmail],
+    ],
+    logoTitle: "Logo",
+    logoText:
+      "Use the symbol as it is: never stretch, rotate, recolor or add effects to it. Leave clear space of at least half the symbol's height around it.",
+    logoNote: "A full logo package is being prepared.",
+    svg: "Download SVG",
+    png: "Download PNG (1024 px)",
+    colorsTitle: "Colors",
+    productsTitle: "Products",
+    contactTitle: "Press contact",
+    contactText: "Write to us for interviews, images or information.",
+  },
+}[lang];
+
+const h2 = "text-headline-md font-semibold";
+const block = "border-t border-outline py-12 md:grid md:grid-cols-12 md:gap-6";
+---
+
+<PageIntro title={copy.title} lede={copy.lede} />
+
+<div class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
+  <section aria-labelledby="hakkimizda" class={block}>
+    <h2 id="hakkimizda" class:list={[h2, "md:col-span-4"]}>{copy.aboutTitle}</h2>
+    <div class="mt-6 space-y-8 md:col-span-8 md:mt-0">
+      <div>
+        <h3 class="text-label font-medium text-secondary">{copy.shortLabel}</h3>
+        <p class="mt-2 max-w-[60ch] text-body-lg">{copy.short}</p>
+      </div>
+      <div>
+        <h3 class="text-label font-medium text-secondary">{copy.longLabel}</h3>
+        <p class="mt-2 max-w-[60ch] text-body-md">{copy.long}</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="kunye" class={block}>
+    <h2 id="kunye" class:list={[h2, "md:col-span-4"]}>{copy.factsTitle}</h2>
+    <dl class="mt-6 max-w-[60ch] text-body-md md:col-span-8 md:mt-0">
+      {
+        copy.facts.map(([label, value]) => (
+          <div class="flex justify-between gap-6 border-b border-outline py-3 first:pt-0">
+            <dt class="text-secondary">{label}</dt>
+            <dd class="text-right">{value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section aria-labelledby="logo" class={block}>
+    <h2 id="logo" class:list={[h2, "md:col-span-4"]}>{copy.logoTitle}</h2>
+    <div class="mt-6 md:col-span-8 md:mt-0">
+      <div class="flex flex-wrap gap-4">
+        <div class="flex size-40 items-center justify-center rounded-xl bg-neutral">
+          <img src="/press/ryvex-studio-symbol.svg" alt="Ryvex Studio" width="80" height="80" />
+        </div>
+        <div class="flex size-40 items-center justify-center rounded-xl bg-[#1C1418]">
+          <img src="/press/ryvex-studio-symbol.svg" alt="" width="80" height="80" />
+        </div>
+      </div>
+      <p class="mt-6 max-w-[60ch] text-body-md text-secondary">{copy.logoText}</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href="/press/ryvex-studio-symbol.svg"
+          download
+          class="inline-flex rounded-full border border-outline px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral"
+          >{copy.svg}</a
+        >
+        <a
+          href="/press/ryvex-studio-symbol.png"
+          download
+          class="inline-flex rounded-full border border-outline px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral"
+          >{copy.png}</a
+        >
+      </div>
+      <p class="mt-4 text-body-sm text-secondary">{copy.logoNote}</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="renkler" class={block}>
+    <h2 id="renkler" class:list={[h2, "md:col-span-4"]}>{copy.colorsTitle}</h2>
+    <ul class="mt-6 grid grid-cols-3 gap-4 md:col-span-8 md:mt-0">
+      {
+        colors.map((color) => (
+          <li>
+            <div
+              class="flex aspect-[4/3] items-end rounded-lg border border-outline p-4"
+              style={`background-color:${color.hex};color:${color.text}`}
+            >
+              <span class="font-mono text-mono-sm">{color.hex}</span>
+            </div>
+            <p class="mt-2 text-body-sm">{color.name}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="urunler-basin" class={block}>
+    <h2 id="urunler-basin" class:list={[h2, "md:col-span-4"]}>{copy.productsTitle}</h2>
+    <ul class="mt-6 md:col-span-8 md:mt-0">
+      {
+        products.map((product) => (
+          <li class="border-b border-outline first:border-t">
+            <a href={`${productBase}/${product.id}`} class="group flex items-center gap-4 py-4">
+              <Image src={product.data.icon} alt="" width={48} height={48} class="shape-icon size-12" />
+              <span>
+                <span class="block text-title font-semibold group-hover:underline">
+                  {product.data.name}
+                </span>
+                <span class="block text-body-sm text-secondary">{productCaption(product, lang)}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="basin-iletisim" class={block}>
+    <h2 id="basin-iletisim" class:list={[h2, "md:col-span-4"]}>{copy.contactTitle}</h2>
+    <div class="mt-6 md:col-span-8 md:mt-0">
+      <p class="text-body-md text-secondary">{copy.contactText}</p>
+      <a href={`mailto:${site.contactEmail}`} class="link-inline mt-3 inline-block text-body-md">
+        {site.contactEmail}
+      </a>
+    </div>
+  </section>
+</div>
