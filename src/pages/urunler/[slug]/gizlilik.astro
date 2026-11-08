@@ -11,6 +11,6 @@ export async function getStaticPaths() {
 const { product } = Astro.props as { product: Product };
 ---
 
-<BaseLayout title={`Gizlilik politikası: ${product.data.name}`}>
+<BaseLayout title={`Gizlilik politikası: ${product.data.name}`} ogImage={`/og/products/${product.id}-tr.png`}>
   <ProductPrivacy product={product} lang="tr" />
 </BaseLayout>

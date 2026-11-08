@@ -11,6 +11,6 @@ export async function getStaticPaths() {
 const { product } = Astro.props as { product: Product };
 ---
 
-<BaseLayout title={`Destek: ${product.data.name}`}>
+<BaseLayout title={`Destek: ${product.data.name}`} ogImage={`/og/products/${product.id}-tr.png`}>
   <ProductSupport product={product} lang="tr" />
 </BaseLayout>
