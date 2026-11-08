@@ -70,9 +70,10 @@ const param = lang === "tr" ? "tur" : "type";
             <div
               class:list={[
                 "flex aspect-[16/10] flex-wrap content-center items-center justify-center gap-6 rounded-xl p-8 md:aspect-[4/3]",
-                ofType.length > 0 ? "bg-neutral" : "border border-dashed border-outline",
+                "bg-neutral",
               ]}
             >
+              {ofType.length === 0 && <span class="text-title font-medium text-secondary">{copy.soon}</span>}
               {ofType.map((product) => (
                 <Image
                   src={product.data.icon}
@@ -85,12 +86,10 @@ const param = lang === "tr" ? "tur" : "type";
               ))}
             </div>
             <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
-            {ofType.length > 0 ? (
+            {ofType.length > 0 && (
               <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
                 {item.link}
               </a>
-            ) : (
-              <p class="mt-5 text-body-md font-medium text-primary">{copy.soon}</p>
             )}
           </article>
         );

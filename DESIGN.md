@@ -233,7 +233,7 @@ Kitle çoğunlukla Türkiye'de, telefondan gezen ve mağazaya geçmeden önce
 sonra açık bilgiyle cevap verir: her ürünün kim tarafından yapıldığı, nerede
 indirileceği, gizlilik politikası ve destek adresi her zaman bir tık uzaktadır.
 
-Sitenin cesur anları ürünlerin etrafında toplanır: hero'da süzülen ikonlar,
+Sitenin cesur anları ürünlerin etrafında toplanır: hero'da süzülen ürün telefonları,
 dokunuşa cevap veren sergi duvarı, kaydırdıkça ekran değiştiren vitrin ve bir
 ikonun ürün sayfasına uçtuğu geçiş. Metinler, menüler ve yasal sayfalar sakin
 ve sessiz kalır. Vişne sayfa başına bir ya da iki yerde görünür. Renk ve enerji
@@ -348,9 +348,9 @@ boşlukla kurulur.
 ```text
 [R] Ryvex Studio                  Ürünler   Stüdyo   İletişim   [tema]
 ----------------------------------------------------------------------
-Her ekranda                          ┌──┐   ┌──┐   ← süzülen ikonlar
-aynı özen.                         ┌──┐   ┌───┐      (5 sütun, yalnızca
-                                         ┌──┐  ┌──┐     masaüstü)
+Her ekranda                        ┌─┐ ┌───┐ ┌─┐   ← üç ürünün gerçek ekranı,
+aynı özen.                         │ │ │   │ │ │     telefon çerçevesinde
+                                   └─┘ └───┘ └─┘     (5 sütun, yalnızca geniş ekran)
 Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
 [Ürünleri keşfet]  [Stüdyoyu tanı]
 
@@ -397,8 +397,10 @@ kaydırmalı karusel kullanılmaz.
 
 ### Ürünler sayfası
 
-Başlık, altında tür filtresi (Tümü, Uygulamalar, Oyunlar, Web) ve aynı sergi
-duvarı. Filtre değiştiğinde yalnızca görünen ürünler değişir; sayfa yeniden
+Başlık, altında tür filtresi (Tümü, Uygulamalar, Oyunlar, Web) ve ürün kartları:
+ürün renginde bir panelden yükselen telefonda ilk ekran görüntüsü, altında ikon,
+ad, künye, durum ve tek cümlelik tanıtım (masaüstünde 3, tablette 2, mobilde 1
+sütun). Filtre değiştiğinde yalnızca görünen ürünler değişir; sayfa yeniden
 yüklenmez ve adres çubuğu güncellenir (`/urunler?tur=oyun`).
 
 ### Ürün detay sayfası
@@ -506,28 +508,29 @@ açıksa kapatılır.
 
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
   (900ms, satırlar arası 110ms). Ardından giriş metni ve butonlar 12px aşağıdan
-  yerine oturur. Sağda ürün ikonları elle yerleştirilmiş bir kompozisyonda
-  belirir ve her biri kendi ritminde (6,5-10 saniye) birkaç piksel yukarı aşağı
-  süzülür. Mobilde bu kompozisyon gösterilmez.
+  yerine oturur. Sağda üç ürünün ilk ekran görüntüsü telefon çerçevelerinde
+  belirir: biri önde, ikisi arkada hafif açıyla. Her telefon kendi ritminde
+  (8-10 saniye) birkaç piksel yukarı aşağı süzülür. Geniş ekran altında bu
+  kompozisyon gösterilmez.
 - **Sergi duvarı:** Duvar ekrana girdiğinde ikonlar soldan sağa, 80ms arayla
   asılır; bu bir kez olur. Fareyle üzerine gelinen ikon 6px kalkar, gölgesi
   derinleşir ve imleci takip ederek en fazla 8 derece eğilir. Bu sırada sayfa
   zemini o ürünün renginin yüzde 6'lık tonuna geçer (500ms). Dokunmatik
   cihazlarda eğim yoktur.
 - **Kaydırmalı vitrin:** Öne çıkan ürünler (`featured`) için. Masaüstünde solda
-  sabit bir cihaz durur; sağdaki metin adımları kaydırıldıkça cihazın ekranı
+  sabit bir cihaz durur. Cihazın sahnesi ve her metin adımı başlığın altındaki
+  ekran yüksekliği kadardır; böylece cihaz ekranın ortasında durur ve metniyle
+  aynı hizada kalır. Kısa ekranlarda cihaz küçülür; sağdaki metin adımları kaydırıldıkça cihazın ekranı
   çapraz geçişle değişir. Web ürünlerinde cihaz telefondan tarayıcı penceresine
   dönüşür (700ms). Aktif olmayan adımların başlığı ikincil renge çekilir; sayfa
   zemini aktif ürünün tonunu alır. Mobilde cihaz her adımın içinde durağandır.
 - **Sayfa geçişleri:** Sayfalar arası geçiş 260ms'lik çapraz geçiştir. Bir ürün
   ikonu, sergi duvarından ürün sayfasına ve oradan gizlilik ile destek
   sayfalarına aynı ikon olarak uçar (520ms).
-- **Hero derinliği ve iniş:** Hero'daki ikonlar imleci derinliklerine göre
-  takip eder (yakındakiler en fazla 28px, uzaktakiler daha az). Sayfa aşağı
-  kaydırıldıkça her ikon, sergi duvarındaki kendi yerine uçar, boyutu duvar
-  ikonuna eşitlenir ve süzülme hareketi sıfıra iner; duvara vardığında duvar
-  ikonu onun yerini alır. Künyeler inişin son yüzde 30'unda belirir. Mobilde ve
-  hareket azaltma açıkken duvar normal biçimde asılır.
+- **Hero derinliği:** Hero'daki telefonlar imleci derinliklerine göre takip
+  eder (öndeki en fazla 24px, arkadakiler daha az). Sayfa aşağı kaydırıldıkça
+  yandaki telefonlar hafifçe açılır ve yukarı kayar. Hareket azaltma açıkken
+  telefonlar durağandır.
 - **Manifesto:** Kelimeler okundukça `muted` tonundan Mürekkep'e dolar
   (280ms). `muted` büyük metinde 3:1 kontrastı korur; dolmamış metin de
   okunur kalır.

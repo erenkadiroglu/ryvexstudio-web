@@ -59,6 +59,10 @@ export interface WallItem {
   color: string;
   /** Short status label, e.g. "Yakında", for products not yet in stores. */
   status?: string;
+  /** One-line description; shown on product cards. */
+  tagline?: string;
+  /** Optimised URL of the first real screenshot; shown on product cards. */
+  shotSrc?: string;
 }
 
 export const comingSoonLabel: Record<Lang, string> = { tr: "Yakında", en: "Coming soon" };

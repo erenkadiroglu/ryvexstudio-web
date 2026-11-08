@@ -292,7 +292,7 @@
   animation-delay: calc(var(--i, 0) * 90ms + 450ms);
 }
 
-/* Hero: product icons drift slowly, each on its own rhythm. */
+/* Hero: the product phones drift slowly, each on its own rhythm. */
 @keyframes drift {
   0%,
   100% {
@@ -451,6 +451,13 @@ html[data-theme="dark"] .showcase-band {
     border-radius 700ms var(--ease-settle);
 }
 
+/* On short screens the device scales down so it never touches the header or the fold. */
+@media (max-height: 760px) {
+  .showcase-stage .showcase-device {
+    scale: 0.82;
+  }
+}
+
 .showcase-screen {
   opacity: 0;
   scale: 1.04;
@@ -486,13 +493,8 @@ html[data-theme="dark"] .showcase-band {
 }
 
 /* Hero icons fly down and land on the product wall as the page scrolls. */
-.hero-depth {
+.hero-phone {
   will-change: transform;
-}
-
-[data-reveal].is-landing .wall-item {
-  opacity: 1;
-  animation: none;
 }
 
 /* Theme switch: the new theme spreads in a circle from the toggle. */
