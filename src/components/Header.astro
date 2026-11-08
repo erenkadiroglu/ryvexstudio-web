@@ -13,6 +13,8 @@ const nav = [
 ];
 
 const otherLang = lang === "tr" ? "en" : "tr";
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
 ---
 
 <header
@@ -28,7 +30,8 @@ const otherLang = lang === "tr" ? "en" : "tr";
             <li>
               <a
                 href={item.href}
-                class="rounded-full px-3.5 py-2 text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral"
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class="rounded-full px-3.5 py-2 text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral aria-[current=page]:bg-neutral"
               >
                 {item.label}
               </a>
@@ -78,7 +81,11 @@ const otherLang = lang === "tr" ? "en" : "tr";
       {
         nav.map((item) => (
           <li>
-            <a href={item.href} class="block py-2 text-headline-lg font-semibold">
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class="block py-2 text-headline-lg font-semibold aria-[current=page]:text-tertiary"
+            >
               {item.label}
             </a>
           </li>
