@@ -49,12 +49,12 @@ const h = (type: string, style: Record<string, unknown>, children?: unknown, ext
   props: { style, children, ...extra },
 });
 
-export interface OgOptions {
+export type OgOptions = {
   title: string;
   subtitle: string;
   /** Data URI of a product icon shown on the right. */
   icon?: string;
-}
+};
 
 export async function renderOgImage({ title, subtitle, icon }: OgOptions): Promise<Buffer> {
   const textColumn = h(
