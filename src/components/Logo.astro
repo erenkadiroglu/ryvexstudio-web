@@ -1,0 +1,23 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href = "/", class: className = "" } = Astro.props;
+---
+
+<a href={href} class:list={["inline-flex items-center gap-2.5 text-primary", className]}>
+  <svg
+    class="size-7 shrink-0"
+    viewBox="0 0 64 64"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect width="64" height="64" rx="14.4" fill="#8E1B3B"></rect>
+    <path
+      d="M22 46V18h12.5c6.2 0 10 3.4 10 8.7 0 4-2.2 6.9-5.9 8L45 46h-6.6l-5.6-10.6H28V46h-6Zm6-15.6h6c3 0 4.6-1.4 4.6-3.7 0-2.4-1.6-3.7-4.6-3.7h-6v7.4Z"
+      fill="#FFFFFF"></path>
+  </svg>
+  <span class="text-[1.0625rem] font-semibold tracking-[-0.02em]">Ryvex Studio</span>
+</a>

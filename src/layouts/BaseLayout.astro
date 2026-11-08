@@ -1,0 +1,65 @@
+---
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { site } from "@/config/site";
+import { getLangFromUrl, useTranslations } from "@/i18n/ui";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { title, description = site.description[lang] } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline[lang]}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#160F12" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === "tr" ? "tr_TR" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      // Apply the saved theme before first paint. Light is the default.
+      (function () {
+        var theme = "light";
+        try {
+          if (localStorage.getItem("rv-theme") === "dark") theme = "dark";
+        } catch (e) {}
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#icerik"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-tertiary focus:px-4 focus:py-2 focus:text-on-tertiary"
+    >
+      {t("skip.content")}
+    </a>
+    <Header />
+    <main id="icerik" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

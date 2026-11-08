@@ -1,0 +1,58 @@
+---
+import Logo from "./Logo.astro";
+import { site } from "@/config/site";
+import { getLangFromUrl, localizePath, useTranslations } from "@/i18n/ui";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: t("footer.products"),
+    links: [{ href: localizePath("/urunler", lang), label: t("nav.products") }],
+  },
+  {
+    title: t("footer.studio"),
+    links: [
+      { href: localizePath("/studyo", lang), label: t("nav.studio") },
+      { href: localizePath("/basin", lang), label: t("footer.press") },
+      { href: localizePath("/iletisim", lang), label: t("nav.contact") },
+    ],
+  },
+  {
+    title: t("footer.legal"),
+    links: [{ href: localizePath("/gizlilik", lang), label: t("footer.privacy") }],
+  },
+];
+---
+
+<footer class="bg-neutral text-body-sm text-secondary">
+  <div class="container-page grid gap-12 py-16 md:grid-cols-12">
+    <div class="md:col-span-5">
+      <Logo href={localizePath("/", lang)} />
+      <p class="mt-4 max-w-[32ch]">{site.tagline[lang]}</p>
+    </div>
+    <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
+      {
+        columns.map((column) => (
+          <div>
+            <h2 class="text-label font-medium text-primary">{column.title}</h2>
+            <ul class="mt-4 space-y-2.5">
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href} class="transition-colors duration-150 hover:text-primary">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="container-page border-t border-outline py-6">
+    <p>© {year} {site.name}. {t("footer.rights")}</p>
+  </div>
+</footer>

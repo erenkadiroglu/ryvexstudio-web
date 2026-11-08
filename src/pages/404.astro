@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Sayfa bulunamadı">
+  <section class="container-page py-section-mobile text-center md:py-section">
+    <h1 class="text-headline-xl font-semibold">Bu sayfa burada değil.</h1>
+    <p class="mx-auto mt-4 max-w-[40ch] text-body-lg text-secondary">
+      Adres değişmiş ya da yanlış yazılmış olabilir.
+    </p>
+    <a
+      href="/"
+      class="mt-8 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+    >
+      Ana sayfaya dön
+    </a>
+  </section>
+</BaseLayout>
