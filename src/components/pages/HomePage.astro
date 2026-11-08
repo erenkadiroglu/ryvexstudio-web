@@ -32,6 +32,11 @@ const constellation = [
   { top: "78%", left: "74%", size: 80, r: "-8deg", dy: "-10px", d: "8.5s", depth: 0.35 },
 ];
 const floating = products.slice(0, constellation.length);
+// With only a few products, give them the largest, most central spots.
+const spots =
+  floating.length < constellation.length
+    ? [...constellation].sort((a, b) => b.size - a.size)
+    : constellation;
 
 const copy = {
   tr: {
@@ -100,7 +105,7 @@ const copy = {
   <div class="relative hidden h-[460px] md:col-span-5 md:block" aria-hidden="true">
     {
       floating.map((product, i) => {
-        const spot = constellation[i];
+        const spot = spots[i];
         return (
           <div
             class="hero-depth absolute"

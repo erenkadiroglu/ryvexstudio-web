@@ -10,6 +10,8 @@ const products = defineCollection({
     z.object({
       name: z.string(),
       type: z.enum(["app", "game", "web"]),
+      /** "coming-soon" hides store links and shows a "Coming soon" label. */
+      status: z.enum(["released", "coming-soon"]).default("released"),
       tagline: z.object({
         tr: z.string(),
         en: z.string().optional(),
@@ -35,6 +37,8 @@ const products = defineCollection({
           accountRequired: z.boolean().default(false),
           tracking: z.boolean().default(false),
           childDirected: z.boolean().default(false),
+          /** Optional wording for the children's privacy section, replacing the default text. */
+          childrenNote: z.object({ tr: z.string(), en: z.string() }).optional(),
           dataCollected: z
             .array(
               z.object({

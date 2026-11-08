@@ -7,6 +7,7 @@ import { site } from "@/config/site";
 import { iconTransitionName } from "@/lib/transitions";
 import { route, type Lang } from "@/i18n/ui";
 import {
+  comingSoonLabel,
   getProducts,
   platformLabels,
   productCaption,
@@ -44,6 +45,8 @@ const copy = {
     features: "Öne çıkan özellikler",
     releases: "Sürüm geçmişi",
     latest: "Son sürüm",
+    status: "Durum",
+    soonNote: (stores: string) => `Yakında ${stores} üzerinden indirilebilecek.`,
     related: "Ailenin diğer üyeleri",
     next: "Sıradaki ürün",
   },
@@ -66,6 +69,8 @@ const copy = {
     features: "Highlights",
     releases: "Release history",
     latest: "Latest",
+    status: "Status",
+    soonNote: (stores: string) => `Coming soon to ${stores}.`,
     related: "More from the family",
     next: "Next product",
   },
@@ -81,7 +86,18 @@ const base = route("products", lang);
 const privacyHref = `${base}/${product.id}/${lang === "tr" ? "gizlilik" : "privacy"}`;
 const supportHref = `${base}/${product.id}/${lang === "tr" ? "destek" : "support"}`;
 
-const stores = [
+const soon = data.status === "coming-soon";
+const storeNames = [
+  data.platforms.includes("ios") && "App Store",
+  data.platforms.includes("android") && "Google Play",
+  data.platforms.includes("web") && (lang === "tr" ? "web" : "the web"),
+].filter(Boolean) as string[];
+const storeList =
+  storeNames.length > 1
+    ? `${storeNames.slice(0, -1).join(", ")}${lang === "tr" ? " ve " : " and "}${storeNames.at(-1)}`
+    : (storeNames[0] ?? "");
+
+const stores = soon ? [] : [
   data.links.appStore && { href: data.links.appStore, label: copy.appStore },
   data.links.googlePlay && { href: data.links.googlePlay, label: copy.googlePlay },
   data.links.web && { href: data.links.web, label: copy.web },
@@ -91,6 +107,7 @@ const facts = [
   { label: copy.developer, value: site.name },
   { label: copy.type, value: typeLabels[lang][data.type] },
   { label: copy.platform, value: data.platforms.map((p) => platformLabels[lang][p]).join(", ") },
+  soon && { label: copy.status, value: comingSoonLabel[lang] },
   data.version && { label: copy.version, value: data.version, mono: true },
   data.releaseDate && { label: copy.released, value: dateFormat.format(data.releaseDate) },
 ].filter(Boolean) as { label: string; value: string; mono?: boolean }[];
@@ -127,13 +144,21 @@ const kind = data.type === "web" ? "browser" : "phone";
             style={`view-transition-name: ${iconTransitionName(product.id)}`}
           />
           <div>
-            <p class="text-body-sm text-secondary">{productCaption(product, lang)}</p>
+            <p class="flex flex-wrap items-center gap-2 text-body-sm text-secondary">
+              {productCaption(product, lang)}
+              {soon && (
+                <span class="rounded-full border border-outline px-2.5 py-0.5 text-[0.8125rem] font-medium text-primary">
+                  {comingSoonLabel[lang]}
+                </span>
+              )}
+            </p>
             <h1 class="mt-1 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
               {data.name}
             </h1>
           </div>
         </div>
         <p class="mt-8 max-w-[40ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
+        {soon && storeList && <p class="mt-10 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>}
         {
           stores.length > 0 && (
             <ul class="mt-10 flex flex-wrap gap-3">

@@ -36,7 +36,10 @@ export function productSchema(product: Product, lang: Lang) {
   const { data } = product;
   const type =
     data.type === "game" ? "VideoGame" : data.type === "web" ? "WebApplication" : "MobileApplication";
-  const installUrls = [data.links.appStore, data.links.googlePlay, data.links.web].filter(Boolean);
+  const installUrls =
+    data.status === "coming-soon"
+      ? []
+      : [data.links.appStore, data.links.googlePlay, data.links.web].filter(Boolean);
 
   return {
     "@context": "https://schema.org",

@@ -21,6 +21,13 @@ const counts = {
   web: products.filter((p) => p.data.type === "web").length,
 };
 
+const joinWith = (word: string) => (parts: (string | 0 | false)[]) => {
+  const list = parts.filter(Boolean) as string[];
+  return list.length > 1 ? `${list.slice(0, -1).join(", ")} ${word} ${list.at(-1)}` : (list[0] ?? "");
+};
+const joinTr = joinWith("ve");
+const joinEn = joinWith("and");
+
 const copy = {
   tr: {
     title: "Stüdyo",
@@ -47,7 +54,7 @@ const copy = {
     ],
     faqTitle: "Sık sorulan sorular",
     familyTitle: "Ryvex ailesi",
-    family: `Bugün ${counts.app} uygulama, ${counts.game} oyun ve ${counts.web} web projesi.`,
+    family: `Bugün ailede ${joinTr([counts.app && `${counts.app} uygulama`, counts.game && `${counts.game} oyun`, counts.web && `${counts.web} web projesi`])} var.`,
     familyLink: "Ürünleri gör",
     contactTitle: "Bize ulaşın",
     contactText: "Bir sorunuz, öneriniz ya da iş birliği fikriniz varsa yazın.",
@@ -78,7 +85,7 @@ const copy = {
     ],
     faqTitle: "Frequently asked questions",
     familyTitle: "The Ryvex family",
-    family: `Today: ${counts.app} apps, ${counts.game} games and ${counts.web} web product${counts.web === 1 ? "" : "s"}.`,
+    family: `Today the family has ${joinEn([counts.app && `${counts.app} app${counts.app === 1 ? "" : "s"}`, counts.game && `${counts.game} game${counts.game === 1 ? "" : "s"}`, counts.web && `${counts.web} web product${counts.web === 1 ? "" : "s"}`])}.`,
     familyLink: "See the products",
     contactTitle: "Get in touch",
     contactText: "If you have a question, a suggestion or an idea to work on together, write to us.",

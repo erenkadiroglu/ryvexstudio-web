@@ -57,7 +57,11 @@ export interface WallItem {
   href: string;
   iconSrc: string;
   color: string;
+  /** Short status label, e.g. "Yakında", for products not yet in stores. */
+  status?: string;
 }
+
+export const comingSoonLabel: Record<Lang, string> = { tr: "Yakında", en: "Coming soon" };
 
 export function toWallItem(product: Product, lang: Lang): WallItem {
   const base = lang === "tr" ? "/urunler" : "/en/products";
@@ -69,5 +73,6 @@ export function toWallItem(product: Product, lang: Lang): WallItem {
     href: `${base}/${product.id}`,
     iconSrc: product.data.icon.src,
     color: product.data.color,
+    status: product.data.status === "coming-soon" ? comingSoonLabel[lang] : undefined,
   };
 }
