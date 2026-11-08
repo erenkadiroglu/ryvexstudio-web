@@ -383,13 +383,10 @@ Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
 Footer
 ```
 
-Ana sayfa sırası: hero, sergi duvarı, manifesto, Ne yapıyoruz, koyu vitrin
-bandı, Nasıl çalışıyoruz, stüdyo ve vişne kapanış bandı. Manifesto büyük
-tipografiyle (masaüstünde 3.5rem) tek bir paragraftır ve altında vişne renkli
-"Ryvex Studio" imzası durur. Kapanış bandı kenardan kenara Vişne zeminde,
-beyaz dev başlık ve beyaz butonla sayfayı bitirir; sağ alt köşesinde sembolün
-yüzde 9 opaklıkta, banttan taşan büyük bir kopyası durur. Bant ana sayfa,
-ürünler, ürün detay ve stüdyo sayfalarının sonunda yer alır.
+Ana sayfa sırası: hero, sergi duvarı, tek cümlelik manifesto, Ne yapıyoruz
+(fotoğraf, ad ve ürün ikonları; açıklama yok), koyu vitrin bandı, Günlükten ve
+vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
+bilgi kendi sayfasında durur. Sitede kişi fotoğrafı kullanılmaz.
 
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
 sayfanın ortasında ritmi değiştiren tek koyu alandır. "Nasıl çalışıyoruz"

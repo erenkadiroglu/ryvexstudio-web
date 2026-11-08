@@ -15,12 +15,10 @@ const base = route("products", lang);
 const copy = {
   tr: {
     heading: "Öne çıkanlar",
-    lede: "Ailemizden birkaç ürün. Kaydırdıkça her biri sahneye çıkıyor.",
     cta: "Ürünü incele",
   },
   en: {
     heading: "Featured",
-    lede: "A few products from the family. Each one takes the stage as you scroll.",
     cta: "View product",
   },
 }[lang];
@@ -41,7 +39,6 @@ const kindOf = (product: Product) => (product.data.type === "web" ? "browser" : 
     <h2 id="one-cikanlar" class="text-headline-xl font-semibold tracking-[-0.035em]">
       {copy.heading}
     </h2>
-    <p class="mt-4 max-w-[44ch] text-body-lg text-secondary">{copy.lede}</p>
 
     <div class="mt-16 md:grid md:grid-cols-12 md:gap-6">
       <!-- Sticky device, desktop only: its screen and shape follow the active step. -->
