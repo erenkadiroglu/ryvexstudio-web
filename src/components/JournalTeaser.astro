@@ -1,0 +1,55 @@
+---
+import { route, type Lang } from "@/i18n/ui";
+import { getPosts, postSlug } from "@/lib/journal";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = (await getPosts(lang)).slice(0, 3);
+const base = route("journal", lang);
+
+const copy = {
+  tr: { heading: "Günlükten", all: "Tüm yazılar" },
+  en: { heading: "From the journal", all: "All posts" },
+}[lang];
+
+const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+{
+  posts.length > 0 && (
+    <section aria-labelledby="gunlukten" class="container-page pb-section-mobile md:pb-section">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="gunlukten" class="text-headline-xl font-semibold tracking-[-0.035em]">
+          {copy.heading}
+        </h2>
+        <a href={base} class="link-inline text-body-md">
+          {copy.all}
+        </a>
+      </div>
+      <ul class="mt-8 border-t border-outline">
+        {posts.map((post) => (
+          <li class="border-b border-outline">
+            <a href={`${base}/${postSlug(post)}`} class="group grid gap-2 py-8 md:grid-cols-12 md:gap-6">
+              <time class="text-body-sm text-secondary md:col-span-3" datetime={post.data.date.toISOString().slice(0, 10)}>
+                {dateFormat.format(post.data.date)}
+              </time>
+              <span class="md:col-span-9">
+                <span class="block text-headline-md font-semibold decoration-2 underline-offset-[5px] group-hover:underline">
+                  {post.data.title}
+                </span>
+                <span class="mt-2 block max-w-[60ch] text-body-md text-secondary">{post.data.description}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

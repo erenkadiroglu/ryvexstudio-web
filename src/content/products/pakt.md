@@ -24,6 +24,10 @@ faq:
     a: { tr: "Hayır. Pakt banka hesabınıza bağlanmaz; harcamaları siz eklersiniz.", en: "No. Pakt never connects to your bank; you add expenses yourself." }
   - q: { tr: "Verilerimi dışa aktarabilir miyim?", en: "Can I export my data?" }
     a: { tr: "Ayarlar bölümünden harcamalarınızı CSV dosyası olarak dışa aktarabilirsiniz.", en: "You can export your expenses as a CSV file from Settings." }
+aboutEn: |
+  Pakt sorts your monthly spending into categories and shows how much of your budget is left at a glance.
+
+  There is no bank account to connect; you add expenses yourself and the data stays on your device.
 features:
   - title: { tr: "Tek bakışta bütçe", en: "Budget at a glance" }
     text: { tr: "Ay sonuna ne kadar kaldığını ana ekranda görün.", en: "See what is left for the month on the home screen." }

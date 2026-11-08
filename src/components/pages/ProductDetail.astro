@@ -231,7 +231,17 @@ const kind = data.type === "web" ? "browser" : "phone";
     <section aria-labelledby="ne-yapar" class="md:col-span-6">
       <h2 id="ne-yapar" class="text-headline-md font-semibold">{copy.about}</h2>
       <div class="prose-product mt-5 max-w-[60ch] space-y-5 text-body-md text-secondary">
-        <Content />
+        {
+          lang === "en" && data.aboutEn ? (
+            data.aboutEn
+              .split(/\n\s*\n/)
+              .map((paragraph) => paragraph.trim())
+              .filter(Boolean)
+              .map((paragraph) => <p>{paragraph}</p>)
+          ) : (
+            <Content />
+          )
+        }
       </div>
 
       {
