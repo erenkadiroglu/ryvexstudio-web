@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import ScreenSketch from "@/components/ScreenSketch.astro";
 import { route, type Lang } from "@/i18n/ui";
 import { productCaption, productTagline, type Product } from "@/lib/products";
 
@@ -12,88 +13,104 @@ const { products, lang } = Astro.props;
 const base = route("products", lang);
 
 const copy = {
-  tr: { heading: "Öne çıkanlar", cta: "Ürünü incele" },
-  en: { heading: "Featured", cta: "View product" },
+  tr: {
+    heading: "Öne çıkanlar",
+    lede: "Ailemizden birkaç ürün. Kaydırdıkça her biri sahneye çıkıyor.",
+    cta: "Ürünü incele",
+  },
+  en: {
+    heading: "Featured",
+    lede: "A few products from the family. Each one takes the stage as you scroll.",
+    cta: "View product",
+  },
 }[lang];
 
 const kindOf = (product: Product) => (product.data.type === "web" ? "browser" : "phone");
-const screenTint = (product: Product) =>
-  `background-color: color-mix(in srgb, ${product.data.color} 14%, var(--color-surface));`;
 ---
 
+<!--
+  A full-bleed band in the ink color. data-theme="dark" scopes the dark tokens to this
+  section, so text and surfaces inside it stay readable in both page themes.
+-->
 <section
-  class="showcase container-page pb-section-mobile md:pb-section"
+  class="showcase showcase-band py-section-mobile text-primary md:py-section"
+  data-theme="dark"
   aria-labelledby="one-cikanlar"
 >
-  <h2 id="one-cikanlar" class="text-headline-lg font-semibold">{copy.heading}</h2>
+  <div class="container-page">
+    <h2 id="one-cikanlar" class="text-headline-xl font-semibold tracking-[-0.035em]">
+      {copy.heading}
+    </h2>
+    <p class="mt-4 max-w-[44ch] text-body-lg text-secondary">{copy.lede}</p>
 
-  <div class="mt-12 md:grid md:grid-cols-12 md:gap-6">
-    <!-- Sticky device, desktop only: its screen and shape follow the active step. -->
-    <div class="hidden md:col-span-6 md:block" aria-hidden="true">
-      <div class="sticky top-[calc(50vh-280px)] flex h-[560px] items-center justify-center">
-        <div
-          class="showcase-device group relative overflow-hidden border border-outline bg-surface data-[kind=browser]:aspect-[16/10] data-[kind=browser]:w-full data-[kind=browser]:rounded-[20px] data-[kind=phone]:aspect-[9/19.5] data-[kind=phone]:w-[260px] data-[kind=phone]:rounded-[40px]"
-          data-kind={kindOf(products[0])}
-          style="box-shadow: var(--rv-object-shadow)"
-        >
+    <div class="mt-16 md:grid md:grid-cols-12 md:gap-6">
+      <!-- Sticky device, desktop only: its screen and shape follow the active step. -->
+      <div class="hidden md:col-span-6 md:block" aria-hidden="true">
+        <div class="sticky top-[calc(50vh-290px)] flex h-[580px] items-center justify-center">
           <div
-            class="absolute inset-x-0 top-0 z-10 hidden h-8 items-center gap-1.5 border-b border-outline bg-surface px-4 group-data-[kind=browser]:flex"
-          >
-            <span class="size-2 rounded-full bg-neutral-strong"></span>
-            <span class="size-2 rounded-full bg-neutral-strong"></span>
-            <span class="size-2 rounded-full bg-neutral-strong"></span>
-          </div>
-          {
-            products.map((product) => (
-              <div
-                class="showcase-screen absolute inset-0 flex flex-col items-center justify-center gap-4"
-                style={screenTint(product)}
-              >
-                {product.data.screenshots[0] ? (
-                  <Image
-                    src={product.data.screenshots[0]}
-                    alt=""
-                    class="absolute inset-0 size-full object-cover"
-                    widths={[400, 800]}
-                    sizes="520px"
-                  />
-                ) : (
-                  <>
-                    <Image src={product.data.icon} alt="" width={96} height={96} class="shape-icon size-24" />
-                    <span class="text-title font-semibold">{product.data.name}</span>
-                  </>
-                )}
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-
-    <ul class="md:col-span-5 md:col-start-8">
-      {
-        products.map((product) => (
-          <li
-            class="showcase-step flex flex-col justify-center border-t border-outline py-12 md:min-h-[70vh] md:border-t-0 md:py-0"
-            data-color={product.data.color}
-            data-kind={kindOf(product)}
+            class="showcase-device group relative overflow-hidden border border-outline bg-surface data-[kind=browser]:aspect-[16/10] data-[kind=browser]:w-full data-[kind=browser]:rounded-[20px] data-[kind=phone]:aspect-[9/19.5] data-[kind=phone]:w-[270px] data-[kind=phone]:rounded-[42px]"
+            data-kind={kindOf(products[0])}
           >
             <div
-              class="mb-8 flex aspect-[16/10] w-full items-center justify-center rounded-xl md:hidden"
-              style={screenTint(product)}
-              aria-hidden="true"
+              class="absolute inset-x-0 top-0 z-10 hidden h-8 items-center gap-1.5 border-b border-outline bg-surface px-4 group-data-[kind=browser]:flex"
             >
-              <Image src={product.data.icon} alt="" width={72} height={72} class="shape-icon size-18" />
+              <span class="size-2 rounded-full bg-neutral-strong"></span>
+              <span class="size-2 rounded-full bg-neutral-strong"></span>
+              <span class="size-2 rounded-full bg-neutral-strong"></span>
             </div>
-            <p class="text-body-sm text-secondary">{productCaption(product, lang)}</p>
-            <h3 class="mt-2 text-headline-lg font-semibold">{product.data.name}</h3>
-            <p class="mt-4 max-w-[36ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
-            <a href={`${base}/${product.id}`} class="link-inline mt-6 self-start text-body-md">
-              {copy.cta}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+            {
+              products.map((product) => (
+                <div class="showcase-screen absolute inset-0">
+                  {product.data.screenshots[0] ? (
+                    <Image
+                      src={product.data.screenshots[0]}
+                      alt=""
+                      class="absolute inset-0 size-full object-cover"
+                      widths={[400, 800]}
+                      sizes="520px"
+                    />
+                  ) : (
+                    <ScreenSketch product={product} />
+                  )}
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <ul class="md:col-span-5 md:col-start-8">
+        {
+          products.map((product, i) => (
+            <li
+              class="showcase-step flex flex-col justify-center border-t border-outline py-12 md:min-h-[72vh] md:border-t-0 md:py-0"
+              data-color={product.data.color}
+              data-kind={kindOf(product)}
+            >
+              <div
+                class="relative mb-8 aspect-[16/10] w-full overflow-hidden rounded-xl border border-outline md:hidden"
+                aria-hidden="true"
+              >
+                <ScreenSketch product={product} variant={i} />
+              </div>
+              <div class="flex items-center gap-3">
+                <Image src={product.data.icon} alt="" width={40} height={40} class="shape-icon size-10" />
+                <p class="text-body-sm text-secondary">{productCaption(product, lang)}</p>
+              </div>
+              <h3 class="mt-5 text-headline-lg font-semibold">{product.data.name}</h3>
+              <p class="mt-4 max-w-[36ch] text-body-lg text-secondary">
+                {productTagline(product, lang)}
+              </p>
+              <a
+                href={`${base}/${product.id}`}
+                class="mt-8 inline-flex self-start rounded-full border border-outline px-[21px] py-[13px] text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
+              >
+                {copy.cta}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </section>

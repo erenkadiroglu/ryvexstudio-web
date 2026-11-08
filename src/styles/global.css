@@ -105,14 +105,14 @@
 /* The page ground can take a faint tint of the product the visitor is looking at. */
 :root {
   --rv-tint: var(--rv-surface);
-  --rv-page: color-mix(in srgb, var(--rv-tint) 6%, var(--rv-surface));
+  --rv-page: color-mix(in srgb, var(--rv-tint) 5%, var(--rv-surface));
 }
 
 @layer base {
   html {
     background-color: var(--rv-page);
     transition: background-color 500ms var(--ease-settle);
-    color: var(--color-primary);
+    color: var(--rv-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -125,13 +125,13 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-tertiary);
+    outline: 2px solid var(--rv-tertiary);
     outline-offset: 2px;
   }
 
   ::selection {
-    background-color: var(--color-tertiary);
-    color: var(--color-on-tertiary);
+    background-color: var(--rv-tertiary);
+    color: var(--rv-on-tertiary);
   }
 }
 
@@ -158,7 +158,7 @@
   }
 
   .link-inline {
-    color: var(--color-tertiary);
+    color: var(--rv-tertiary);
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
@@ -293,6 +293,16 @@
     box-shadow 450ms var(--ease-settle);
 }
 
+/* Showcase band: a full-bleed ink section that takes a faint tint of the active product. */
+.showcase-band {
+  background-color: color-mix(in srgb, var(--rv-band-tint, #160f12) 7%, #160f12);
+  transition: background-color 600ms var(--ease-settle);
+}
+
+html[data-theme="dark"] .showcase-band {
+  background-color: color-mix(in srgb, var(--rv-band-tint, #241c20) 7%, #241c20);
+}
+
 /* Showcase: a device that changes screens as the story scrolls. */
 .showcase-device {
   transition:
@@ -316,12 +326,12 @@
 
 /* Inactive steps step back through color, not opacity, so text keeps its contrast. */
 .showcase-step h3 {
-  color: var(--color-secondary);
+  color: var(--rv-secondary);
   transition: color 500ms var(--ease-settle);
 }
 
 .showcase-step.is-active h3 {
-  color: var(--color-primary);
+  color: var(--rv-primary);
 }
 
 /* Page transitions: a quick cross-fade, while shared product icons morph between pages. */
