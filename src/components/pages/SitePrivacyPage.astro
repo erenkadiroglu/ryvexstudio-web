@@ -1,0 +1,129 @@
+---
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import { getProducts } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const products = await getProducts();
+const email = site.contactEmail;
+const updated = new Date("2026-11-08");
+const dateText = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(updated);
+
+const copy = {
+  tr: {
+    title: "Gizlilik",
+    updated: "Son güncelleme",
+    sections: [
+      [
+        "Bu sayfa hakkında",
+        `Bu politika, ryvexstudio.com web sitesini ziyaret ettiğinizde hangi verilerin işlendiğini açıklar. Veri sorumlusu, ${site.name} adına ${site.founder}'dur. Ürünlerimizin her birinin ayrı bir gizlilik politikası vardır; bağlantıları aşağıda.`,
+      ],
+      [
+        "Çerezler ve takip",
+        "Bu site çerez kullanmaz, ziyaretçi istatistiği toplamaz ve reklam ya da pazarlama amaçlı takip araçları içermez. Yazı tipleri sitenin kendi sunucusundan yüklenir; üçüncü taraf yazı tipi servislerine istek gönderilmez.",
+      ],
+      [
+        "Tema tercihi",
+        "Aydınlık ya da karanlık temayı seçtiğinizde bu tercih yalnızca tarayıcınızın yerel depolama alanında saklanır. Bize gönderilmez ve tarayıcı verilerinizi temizlediğinizde silinir.",
+      ],
+      [
+        "Sunucu kayıtları",
+        "Sitenin barındırıldığı sağlayıcı, güvenlik ve hizmetin çalışması amacıyla IP adresi, tarayıcı türü ve ziyaret zamanı gibi standart sunucu kayıtlarını kısa bir süre tutabilir.",
+      ],
+      [
+        "Bize yazdığınızda",
+        "E-posta ile bize ulaştığınızda adresinizi ve mesajınızı yalnızca size cevap vermek için kullanırız ve kimseyle paylaşmayız.",
+      ],
+      [
+        "Haklarınız",
+        `6698 sayılı Kişisel Verilerin Korunması Kanunu'nun 11. maddesi ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında; verilerinizin işlenip işlenmediğini öğrenme, bunlara erişme, düzeltilmesini ya da silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Talepleriniz için ${email} adresine yazabilirsiniz.`,
+      ],
+      [
+        "Değişiklikler",
+        "Bu politika güncellendiğinde değişiklikler bu sayfada yayınlanır ve sayfanın üstündeki tarih güncellenir.",
+      ],
+    ],
+    productsTitle: "Ürünlerin gizlilik politikaları",
+    privacySegment: "gizlilik",
+  },
+  en: {
+    title: "Privacy",
+    updated: "Last updated",
+    sections: [
+      [
+        "About this page",
+        `This policy explains what data is processed when you visit the ryvexstudio.com website. The data controller is ${site.founder}, on behalf of ${site.name}. Each of our products has its own privacy policy; links are below.`,
+      ],
+      [
+        "Cookies and tracking",
+        "This site uses no cookies, collects no visitor statistics and contains no advertising or marketing trackers. Fonts are served from the site itself; no requests are sent to third-party font services.",
+      ],
+      [
+        "Theme preference",
+        "When you choose the light or dark theme, the choice is stored only in your browser's local storage. It is never sent to us and is removed when you clear your browser data.",
+      ],
+      [
+        "Server logs",
+        "The provider hosting this site may keep standard server logs, such as IP address, browser type and time of visit, for a short period to keep the service secure and running.",
+      ],
+      [
+        "When you write to us",
+        "When you contact us by email, we use your address and message only to reply to you and never share them.",
+      ],
+      [
+        "Your rights",
+        `Under Article 11 of the Turkish Personal Data Protection Law No. 6698 and the EU General Data Protection Regulation (GDPR), you have the right to know whether your data is processed, to access it, to ask for it to be corrected or deleted, and to object to its processing. Send requests to ${email}.`,
+      ],
+      [
+        "Changes",
+        "When this policy changes, the update is published on this page and the date at the top is updated.",
+      ],
+    ],
+    productsTitle: "Product privacy policies",
+    privacySegment: "privacy",
+  },
+}[lang];
+
+const productBase = route("products", lang);
+---
+
+<article class="container-page pt-20 pb-section-mobile md:pt-28 md:pb-section">
+  <div class="max-w-[64ch]">
+    <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+      {copy.title}
+    </h1>
+    <p class="mt-4 text-body-sm text-secondary">
+      {copy.updated}: <time datetime={updated.toISOString().slice(0, 10)}>{dateText}</time>
+    </p>
+    <div class="text-body-md text-secondary">
+      {
+        copy.sections.map(([heading, text]) => (
+          <>
+            <h2 class="mt-14 text-headline-md font-semibold text-primary">{heading}</h2>
+            <p class="mt-4">{text}</p>
+          </>
+        ))
+      }
+      <h2 class="mt-14 text-headline-md font-semibold text-primary">{copy.productsTitle}</h2>
+      <ul class="mt-4 space-y-2">
+        {
+          products.map((product) => (
+            <li>
+              <a href={`${productBase}/${product.id}/${copy.privacySegment}`} class="link-inline">
+                {product.data.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</article>

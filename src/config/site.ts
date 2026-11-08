@@ -10,6 +10,6 @@ export const site = {
     en: "Ryvex Studio is an independent studio making mobile apps, games and web products.",
   },
   founder: "Eren KADİROĞLU",
-  foundedYear: 2026,
   contactEmail: "hello@ryvexstudio.com",
+  supportEmail: "destek@ryvexstudio.com",
 } as const;

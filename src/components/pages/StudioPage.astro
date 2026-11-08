@@ -1,0 +1,117 @@
+---
+import { Image } from "astro:assets";
+import PageIntro from "@/components/PageIntro.astro";
+import desk from "@/assets/studio/desk.jpg";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import { getProducts } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const products = await getProducts();
+const counts = {
+  app: products.filter((p) => p.data.type === "app").length,
+  game: products.filter((p) => p.data.type === "game").length,
+  web: products.filter((p) => p.data.type === "web").length,
+};
+
+const copy = {
+  tr: {
+    title: "Stüdyo",
+    lede: "Uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyoyuz.",
+    imageAlt: "Ahşap bir masanın üzerinde defter, kahve fincanı ve dizüstü bilgisayar",
+    story: [
+      `Ryvex Studio, ${site.founder} tarafından kurulan bağımsız bir ürün stüdyosu. Farklı mağazalarda ve farklı adreslerde dağınık duran uygulamaları, oyunları ve web projelerini tek bir imza altında toplamak için kuruldu.`,
+      "Çok ürün çıkarmak için acele etmiyoruz. Her ürünü kendimiz kullanmak isteyeceğimiz seviyeye gelene kadar işliyoruz. Ne yaptığını açıkça anlatan, gereksiz izin istemeyen, açıldığında insanı yormayan ürünler yapıyoruz.",
+      "Bir Ryvex ürününü sevdiyseniz, diğerlerinde de aynı özeni bulacaksınız. Bulamazsanız bize yazın; okuyoruz.",
+    ],
+    principlesTitle: "Neye önem veriyoruz",
+    principles: [
+      ["Özen", "Her ürün, kullanmak isteyeceğimiz seviyeye gelmeden yayınlanmaz. Detaylar tesadüf değildir."],
+      ["Tek imza", "Uygulama, oyun ya da web; hepsi aynı standarttan geçer."],
+      ["Şeffaflık", "Ürünlerimiz ne yaptığını ve hangi veriyi kullandığını açıkça söyler. Gizlilik politikası her üründe bir tık uzaktadır."],
+      ["Ulaşılabilirlik", "Ürünlerin arkasında adı bilinen bir kurucu ve gerçek bir destek kanalı var."],
+      ["Keyif", "İyi bir araç da iyi bir oyun da kullanırken insanı mutlu etmelidir."],
+    ],
+    familyTitle: "Ryvex ailesi",
+    family: `Bugün ${counts.app} uygulama, ${counts.game} oyun ve ${counts.web} web projesi.`,
+    familyLink: "Ürünleri gör",
+    contactTitle: "Bize ulaşın",
+    contactText: "Bir sorunuz, öneriniz ya da iş birliği fikriniz varsa yazın.",
+    contactLink: "İletişim sayfası",
+  },
+  en: {
+    title: "Studio",
+    lede: "We are an independent studio making apps, games and web products.",
+    imageAlt: "A notebook, a cup of coffee and a laptop on a wooden desk",
+    story: [
+      `Ryvex Studio is an independent product studio founded by ${site.founder}. It was set up to bring apps, games and web products that were scattered across stores and addresses under one signature.`,
+      "We are in no hurry to ship many products. Each one is refined until it is something we would want to use ourselves. We make products that say clearly what they do, ask for no unnecessary permissions and never wear you out.",
+      "If you like one Ryvex product, you will find the same care in the others. If you don't, write to us; we read every message.",
+    ],
+    principlesTitle: "What we care about",
+    principles: [
+      ["Care", "No product ships before it is something we would want to use. Details are never an accident."],
+      ["One signature", "App, game or web product, each one meets the same standard."],
+      ["Transparency", "Our products say clearly what they do and what data they use. Every product's privacy policy is one click away."],
+      ["Reachability", "Behind every product is a named founder and a real support channel."],
+      ["Delight", "A good tool and a good game should both make you happy to use them."],
+    ],
+    familyTitle: "The Ryvex family",
+    family: `Today: ${counts.app} apps, ${counts.game} games and ${counts.web} web product${counts.web === 1 ? "" : "s"}.`,
+    familyLink: "See the products",
+    contactTitle: "Get in touch",
+    contactText: "If you have a question, a suggestion or an idea to work on together, write to us.",
+    contactLink: "Contact page",
+  },
+}[lang];
+---
+
+<PageIntro title={copy.title} lede={copy.lede} />
+
+<div class="container-page mt-14 md:mt-20">
+  <Image
+    src={desk}
+    alt={copy.imageAlt}
+    widths={[640, 1024, 1440, 1800]}
+    sizes="(min-width: 1280px) 1240px, 100vw"
+    class="aspect-[16/9] w-full rounded-lg object-cover md:aspect-[21/9]"
+    loading="eager"
+  />
+</div>
+
+<section class="container-page grid gap-6 py-section-mobile md:grid-cols-12 md:py-section">
+  <div class="space-y-5 text-body-lg text-secondary md:col-span-7 md:col-start-6">
+    {copy.story.map((paragraph, i) => <p class:list={[i === 0 && "text-primary"]}>{paragraph}</p>)}
+  </div>
+</section>
+
+<section aria-labelledby="ilkeler" class="container-page pb-section-mobile md:pb-section">
+  <h2 id="ilkeler" class="text-headline-lg font-semibold">{copy.principlesTitle}</h2>
+  <dl class="mt-10 grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      copy.principles.map(([term, text]) => (
+        <div>
+          <dt class="text-title font-semibold">{term}</dt>
+          <dd class="mt-2 max-w-[40ch] text-body-md text-secondary">{text}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<section class="container-page grid gap-12 pb-section-mobile md:grid-cols-2 md:pb-section">
+  <div class="rounded-xl bg-neutral p-8 md:p-10">
+    <h2 class="text-headline-md font-semibold">{copy.familyTitle}</h2>
+    <p class="mt-3 text-body-md text-secondary">{copy.family}</p>
+    <a href={route("products", lang)} class="link-inline mt-6 inline-block">{copy.familyLink}</a>
+  </div>
+  <div class="rounded-xl bg-neutral p-8 md:p-10">
+    <h2 class="text-headline-md font-semibold">{copy.contactTitle}</h2>
+    <p class="mt-3 text-body-md text-secondary">{copy.contactText}</p>
+    <a href={route("contact", lang)} class="link-inline mt-6 inline-block">{copy.contactLink}</a>
+  </div>
+</section>

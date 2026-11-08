@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+  lede?: string;
+}
+
+const { title, lede } = Astro.props;
+---
+
+<header class="container-page pt-20 md:pt-28">
+  <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+    {title}
+  </h1>
+  {lede && <p class="mt-5 max-w-[48ch] text-body-lg text-secondary">{lede}</p>}
+</header>
