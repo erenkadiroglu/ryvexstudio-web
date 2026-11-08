@@ -6,6 +6,7 @@ import desk from "@/assets/studio/desk.jpg";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts } from "@/lib/products";
+import { studioFaq } from "@/data/studio-faq";
 
 interface Props {
   lang: Lang;
@@ -37,6 +38,7 @@ const copy = {
       ["Ulaşılabilirlik", "Ürünlerin arkasında adı bilinen bir kurucu ve gerçek bir destek kanalı var."],
       ["Keyif", "İyi bir araç da iyi bir oyun da kullanırken insanı mutlu etmelidir."],
     ],
+    faqTitle: "Sık sorulan sorular",
     familyTitle: "Ryvex ailesi",
     family: `Bugün ${counts.app} uygulama, ${counts.game} oyun ve ${counts.web} web projesi.`,
     familyLink: "Ürünleri gör",
@@ -61,6 +63,7 @@ const copy = {
       ["Reachability", "Behind every product is a named founder and a real support channel."],
       ["Delight", "A good tool and a good game should both make you happy to use them."],
     ],
+    faqTitle: "Frequently asked questions",
     familyTitle: "The Ryvex family",
     family: `Today: ${counts.app} apps, ${counts.game} games and ${counts.web} web product${counts.web === 1 ? "" : "s"}.`,
     familyLink: "See the products",
@@ -102,6 +105,33 @@ const copy = {
       ))
     }
   </dl>
+</section>
+
+<section aria-labelledby="sss" class="container-page pb-section-mobile md:grid md:grid-cols-12 md:gap-6 md:pb-section">
+  <h2 id="sss" class="text-headline-lg font-semibold md:col-span-4">{copy.faqTitle}</h2>
+  <div class="mt-8 border-t border-outline md:col-span-8 md:mt-0">
+    {
+      studioFaq[lang].map((item) => (
+        <details class="group border-b border-outline">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-body-lg font-medium text-primary [&::-webkit-details-marker]:hidden">
+            {item.q}
+            <svg
+              class="size-5 shrink-0 text-secondary transition-transform duration-200 group-open:rotate-45"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </summary>
+          <p class="max-w-[60ch] pb-6 text-body-md text-secondary">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
 </section>
 
 <section class="container-page grid gap-12 pb-section-mobile md:grid-cols-2 md:pb-section">

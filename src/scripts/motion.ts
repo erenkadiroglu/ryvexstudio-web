@@ -55,6 +55,48 @@ document.addEventListener("pointerout", (event) => {
   setTint(undefined);
 });
 
+/* ---------- Magnetic buttons: primary calls to action lean toward the pointer ---------- */
+
+const MAGNET_RANGE = 40;
+const MAGNET_PULL = 0.25;
+const MAGNET_MAX = 8;
+let magnet: HTMLElement | null = null;
+
+const releaseMagnet = () => {
+  if (magnet) magnet.style.transform = "";
+  magnet = null;
+};
+
+document.addEventListener(
+  "pointermove",
+  (event) => {
+    if (reducedMotion.matches || !finePointer.matches) return;
+    const candidates = document.querySelectorAll<HTMLElement>("[data-magnetic]");
+    let found: HTMLElement | null = null;
+    let fx = 0;
+    let fy = 0;
+    for (const el of candidates) {
+      const r = el.getBoundingClientRect();
+      if (
+        event.clientX < r.left - MAGNET_RANGE || event.clientX > r.right + MAGNET_RANGE ||
+        event.clientY < r.top - MAGNET_RANGE || event.clientY > r.bottom + MAGNET_RANGE
+      ) continue;
+      found = el;
+      const clampPx = (v: number) => Math.max(-MAGNET_MAX, Math.min(MAGNET_MAX, v));
+      fx = clampPx((event.clientX - (r.left + r.width / 2)) * MAGNET_PULL);
+      fy = clampPx((event.clientY - (r.top + r.height / 2)) * MAGNET_PULL);
+      break;
+    }
+    if (found !== magnet) releaseMagnet();
+    if (found) {
+      magnet = found;
+      found.style.transition = "transform 250ms cubic-bezier(0.2, 0.7, 0.2, 1)";
+      found.style.transform = `translate(${fx.toFixed(1)}px, ${fy.toFixed(1)}px)`;
+    }
+  },
+  { passive: true },
+);
+
 /* ---------- Per page: reveal the wall and run the showcase ---------- */
 
 let observers: IntersectionObserver[] = [];
@@ -254,6 +296,7 @@ document.addEventListener("astro:page-load", () => {
 });
 
 document.addEventListener("astro:before-swap", () => {
+  releaseMagnet();
   observers.forEach((o) => o.disconnect());
   observers = [];
   pageListeners.abort();

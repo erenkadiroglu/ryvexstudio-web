@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import StudioPage from "@/components/pages/StudioPage.astro";
+import { faqSchema } from "@/data/studio-faq";
 ---
 
-<BaseLayout title="Stüdyo" description="Ryvex Studio hakkında: kim olduğumuz ve neye önem verdiğimiz.">
+<BaseLayout jsonLd={[faqSchema("tr")]} title="Stüdyo" description="Ryvex Studio hakkında: kim olduğumuz ve neye önem verdiğimiz.">
   <StudioPage lang="tr" />
 </BaseLayout>
