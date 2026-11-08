@@ -2,7 +2,7 @@
 name: "Ryvex Studio"
 tagline: "Her ekranda aynı özen."
 specVersion: "0.3.0"
-version: 2
+version: 3
 language: tr
 type: master
 ---
@@ -16,7 +16,7 @@ type: master
 
 ### Overview
 
-Ryvex Studio, Eren Kadıoğlu tarafından kurulan bağımsız bir dijital ürün
+Ryvex Studio, Eren KADİROĞLU tarafından kurulan bağımsız bir dijital ürün
 stüdyosudur. Mobil uygulamalar, oyunlar ve web projeleri tek bir imza altında
 tasarlanır, geliştirilir ve yayınlanır.
 
@@ -241,7 +241,7 @@ değiştirilmeden yazılır.
 
 ### Social Bios
 
-- **LinkedIn:** Ryvex Studio, Eren Kadıoğlu tarafından kurulan bağımsız bir
+- **LinkedIn:** Ryvex Studio, Eren KADİROĞLU tarafından kurulan bağımsız bir
   dijital ürün stüdyosudur. Mobil uygulamalar, oyunlar ve web projeleri tek bir
   imza ve aynı kalite standardıyla tasarlanıp geliştirilir. Her ekranda aynı özen.
 - **Instagram:**
@@ -371,7 +371,7 @@ beyaz bir duvar, eşit aralıklarla asılmış, her biri kendi rengini taşıyan
   ifadesiyle ana markaya bağlanır.
 - Ürün adlarının önüne "Ryvex" eklenip eklenmeyeceği ürün bazında karar
   verilir; zorunlu değildir.
-- Yeni bir ürün adı yayına girmeden önce Eren Kadıoğlu tarafından onaylanır.
+- Yeni bir ürün adı yayına girmeden önce Eren KADİROĞLU tarafından onaylanır.
 
 ### Claims
 
