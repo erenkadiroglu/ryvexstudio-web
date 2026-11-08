@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ProductDetail from "@/components/pages/ProductDetail.astro";
 import { getProducts, productTagline, type Product } from "@/lib/products";
+import { productSchema } from "@/lib/schema";
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -11,6 +12,11 @@ export async function getStaticPaths() {
 const { product } = Astro.props as { product: Product };
 ---
 
-<BaseLayout title={product.data.name} description={productTagline(product, "tr")}>
+<BaseLayout
+  title={product.data.name}
+  description={productTagline(product, "tr")}
+  ogImage={`/og/products/${product.id}-tr.png`}
+  jsonLd={[productSchema(product, "tr")]}
+>
   <ProductDetail product={product} lang="tr" />
 </BaseLayout>

@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import HomePage from "@/components/pages/HomePage.astro";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 ---
 
-<BaseLayout>
+<BaseLayout jsonLd={[organizationSchema("tr"), websiteSchema("tr")]}>
   <HomePage lang="tr" />
 </BaseLayout>

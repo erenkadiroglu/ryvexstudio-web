@@ -3,19 +3,37 @@ import "@/styles/global.css";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { site } from "@/config/site";
-import { getLangFromUrl, useTranslations } from "@/i18n/ui";
+import { alternatePath, getLangFromUrl, useTranslations } from "@/i18n/ui";
 
 interface Props {
   title?: string;
   description?: string;
+  /** Path of the Open Graph image, e.g. /og/products/kelimo-tr.png */
+  ogImage?: string;
+  /** Structured data objects rendered as JSON-LD. */
+  jsonLd?: Record<string, unknown>[];
 }
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const { title, description = site.description[lang] } = Astro.props;
+const {
+  title,
+  description = site.description[lang],
+  ogImage = `/og/site-${lang}.png`,
+  jsonLd = [],
+} = Astro.props;
 const pageTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline[lang]}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const isNotFound = Astro.url.pathname.startsWith("/404");
+const alternates = isNotFound
+  ? []
+  : [
+      { hreflang: "tr", href: new URL(alternatePath(Astro.url, "tr"), Astro.site) },
+      { hreflang: "en", href: new URL(alternatePath(Astro.url, "en"), Astro.site) },
+      { hreflang: "x-default", href: new URL(alternatePath(Astro.url, "tr"), Astro.site) },
+    ];
+const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
@@ -26,6 +44,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#160F12" media="(prefers-color-scheme: dark)" />
@@ -36,7 +55,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === "tr" ? "tr_TR" : "en_US"} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImageUrl} />
+    {
+      jsonLd.map((data) => (
+        <script type="application/ld+json" set:html={JSON.stringify(data)} />
+      ))
+    }
 
     <script is:inline>
       // Apply the saved theme before first paint. Light is the default.
