@@ -1,0 +1,94 @@
+---
+import LegalArticle from "@/components/LegalArticle.astro";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import type { Product } from "@/lib/products";
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+
+const { product, lang } = Astro.props;
+const { data } = product;
+const email = data.supportEmail ?? site.contactEmail;
+
+const copy = {
+  tr: {
+    title: "Destek",
+    lede: `${data.name} ile ilgili bir sorun mu var? Buradayız.`,
+    faq: "Sık sorulan sorular",
+    contactTitle: "Bize yazın",
+    contactText:
+      "Sorunu kısaca anlatın. Cihazınızın modelini ve uygulamanın sürümünü eklerseniz daha hızlı yardımcı olabiliriz.",
+    write: "E-posta gönder",
+    subject: `${data.name} destek talebi`,
+    privacy: "Gizlilik politikası",
+  },
+  en: {
+    title: "Support",
+    lede: `Something not working in ${data.name}? We're here.`,
+    faq: "Frequently asked questions",
+    contactTitle: "Write to us",
+    contactText:
+      "Describe the problem briefly. Including your device model and the app version helps us help you faster.",
+    write: "Send an email",
+    subject: `${data.name} support request`,
+    privacy: "Privacy policy",
+  },
+}[lang];
+
+const mailto = `mailto:${email}?subject=${encodeURIComponent(
+  `${copy.subject}${data.version ? ` (${data.version})` : ""}`,
+)}`;
+const privacyHref = `${route("products", lang)}/${product.id}/${lang === "tr" ? "gizlilik" : "privacy"}`;
+---
+
+<LegalArticle product={product} lang={lang} title={copy.title}>
+  <p class="mt-4 text-body-lg">{copy.lede}</p>
+
+  {
+    data.faq.length > 0 && (
+      <section aria-labelledby="sss" class="mt-14">
+        <h2 id="sss" class="text-headline-md font-semibold text-primary">
+          {copy.faq}
+        </h2>
+        <div class="mt-5 border-t border-outline">
+          {data.faq.map((item) => (
+            <details class="group border-b border-outline">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-body-md font-medium text-primary [&::-webkit-details-marker]:hidden">
+                {item.q[lang]}
+                <svg
+                  class="size-5 shrink-0 text-secondary transition-transform duration-150 group-open:rotate-45"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </summary>
+              <p class="pb-5">{item.a[lang]}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="bize-yazin" class="mt-14 rounded-xl bg-neutral p-8">
+    <h2 id="bize-yazin" class="text-title font-semibold text-primary">{copy.contactTitle}</h2>
+    <p class="mt-3">{copy.contactText}</p>
+    <a
+      href={mailto}
+      class="mt-6 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+    >
+      {copy.write}
+    </a>
+    <p class="mt-4 text-body-sm">{email}</p>
+  </section>
+
+  <p class="mt-10"><a href={privacyHref} class="link-inline">{copy.privacy}</a></p>
+</LegalArticle>

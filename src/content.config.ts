@@ -29,6 +29,46 @@ const products = defineCollection({
       releaseDate: z.coerce.date().optional(),
       supportEmail: z.email().optional(),
       privacyUpdated: z.coerce.date().optional(),
+      /** Facts the privacy policy is generated from. Keep them accurate for each product. */
+      privacy: z
+        .object({
+          accountRequired: z.boolean().default(false),
+          tracking: z.boolean().default(false),
+          childDirected: z.boolean().default(false),
+          dataCollected: z
+            .array(
+              z.object({
+                data: z.object({ tr: z.string(), en: z.string() }),
+                purpose: z.object({ tr: z.string(), en: z.string() }),
+                storage: z.enum(["device", "server"]),
+              }),
+            )
+            .default([]),
+          thirdParties: z
+            .array(
+              z.object({
+                name: z.string(),
+                purpose: z.object({ tr: z.string(), en: z.string() }),
+                policyUrl: z.url(),
+              }),
+            )
+            .default([]),
+        })
+        .default({
+          accountRequired: false,
+          tracking: false,
+          childDirected: false,
+          dataCollected: [],
+          thirdParties: [],
+        }),
+      faq: z
+        .array(
+          z.object({
+            q: z.object({ tr: z.string(), en: z.string() }),
+            a: z.object({ tr: z.string(), en: z.string() }),
+          }),
+        )
+        .default([]),
       order: z.number().int().default(100),
       draft: z.boolean().default(false),
       /** Placeholder entries used until real products are added. Remove before launch. */
