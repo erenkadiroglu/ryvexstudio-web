@@ -1,0 +1,178 @@
+---
+import LegalDocument, { type LegalSection } from "@/components/LegalDocument.astro";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const updated = new Date("2026-11-08");
+const privacyUrl = `https://ryvexstudio.com${route("privacy", lang)}`;
+
+const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
+  tr: {
+    title: "Kullanım Koşulları",
+    lede: `Bu koşullar, ryvexstudio.com web sitesinin ve ${site.name} ürünlerinin kullanımına ilişkin kuralları açıklar. Siteyi ya da ürünlerimizi kullanarak bu koşulları kabul etmiş olursunuz.`,
+    sections: [
+      {
+        heading: "Taraflar",
+        paragraphs: [
+          `Bu koşullarda "biz", "${site.name}" ya da "stüdyo" ifadeleri ${site.founder} tarafından yürütülen ${site.name}'yu; "siz" ifadesi ise siteyi ya da ürünlerimizi kullanan kişiyi ifade eder.`,
+        ],
+      },
+      {
+        heading: "Kapsam",
+        paragraphs: [
+          "Bu koşullar ryvexstudio.com alan adındaki tüm sayfalar ile mobil uygulamalarımız, oyunlarımız ve web ürünlerimiz için geçerlidir.",
+          "Bir ürünün kendine ait ek koşulları varsa, o ürün için bu koşullarla birlikte uygulanır. Ürünler App Store ya da Google Play üzerinden indirildiğinde, ilgili mağazanın kullanım koşulları da geçerlidir.",
+        ],
+      },
+      {
+        heading: "Ürünlerin kullanımı",
+        paragraphs: [
+          "Ürünlerimizi yalnızca kişisel ve hukuka uygun amaçlarla kullanabilirsiniz. Aşağıdakiler yasaktır:",
+        ],
+        list: [
+          "Ürünlerin kaynak kodunu çözmeye, tersine mühendislik yapmaya ya da değiştirmeye çalışmak (yürürlükteki mevzuatın açıkça izin verdiği durumlar hariç).",
+          "Ürünleri ya da altyapımızı bozacak, aşırı yükleyecek veya güvenliğini zayıflatacak işlemler yapmak.",
+          "Ürünleri başkalarının haklarını ihlal edecek ya da yasa dışı içerik üretecek şekilde kullanmak.",
+          "Ürünleri izinsiz olarak kopyalamak, çoğaltmak, satmak ya da kiralamak.",
+        ],
+      },
+      {
+        heading: "Fikri mülkiyet",
+        paragraphs: [
+          `Sitedeki ve ürünlerdeki tüm metinler, tasarımlar, logolar, ikonlar ve yazılımlar ${site.name}'ya aittir ya da lisans altında kullanılır. Bu koşullar size, ürünleri kişisel olarak kullanmanız için sınırlı, devredilemez ve münhasır olmayan bir kullanım hakkı tanır; herhangi bir mülkiyet hakkı devretmez.`,
+          "Sitede kullanılan bazı fotoğraflar üçüncü taraf kaynaklardan, ilgili lisanslarına uygun olarak alınmıştır.",
+        ],
+      },
+      {
+        heading: "Satın alımlar ve abonelikler",
+        paragraphs: [
+          "Ürünlerimizdeki ücretli içerikler ve abonelikler App Store ya da Google Play üzerinden satın alınır. Ödeme, iptal ve iade işlemleri ilgili mağazanın kurallarına tabidir ve mağaza hesabınız üzerinden yönetilir.",
+        ],
+      },
+      {
+        heading: "Kişisel veriler",
+        paragraphs: [
+          `Kişisel verileriniz, ${privacyUrl} adresindeki gizlilik politikası, KVKK Aydınlatma Metni ve her ürünün kendi gizlilik politikası kapsamında işlenir.`,
+        ],
+      },
+      {
+        heading: "Hizmetin sunulması",
+        paragraphs: [
+          "Ürünlerimizi özenle geliştiriyor ve güncel tutmaya çalışıyoruz. Bununla birlikte ürünlerin her zaman kesintisiz ya da hatasız çalışacağını garanti edemeyiz. Bir ürünü güncelleyebilir, özelliklerini değiştirebilir ya da yayından kaldırabiliriz.",
+        ],
+      },
+      {
+        heading: "Sorumluluğun sınırlandırılması",
+        paragraphs: [
+          "Yürürlükteki mevzuatın izin verdiği ölçüde, ürünlerin kullanımından ya da kullanılamamasından doğan dolaylı zararlardan sorumlu değiliz. Bu sınırlama, tüketici mevzuatı başta olmak üzere kanunen sınırlandırılamayan haklarınızı etkilemez.",
+        ],
+      },
+      {
+        heading: "Üçüncü taraf bağlantıları",
+        paragraphs: [
+          "Site ve ürünler, üçüncü taraf sitelere ya da hizmetlere bağlantılar içerebilir. Bu sitelerin içeriğinden ve uygulamalarından sorumlu değiliz.",
+        ],
+      },
+      {
+        heading: "Değişiklikler",
+        paragraphs: [
+          "Bu koşulları zaman zaman güncelleyebiliriz. Güncel metin her zaman bu sayfada yayınlanır ve sayfanın üstündeki tarih değiştirilir. Değişiklikten sonra siteyi ya da ürünleri kullanmaya devam etmeniz, güncel koşulları kabul ettiğiniz anlamına gelir.",
+        ],
+      },
+      {
+        heading: "Uygulanacak hukuk",
+        paragraphs: [
+          "Bu koşullar Türkiye Cumhuriyeti kanunlarına tabidir. Tüketici sıfatıyla sahip olduğunuz, yerleşim yerinizdeki tüketici hakem heyetlerine ve tüketici mahkemelerine başvurma hakkınız saklıdır.",
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Terms of Use",
+    lede: `These terms set out the rules for using the ryvexstudio.com website and ${site.name} products. By using the website or our products, you agree to these terms.`,
+    sections: [
+      {
+        heading: "Parties",
+        paragraphs: [
+          `In these terms, "we", "${site.name}" or "the studio" means ${site.name}, run by ${site.founder}; "you" means the person using the website or our products.`,
+        ],
+      },
+      {
+        heading: "Scope",
+        paragraphs: [
+          "These terms apply to every page on ryvexstudio.com and to our mobile apps, games and web products.",
+          "If a product has additional terms of its own, they apply together with these terms. When a product is downloaded from the App Store or Google Play, that store's terms of use also apply.",
+        ],
+      },
+      {
+        heading: "Using our products",
+        paragraphs: ["You may use our products only for personal and lawful purposes. The following are not allowed:"],
+        list: [
+          "Attempting to decompile, reverse engineer or modify the products (except where applicable law expressly permits it).",
+          "Doing anything that disrupts, overloads or weakens the security of the products or our infrastructure.",
+          "Using the products to infringe the rights of others or to create unlawful content.",
+          "Copying, reproducing, selling or renting the products without permission.",
+        ],
+      },
+      {
+        heading: "Intellectual property",
+        paragraphs: [
+          `All text, designs, logos, icons and software on the website and in our products belong to ${site.name} or are used under licence. These terms grant you a limited, non-transferable, non-exclusive right to use the products personally; they do not transfer any ownership.`,
+          "Some photographs on the website come from third-party sources and are used in line with their licences.",
+        ],
+      },
+      {
+        heading: "Purchases and subscriptions",
+        paragraphs: [
+          "Paid content and subscriptions in our products are purchased through the App Store or Google Play. Payments, cancellations and refunds follow that store's rules and are managed from your store account.",
+        ],
+      },
+      {
+        heading: "Personal data",
+        paragraphs: [
+          `Your personal data is processed as described in the privacy policy at ${privacyUrl}, the Personal Data Notice and each product's own privacy policy.`,
+        ],
+      },
+      {
+        heading: "Availability",
+        paragraphs: [
+          "We build our products with care and work to keep them up to date. However, we cannot guarantee that they will always work without interruption or errors. We may update a product, change its features or withdraw it.",
+        ],
+      },
+      {
+        heading: "Limitation of liability",
+        paragraphs: [
+          "To the extent permitted by applicable law, we are not liable for indirect damages arising from the use of, or inability to use, our products. This limitation does not affect any rights that cannot be limited by law, including consumer rights.",
+        ],
+      },
+      {
+        heading: "Third-party links",
+        paragraphs: [
+          "The website and products may link to third-party websites or services. We are not responsible for their content or practices.",
+        ],
+      },
+      {
+        heading: "Changes",
+        paragraphs: [
+          "We may update these terms from time to time. The current version is always published on this page, with the date at the top updated. Continuing to use the website or products after a change means you accept the updated terms.",
+        ],
+      },
+      {
+        heading: "Governing law",
+        paragraphs: [
+          "These terms are governed by the laws of the Republic of Türkiye. Your rights as a consumer, including applying to the consumer arbitration committees and consumer courts where you live, are reserved.",
+        ],
+      },
+    ],
+  },
+};
+
+const c = content[lang];
+---
+
+<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />

@@ -1,0 +1,63 @@
+---
+import { site } from "@/config/site";
+import type { Lang } from "@/i18n/ui";
+
+export interface LegalSection {
+  heading: string;
+  paragraphs?: string[];
+  list?: string[];
+}
+
+interface Props {
+  lang: Lang;
+  title: string;
+  lede?: string;
+  updated: Date;
+  sections: LegalSection[];
+}
+
+const { lang, title, lede, updated, sections } = Astro.props;
+const dateText = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(updated);
+const updatedLabel = lang === "tr" ? "Son güncelleme" : "Last updated";
+const contactLabel = lang === "tr" ? "İletişim" : "Contact";
+---
+
+<article class="container-page pt-20 pb-section-mobile md:pt-28 md:pb-section">
+  <div class="max-w-[64ch]">
+    <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+      {title}
+    </h1>
+    <p class="mt-4 text-body-sm text-secondary">
+      {updatedLabel}: <time datetime={updated.toISOString().slice(0, 10)}>{dateText}</time>
+    </p>
+    {lede && <p class="mt-8 text-body-lg text-secondary">{lede}</p>}
+
+    <div class="text-body-md text-secondary">
+      {
+        sections.map((section) => (
+          <section>
+            <h2 class="mt-14 text-headline-md font-semibold text-primary">{section.heading}</h2>
+            {section.paragraphs?.map((p) => <p class="mt-4">{p}</p>)}
+            {section.list && (
+              <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-outline">
+                {section.list.map((item) => <li>{item}</li>)}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+      <section>
+        <h2 class="mt-14 text-headline-md font-semibold text-primary">{contactLabel}</h2>
+        <p class="mt-4">
+          {site.name}, {site.founder}
+          <br />
+          <a href={`mailto:${site.contactEmail}`} class="link-inline">{site.contactEmail}</a>
+        </p>
+      </section>
+    </div>
+  </div>
+</article>

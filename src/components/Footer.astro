@@ -28,7 +28,12 @@ const columns = [
   },
   {
     title: t("footer.legal"),
-    links: [{ href: route("privacy", lang), label: t("footer.privacy") }],
+    links: [
+      { href: route("privacy", lang), label: t("footer.privacy") },
+      { href: route("terms", lang), label: t("footer.terms") },
+      { href: route("kvkk", lang), label: t("footer.kvkk") },
+      { href: route("cookies", lang), label: t("footer.cookies") },
+    ],
   },
 ];
 ---
