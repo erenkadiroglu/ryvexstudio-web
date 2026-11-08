@@ -211,6 +211,14 @@ const kind = data.type === "web" ? "browser" : "phone";
                 </li>
               ))}
             </ul>
+          ) : data.banner ? (
+            <Image
+              src={data.banner}
+              alt={`${data.name}`}
+              widths={[640, 1024, 1376]}
+              sizes="(min-width: 1280px) 1240px, 100vw"
+              class="aspect-[16/9] w-full rounded-xl object-cover md:aspect-[1376/768]"
+            />
           ) : (
             <div class="flex gap-5 pb-2" aria-hidden="true">
               {(kind === "browser" ? [0, 2, 3] : [0, 2, 3, 4]).map((i) => (
@@ -228,7 +236,7 @@ const kind = data.type === "web" ? "browser" : "phone";
             </div>
           )
         }
-        {data.screenshots.length === 0 && <p class="sr-only">{copy.screenshotsSoon}</p>}
+        {data.screenshots.length === 0 && !data.banner && <p class="sr-only">{copy.screenshotsSoon}</p>}
       </div>
     </div>
   </div>

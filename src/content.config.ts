@@ -27,6 +27,8 @@ const products = defineCollection({
         })
         .default({}),
       screenshots: z.array(image()).default([]),
+      /** Wide promotional artwork, e.g. the store feature graphic. Shown instead of sketches. */
+      banner: image().optional(),
       version: z.string().optional(),
       releaseDate: z.coerce.date().optional(),
       supportEmail: z.email().optional(),
