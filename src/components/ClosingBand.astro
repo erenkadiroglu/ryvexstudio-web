@@ -11,12 +11,10 @@ const { lang } = Astro.props;
 const copy = {
   tr: {
     heading: "Bir fikriniz mi var?",
-    text: "Sorularınızı, önerilerinizi ve iş birliği fikirlerinizi okuyoruz. Her mesaja cevap veriyoruz.",
     cta: "Bize yazın",
   },
   en: {
     heading: "Have an idea?",
-    text: "We read every question, suggestion and idea for working together, and we reply to every message.",
     cta: "Write to us",
   },
 }[lang];
@@ -47,7 +45,6 @@ const copy = {
     >
       {copy.heading}
     </h2>
-    <p class="mt-6 max-w-[44ch] text-body-lg text-[#FFFFFF]/85">{copy.text}</p>
     <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
       <a
         href={route("contact", lang)}

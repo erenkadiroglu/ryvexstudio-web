@@ -2,7 +2,6 @@
 import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import ScreenSketch from "@/components/ScreenSketch.astro";
-import { render } from "astro:content";
 import { site } from "@/config/site";
 import { iconTransitionName } from "@/lib/transitions";
 import { route, type Lang } from "@/i18n/ui";
@@ -23,7 +22,6 @@ interface Props {
 
 const { product, lang } = Astro.props;
 const { data } = product;
-const { Content } = await render(product);
 
 const copy = {
   tr: {
@@ -252,74 +250,63 @@ const kind = data.type === "web" ? "browser" : "phone";
     )
   }
 
-  <div class="container-page grid gap-12 py-section-mobile md:grid-cols-12 md:gap-6 md:py-section">
-    <section aria-labelledby="ne-yapar" class="md:col-span-6">
-      <h2 id="ne-yapar" class="text-headline-md font-semibold">{copy.about}</h2>
-      <div class="prose-product mt-5 max-w-[60ch] space-y-5 text-body-md text-secondary">
+  <div class="container-page py-section-mobile md:py-section">
+    <section aria-labelledby="urun-bilgileri" class="rounded-xl bg-neutral p-8 md:p-10">
+      <h2 id="urun-bilgileri" class="sr-only">{copy.facts}</h2>
+      <dl class="grid gap-x-6 gap-y-6 text-body-sm sm:grid-cols-2 lg:grid-cols-4">
         {
-          lang === "en" && data.aboutEn ? (
-            data.aboutEn
-              .split(/\n\s*\n/)
-              .map((paragraph) => paragraph.trim())
-              .filter(Boolean)
-              .map((paragraph) => <p>{paragraph}</p>)
-          ) : (
-            <Content />
-          )
+          facts.map((fact) => (
+            <div>
+              <dt class="text-secondary">{fact.label}</dt>
+              <dd class:list={["mt-1 text-title font-semibold", fact.mono && "font-mono"]}>{fact.value}</dd>
+            </div>
+          ))
         }
+      </dl>
+      <div class="mt-8 flex flex-wrap gap-3 border-t border-outline pt-6">
+        <a
+          href={privacyHref}
+          class="inline-flex rounded-full border border-outline bg-surface px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral-strong"
+        >
+          {copy.privacy}
+        </a>
+        <a
+          href={supportHref}
+          class="inline-flex rounded-full border border-outline bg-surface px-[21px] py-[13px] text-label font-medium transition-colors duration-150 hover:bg-neutral-strong"
+        >
+          {copy.support}
+        </a>
       </div>
-
-      {
-        data.releases.length > 0 && (
-          <section aria-labelledby="surumler" class="mt-16">
-            <h2 id="surumler" class="text-headline-md font-semibold">{copy.releases}</h2>
-            <ol class="mt-6 border-l border-outline">
-              {data.releases.map((release, i) => (
-                <li class="relative pb-8 pl-6 last:pb-0">
-                  <span
-                    class="absolute top-1.5 -left-[5px] size-[9px] rounded-full"
-                    style={`background-color:${i === 0 ? data.color : "var(--rv-outline)"}`}
-                    aria-hidden="true"
-                  />
-                  <p class="flex flex-wrap items-baseline gap-x-3 text-body-sm">
-                    <span class="font-mono text-mono-sm text-primary">{release.version}</span>
-                    <time class="text-secondary" datetime={release.date.toISOString().slice(0, 10)}>
-                      {dateFormat.format(release.date)}
-                    </time>
-                    {i === 0 && <span class="font-medium text-primary">{copy.latest}</span>}
-                  </p>
-                  <ul class="mt-2 list-disc space-y-1 pl-5 text-body-sm text-secondary marker:text-outline">
-                    {release.notes[lang].map((note) => <li>{note}</li>)}
-                  </ul>
-                </li>
-              ))}
-            </ol>
-          </section>
-        )
-      }
     </section>
 
-    <aside aria-labelledby="urun-bilgileri" class="md:col-span-5 md:col-start-8">
-      <div class="rounded-xl bg-neutral p-8 md:sticky md:top-24">
-        <h2 id="urun-bilgileri" class="text-title font-semibold">{copy.facts}</h2>
-        <dl class="mt-5 text-body-sm">
-          {
-            facts.map((fact) => (
-              <div class="flex items-baseline justify-between gap-6 border-t border-outline py-3">
-                <dt class="text-secondary">{fact.label}</dt>
-                <dd class:list={["text-right", fact.mono && "font-mono text-mono-sm"]}>
-                  {fact.value}
-                </dd>
-              </div>
-            ))
-          }
-        </dl>
-        <div class="flex flex-wrap gap-x-6 gap-y-2 border-t border-outline pt-4 text-body-sm">
-          <a href={privacyHref} class="link-inline">{copy.privacy}</a>
-          <a href={supportHref} class="link-inline">{copy.support}</a>
-        </div>
-      </div>
-    </aside>
+    {
+      data.releases.length > 0 && (
+        <section aria-labelledby="surumler" class="mt-16 max-w-[64ch]">
+          <h2 id="surumler" class="text-headline-md font-semibold">{copy.releases}</h2>
+          <ol class="mt-6 border-l border-outline">
+            {data.releases.map((release, i) => (
+              <li class="relative pb-8 pl-6 last:pb-0">
+                <span
+                  class="absolute top-1.5 -left-[5px] size-[9px] rounded-full"
+                  style={`background-color:${i === 0 ? data.color : "var(--rv-outline)"}`}
+                  aria-hidden="true"
+                />
+                <p class="flex flex-wrap items-baseline gap-x-3 text-body-sm">
+                  <span class="font-mono text-mono-sm text-primary">{release.version}</span>
+                  <time class="text-secondary" datetime={release.date.toISOString().slice(0, 10)}>
+                    {dateFormat.format(release.date)}
+                  </time>
+                  {i === 0 && <span class="font-medium text-primary">{copy.latest}</span>}
+                </p>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-body-sm text-secondary marker:text-outline">
+                  {release.notes[lang].map((note) => <li>{note}</li>)}
+                </ul>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
   </div>
 
   {
