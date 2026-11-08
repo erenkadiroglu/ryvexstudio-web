@@ -97,4 +97,18 @@ const products = defineCollection({
     }),
 });
 
-export const collections = { products };
+const journal = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/journal" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    lang: z.enum(["tr", "en"]),
+    /** Shared key that links the Turkish and English versions of a post. */
+    translationKey: z.string(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { products, journal };

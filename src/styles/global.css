@@ -181,6 +181,76 @@
   }
 }
 
+/* Journal posts: long-form reading typography. */
+.prose-journal {
+  color: var(--rv-secondary);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.prose-journal > * + * {
+  margin-top: 1.25em;
+}
+
+.prose-journal p:first-child {
+  color: var(--rv-primary);
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.prose-journal h2 {
+  margin-top: 2.25em;
+  color: var(--rv-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.prose-journal h2 + * {
+  margin-top: 0.75em;
+}
+
+.prose-journal strong {
+  color: var(--rv-primary);
+  font-weight: 600;
+}
+
+.prose-journal a {
+  color: var(--rv-tertiary);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.prose-journal ul,
+.prose-journal ol {
+  padding-left: 1.25em;
+}
+
+.prose-journal ul {
+  list-style: disc;
+}
+
+.prose-journal ol {
+  list-style: decimal;
+}
+
+.prose-journal li + li {
+  margin-top: 0.5em;
+}
+
+.prose-journal li::marker {
+  color: var(--rv-tertiary);
+}
+
+.prose-journal blockquote {
+  border-left: 2px solid var(--rv-tertiary);
+  padding-left: 1.25em;
+  color: var(--rv-primary);
+  font-size: 1.25rem;
+}
+
 /* ---------- Motion ---------- */
 
 /* Hero: each headline line rises out of its own mask, then the rest settles in. */
