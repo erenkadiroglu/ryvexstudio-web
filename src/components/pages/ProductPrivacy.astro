@@ -1,0 +1,196 @@
+---
+import LegalArticle from "@/components/LegalArticle.astro";
+import { site } from "@/config/site";
+import { route, type Lang } from "@/i18n/ui";
+import type { Product } from "@/lib/products";
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+
+const { product, lang } = Astro.props;
+const { data } = product;
+const { privacy } = data;
+const name = data.name;
+const email = site.contactEmail;
+
+const onDevice = privacy.dataCollected.filter((d) => d.storage === "device");
+const onServer = privacy.dataCollected.filter((d) => d.storage === "server");
+
+const copy = {
+  tr: {
+    title: "Gizlilik politikası",
+    summaryTitle: "Kısaca",
+    account: privacy.accountRequired ? "Hesap açmanız gerekir." : "Hesap açmanız gerekmez.",
+    tracking: privacy.tracking
+      ? "Reklam amaçlı takip yapılır; ayrıntılar aşağıda."
+      : "Reklam ya da pazarlama amacıyla takip yapılmaz.",
+    storage:
+      onServer.length === 0
+        ? "Verileriniz yalnızca cihazınızda kalır."
+        : "Bazı veriler, hizmetin çalışması için sunucularımızda saklanır.",
+    sample: "Bu sayfa örnek bir ürüne aittir ve gerçek ürün yayınlandığında güncellenecektir.",
+    s1: "Bu politika hakkında",
+    p1: `Bu politika, ${name} ürününü kullanırken hangi verilerin işlendiğini, neden işlendiğini ve haklarınızı açıklar. Veri sorumlusu, ${site.name} adına ${site.founder}'dur.`,
+    s2: "İşlenen veriler",
+    none: `${name} hiçbir kişisel veri toplamaz.`,
+    colData: "Veri",
+    colPurpose: "Amaç",
+    colWhere: "Nerede saklanır",
+    device: "Cihazınızda",
+    server: "Sunucularımızda",
+    s3: "Üçüncü taraf hizmetler",
+    noThird: `${name}, verilerinizi hiçbir üçüncü tarafla paylaşmaz ve üçüncü taraf takip araçları kullanmaz.`,
+    thirdIntro: `${name} aşağıdaki hizmetleri kullanır. Bu hizmetler kendi gizlilik politikalarına tabidir.`,
+    policy: "gizlilik politikası",
+    s4: "Saklama ve silme",
+    retainDevice:
+      "Cihazınızda saklanan veriler, uygulamayı sildiğinizde cihazınızdan da silinir. Bu veriler bize ulaşmaz.",
+    retainServer: `Sunucularımızda saklanan veriler, hizmeti sunmak için gerekli olduğu sürece tutulur. Silinmesini istediğinizde ${email} adresine yazmanız yeterlidir.`,
+    s5: "Haklarınız",
+    rights: `6698 sayılı Kişisel Verilerin Korunması Kanunu'nun 11. maddesi ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında; verilerinizin işlenip işlenmediğini öğrenme, bunlara erişme, düzeltilmesini ya da silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Talepleriniz için ${email} adresine yazabilirsiniz.`,
+    s6: "Çocukların gizliliği",
+    children: privacy.childDirected
+      ? `${name} çocuklar için tasarlanmıştır ve çocuklardan kişisel veri toplamaz.`
+      : `${name}, 13 yaşın altındaki çocuklara yönelik değildir ve bu yaştaki çocuklardan bilerek kişisel veri toplamaz.`,
+    s7: "Değişiklikler",
+    changes:
+      "Bu politika güncellendiğinde, değişiklikler bu sayfada yayınlanır ve sayfanın üstündeki tarih güncellenir.",
+    s8: "İletişim",
+    contact: "Gizlilikle ilgili sorularınız için:",
+    support: "Destek sayfası",
+  },
+  en: {
+    title: "Privacy policy",
+    summaryTitle: "In short",
+    account: privacy.accountRequired ? "An account is required." : "No account is required.",
+    tracking: privacy.tracking
+      ? "Advertising tracking is used; details below."
+      : "There is no tracking for advertising or marketing.",
+    storage:
+      onServer.length === 0
+        ? "Your data stays on your device."
+        : "Some data is stored on our servers so the service can work.",
+    sample: "This page belongs to a sample product and will be updated when the real product launches.",
+    s1: "About this policy",
+    p1: `This policy explains what data is processed when you use ${name}, why it is processed and what your rights are. The data controller is ${site.founder}, on behalf of ${site.name}.`,
+    s2: "Data we process",
+    none: `${name} does not collect any personal data.`,
+    colData: "Data",
+    colPurpose: "Purpose",
+    colWhere: "Where it is stored",
+    device: "On your device",
+    server: "On our servers",
+    s3: "Third-party services",
+    noThird: `${name} does not share your data with third parties and does not use third-party tracking tools.`,
+    thirdIntro: `${name} uses the services below. Each is governed by its own privacy policy.`,
+    policy: "privacy policy",
+    s4: "Retention and deletion",
+    retainDevice:
+      "Data stored on your device is removed when you delete the app. This data never reaches us.",
+    retainServer: `Data stored on our servers is kept only as long as needed to provide the service. To have it deleted, write to ${email}.`,
+    s5: "Your rights",
+    rights: `Under Article 11 of the Turkish Personal Data Protection Law No. 6698 and the EU General Data Protection Regulation (GDPR), you have the right to know whether your data is processed, to access it, to ask for it to be corrected or deleted, and to object to its processing. Send requests to ${email}.`,
+    s6: "Children's privacy",
+    children: privacy.childDirected
+      ? `${name} is designed for children and does not collect personal data from them.`
+      : `${name} is not directed at children under 13 and does not knowingly collect personal data from them.`,
+    s7: "Changes",
+    changes:
+      "When this policy changes, the update is published on this page and the date at the top is updated.",
+    s8: "Contact",
+    contact: "For privacy questions:",
+    support: "Support page",
+  },
+}[lang];
+
+const supportHref = `${route("products", lang)}/${product.id}/${lang === "tr" ? "destek" : "support"}`;
+const h2 = "mt-14 text-headline-md font-semibold text-primary";
+---
+
+<LegalArticle product={product} lang={lang} title={copy.title} updated={data.privacyUpdated}>
+  {data.sample && <p class="mt-8 rounded-md bg-neutral px-4 py-3 text-body-sm">{copy.sample}</p>}
+
+  <section aria-labelledby="ozet" class="mt-10 rounded-xl bg-neutral p-8">
+    <h2 id="ozet" class="text-title font-semibold text-primary">{copy.summaryTitle}</h2>
+    <ul class="mt-4 space-y-2 text-body-md">
+      <li>{copy.account}</li>
+      <li>{copy.tracking}</li>
+      <li>{copy.storage}</li>
+    </ul>
+  </section>
+
+  <h2 class={h2}>{copy.s1}</h2>
+  <p class="mt-4">{copy.p1}</p>
+
+  <h2 class={h2}>{copy.s2}</h2>
+  {
+    privacy.dataCollected.length === 0 ? (
+      <p class="mt-4">{copy.none}</p>
+    ) : (
+      <div class="mt-5 overflow-x-auto">
+        <table class="w-full text-left text-body-sm">
+          <thead>
+            <tr class="border-b border-outline text-primary">
+              <th scope="col" class="py-3 pr-6 font-medium">{copy.colData}</th>
+              <th scope="col" class="py-3 pr-6 font-medium">{copy.colPurpose}</th>
+              <th scope="col" class="py-3 font-medium">{copy.colWhere}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {privacy.dataCollected.map((row) => (
+              <tr class="border-b border-outline align-top">
+                <td class="py-3 pr-6 text-primary">{row.data[lang]}</td>
+                <td class="py-3 pr-6">{row.purpose[lang]}</td>
+                <td class="py-3">{row.storage === "device" ? copy.device : copy.server}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  <h2 class={h2}>{copy.s3}</h2>
+  {
+    privacy.thirdParties.length === 0 ? (
+      <p class="mt-4">{copy.noThird}</p>
+    ) : (
+      <>
+        <p class="mt-4">{copy.thirdIntro}</p>
+        <ul class="mt-4 space-y-2">
+          {privacy.thirdParties.map((tp) => (
+            <li>
+              <span class="text-primary">{tp.name}</span>: {tp.purpose[lang]} (
+              <a href={tp.policyUrl} rel="noopener" class="link-inline">
+                {copy.policy}
+              </a>
+              )
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  <h2 class={h2}>{copy.s4}</h2>
+  {onDevice.length > 0 && <p class="mt-4">{copy.retainDevice}</p>}
+  {onServer.length > 0 && <p class="mt-4">{copy.retainServer}</p>}
+  {privacy.dataCollected.length === 0 && <p class="mt-4">{copy.none}</p>}
+
+  <h2 class={h2}>{copy.s5}</h2>
+  <p class="mt-4">{copy.rights}</p>
+
+  <h2 class={h2}>{copy.s6}</h2>
+  <p class="mt-4">{copy.children}</p>
+
+  <h2 class={h2}>{copy.s7}</h2>
+  <p class="mt-4">{copy.changes}</p>
+
+  <h2 class={h2}>{copy.s8}</h2>
+  <p class="mt-4">
+    {copy.contact} <a href={`mailto:${email}`} class="link-inline">{email}</a>
+  </p>
+  <p class="mt-2"><a href={supportHref} class="link-inline">{copy.support}</a></p>
+</LegalArticle>

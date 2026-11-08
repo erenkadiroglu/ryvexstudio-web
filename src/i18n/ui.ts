@@ -71,6 +71,14 @@ export function route(name: RouteName, lang: Lang): string {
   return routes[name][lang];
 }
 
+/** Localized sub-page segments, e.g. /urunler/notora/gizlilik <-> /en/products/notora/privacy */
+const subpageSegments: Record<string, Record<Lang, string>> = {
+  gizlilik: { tr: "gizlilik", en: "privacy" },
+  privacy: { tr: "gizlilik", en: "privacy" },
+  destek: { tr: "destek", en: "support" },
+  support: { tr: "destek", en: "support" },
+};
+
 /**
  * Path of the same page in the other language. Product detail pages share
  * their slug across languages; anything unknown falls back to the home page.
@@ -81,7 +89,12 @@ export function alternatePath(url: URL, target: Lang): string {
     for (const p of Object.values(paths)) {
       if (path === p) return paths[target];
       if (path.startsWith(`${p}/`) && p !== "/" && p !== "/en") {
-        return `${paths[target]}${path.slice(p.length)}`;
+        const rest = path
+          .slice(p.length)
+          .split("/")
+          .map((segment) => subpageSegments[segment]?.[target] ?? segment)
+          .join("/");
+        return `${paths[target]}${rest}`;
       }
     }
   }

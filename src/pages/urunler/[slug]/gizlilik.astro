@@ -1,0 +1,16 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProductPrivacy from "@/components/pages/ProductPrivacy.astro";
+import { getProducts, type Product } from "@/lib/products";
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props as { product: Product };
+---
+
+<BaseLayout title={`Gizlilik politikası: ${product.data.name}`}>
+  <ProductPrivacy product={product} lang="tr" />
+</BaseLayout>
