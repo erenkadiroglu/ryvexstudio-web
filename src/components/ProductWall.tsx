@@ -127,6 +127,11 @@ export default function ProductWall({
                   {item.name}
                 </span>
                 <span className="mt-1 block text-body-sm text-secondary">{item.caption}</span>
+                {item.status && (
+                  <span className="mt-2 inline-flex rounded-full border border-outline px-2.5 py-0.5 text-[0.8125rem] font-medium text-primary">
+                    {item.status}
+                  </span>
+                )}
               </a>
             </li>
           ))}

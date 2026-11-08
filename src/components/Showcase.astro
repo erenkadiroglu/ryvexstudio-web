@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import ScreenSketch from "@/components/ScreenSketch.astro";
 import { route, type Lang } from "@/i18n/ui";
-import { productCaption, productTagline, type Product } from "@/lib/products";
+import { comingSoonLabel, productCaption, productTagline, type Product } from "@/lib/products";
 
 interface Props {
   products: Product[];
@@ -96,6 +96,11 @@ const kindOf = (product: Product) => (product.data.type === "web" ? "browser" : 
               <div class="flex items-center gap-3">
                 <Image src={product.data.icon} alt="" width={40} height={40} class="shape-icon size-10" />
                 <p class="text-body-sm text-secondary">{productCaption(product, lang)}</p>
+                {product.data.status === "coming-soon" && (
+                  <span class="rounded-full border border-outline px-2.5 py-0.5 text-[0.8125rem] font-medium text-primary">
+                    {comingSoonLabel[lang]}
+                  </span>
+                )}
               </div>
               <h3 class="mt-5 text-headline-lg font-semibold">{product.data.name}</h3>
               <p class="mt-4 max-w-[36ch] text-body-lg text-secondary">

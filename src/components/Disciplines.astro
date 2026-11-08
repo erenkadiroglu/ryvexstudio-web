@@ -16,6 +16,7 @@ const { products, lang } = Astro.props;
 const copy = {
   tr: {
     heading: "Ne yapıyoruz",
+    soon: "Yakında",
     lede: "Üç alanda, tek standartla üretiyoruz.",
     items: {
       app: {
@@ -40,6 +41,7 @@ const copy = {
   },
   en: {
     heading: "What we make",
+    soon: "Coming soon",
     lede: "Three disciplines, one standard.",
     items: {
       app: {
@@ -110,9 +112,13 @@ const param = lang === "tr" ? "tur" : "type";
                 ))}
               </ul>
             )}
-            <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
-              {item.link}
-            </a>
+            {ofType.length > 0 ? (
+              <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
+                {item.link}
+              </a>
+            ) : (
+              <p class="mt-5 text-body-md font-medium text-primary">{copy.soon}</p>
+            )}
           </article>
         );
       })
