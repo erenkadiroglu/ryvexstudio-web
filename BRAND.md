@@ -2,16 +2,15 @@
 name: "Ryvex Studio"
 tagline: "Her ekranda aynı özen."
 specVersion: "0.3.0"
-version: 1
+version: 2
 language: tr
 type: master
 ---
 
 # Ryvex Studio
 
-> Durum: Strateji yönü onaylandı (Yön B, "Tek imza"). Renkler, yazı tipleri ve
-> logo konsepti **önerilen** durumdadır; onaylanana kadar kesinleşmiş sayılmaz.
-> Ürün listesi henüz eklenmedi.
+> Durum: Strateji, ses tonu, renkler, yazı tipleri ve logo konsepti onaylandı.
+> Logo dosyaları ve ürün listesi henüz eklenmedi.
 
 ## Strategy
 
@@ -289,7 +288,7 @@ değiştirilmeden yazılır.
 
 ### Logo & Marks
 
-> Durum: Konsept önerisi. Logo dosyaları henüz üretilmedi.
+> Durum: Konsept onaylandı. Logo dosyaları henüz üretilmedi.
 
 - **Kelime logosu:** "Ryvex" kelimesi marka yazı tipinde, sıkı ve dengeli harf
   aralığıyla; altında ya da yanında daha hafif ağırlıkta "Studio".
@@ -305,33 +304,39 @@ değiştirilmeden yazılır.
 
 ### Core Colors
 
-> Durum: Önerilen. Onay bekliyor.
+> Durum: Onaylandı.
 
-- **Kâğıt** `#F6F5F1` (zorunlu). Markanın zemini. Saf beyaz değil; sıcak, sakin
-  ve kâğıt gibi. Özenin ilk işareti.
-- **Grafit** `#16171A` (zorunlu). Markanın sesi. Saf siyah değil; derin, ağırbaşlı
-  ve kalıcı. Karanlık temada zemine dönüşür.
-- **Kor** `#D9481F` (zorunlu). Tek sıcak nokta. Az kullanıldığı için anlam taşır:
-  imzanın, dikkatin ve canlılığın rengi. Oyunların enerjisini ana markaya
-  taşıyan köprü.
+- **Vişne** `#8E1B3B` (zorunlu). Markanın imzası. Derin, olgun ve sıcak; şarabın
+  ağırbaşlılığını ve meyvenin canlılığını birlikte taşır. Az kullanıldığı için
+  anlam taşır. Oyunların enerjisini ana markaya taşıyan köprüdür.
+- **Mürekkep** `#1C1418` (zorunlu). Markanın sesi. Saf siyah değil; içinde vişnenin
+  izi olan koyu bir mürekkep. Karanlık temada zeminin kaynağıdır.
+- **Beyaz** `#FFFFFF` (zorunlu). Markanın zemini. Krem ya da kırık beyaz değil;
+  temiz, aydınlık ve ürünlerin kendi renklerine yer açan bir sahne.
 
 Ürünler kendi renklerini taşıyabilir. Bu renkler ürünün kendi `BRAND.md`
 dosyasında tanımlanır, ana markanın renklerinin yerini almaz.
 
-**Kaçınılacak renk aileleri:** Doygun teknoloji maviları (sektördeki herkesin
-rengi), neon yeşil ve mor gradyanlar (oyuncu klişesi).
+**Kaçınılacak renk aileleri:**
+
+- Doygun teknoloji maviları ve mor-indigo gradyanlar: sektördeki herkesin rengi.
+- Neon yeşil ve elektrik tonları: oyuncu klişesi.
+- Krem zemin ile kiremit ya da turuncu vurgu birleşimi.
+- Grafit ile turkuaz birleşimi.
+
+Son iki birleşim, otomatik üretilmiş sitelerin en tanıdık kalıplarıdır.
 
 ### Typefaces
 
-> Durum: Önerilen. Lisans durumu kurulum sırasında doğrulanacak.
+> Durum: Onaylandı. Lisanslar doğrulandı.
 
 - **Geist**: markanın sesi; başlıklar ve metinler. Türkçe karakter desteği
   (ç, ğ, ı, İ, ö, ş, ü) zorunludur. Yedek: `-apple-system, "Segoe UI", Roboto,
-  sans-serif`. Lisans: SIL Open Font License 1.1 olarak yayımlanıyor.
-  Doğrulanmadı.
+  sans-serif`. Lisans: SIL Open Font License 1.1, Google Fonts
+  üzerinden. Doğrulandı. Türkçe karakterler Latin Extended setinde.
 - **Geist Mono**: yalnızca teknik bilgiler ve küçük etiketler; sürüm numarası,
   platform adı, tarih. Yedek: `ui-monospace, "SF Mono", Menlo, monospace`.
-  Lisans: SIL Open Font License 1.1 olarak yayımlanıyor. Doğrulanmadı.
+  Lisans: SIL Open Font License 1.1, Google Fonts üzerinden. Doğrulandı.
 
 ### Photography & Illustration
 
@@ -348,14 +353,14 @@ rengi), neon yeşil ve mor gradyanlar (oyuncu klişesi).
 ### Art Direction
 
 **Tasarım anahtar kelimeleri:** Görünür ızgara, ölçülü sadelik, ürün sahnede,
-sıcak nötr, tek sıcak vurgu, detay işçiliği.
+temiz beyaz, tek derin vurgu, detay işçiliği.
 
 **Yön cümlesi:** Kimlik süsle değil, düzen ve özenle konuşmalı. Ana marka sakin
 kalır, renk ve enerji ürünlerden gelir.
 
-**Görsel alan:** Doğal ışık alan bir tasarım stüdyosunun sergi duvarı: sıcak
+**Görsel alan:** Doğal ışık alan bir tasarım stüdyosunun sergi duvarı: temiz
 beyaz bir duvar, eşit aralıklarla asılmış, her biri kendi rengini taşıyan ürün
-çerçeveleri; köşede tek bir turuncu imza.
+çerçeveleri; köşede vişne rengi tek bir imza.
 
 ## Governance
 
