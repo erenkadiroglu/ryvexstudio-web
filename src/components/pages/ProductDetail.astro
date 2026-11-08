@@ -1,7 +1,6 @@
 ---
 import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
-import ScreenSketch from "@/components/ScreenSketch.astro";
 import { site } from "@/config/site";
 import { iconTransitionName } from "@/lib/transitions";
 import { route, type Lang } from "@/i18n/ui";
@@ -29,7 +28,6 @@ const copy = {
     googlePlay: "Google Play'den indir",
     web: "Tarayıcıda aç",
     screenshots: "Ekran görüntüleri",
-    screenshotsSoon: "Ekran görüntüleri yakında eklenecek.",
     about: "Ne yapar",
     facts: "Ürün bilgileri",
     developer: "Geliştirici",
@@ -53,7 +51,6 @@ const copy = {
     googlePlay: "Get it on Google Play",
     web: "Open in browser",
     screenshots: "Screenshots",
-    screenshotsSoon: "Screenshots are coming soon.",
     about: "What it does",
     facts: "Product details",
     developer: "Developer",
@@ -124,6 +121,8 @@ const related = [
   ...others.filter((p) => p.data.type !== data.type),
 ].slice(0, 3);
 const kind = data.type === "web" ? "browser" : "phone";
+// Only real material is shown: a screenshot in a device, or else the product's own icon.
+const shot = data.screenshots[0];
 ---
 
 <article>
@@ -138,8 +137,8 @@ const kind = data.type === "web" ? "browser" : "phone";
             alt=""
             width={128}
             height={128}
-            class="shape-icon object-depth size-24 md:size-32"
-            style={`view-transition-name: ${iconTransitionName(product.id)}`}
+            class:list={["shape-icon object-depth size-24 md:size-32", !shot && "md:hidden"]}
+            style={shot ? `view-transition-name: ${iconTransitionName(product.id)}` : undefined}
           />
           <div>
             <p class="flex flex-wrap items-center gap-2 text-body-sm text-secondary">
@@ -176,34 +175,41 @@ const kind = data.type === "web" ? "browser" : "phone";
         }
       </div>
 
-      <!-- A single device in the product's shape, desktop only. -->
+      <!-- Desktop: a real screenshot in the product's device, or the product's own icon. -->
       <div class="hidden justify-center md:col-span-5 md:flex" aria-hidden="true">
-        <div
-          class:list={[
-            "object-depth relative overflow-hidden border border-outline bg-surface",
-            kind === "browser" ? "aspect-[16/10] w-full rounded-[20px]" : "aspect-[9/19.5] w-[260px] rounded-[40px]",
-          ]}
-        >
-          {
-            data.screenshots[0] ? (
-              <Image src={data.screenshots[0]} alt="" widths={[400, 800]} sizes="520px" class="absolute inset-0 size-full object-cover" />
-            ) : (
-              <ScreenSketch product={product} variant={1} />
-            )
-          }
-        </div>
+        {
+          shot ? (
+            <div
+              class:list={[
+                "object-depth relative overflow-hidden border border-outline bg-surface",
+                kind === "browser" ? "aspect-[16/10] w-full rounded-[20px]" : "aspect-[9/19.5] w-[260px] rounded-[40px]",
+              ]}
+            >
+              <Image src={shot} alt="" widths={[400, 800]} sizes="520px" class="absolute inset-0 size-full object-cover" />
+            </div>
+          ) : (
+            <Image
+              src={data.icon}
+              alt=""
+              widths={[256, 512]}
+              sizes="256px"
+              class="shape-icon object-depth size-64"
+              style={`view-transition-name: ${iconTransitionName(product.id)}`}
+            />
+          )
+        }
       </div>
     </header>
 
-    <div class="container-page pb-16 md:pb-20">
-      <div class="overflow-x-auto" tabindex="0" role="region" aria-label={copy.screenshots}>
-        {
-          data.screenshots.length > 0 ? (
+    {
+      data.screenshots.length > 0 && (
+        <div class="container-page pb-16 md:pb-20">
+          <div class="overflow-x-auto" tabindex="0" role="region" aria-label={copy.screenshots}>
             <ul class="flex gap-5 pb-2">
-              {data.screenshots.map((shot, i) => (
+              {data.screenshots.map((image, i) => (
                 <li class="shrink-0">
                   <Image
-                    src={shot}
+                    src={image}
                     alt={`${data.name}, ${copy.screenshots.toLocaleLowerCase(lang)} ${i + 1}`}
                     height={560}
                     class="h-[420px] w-auto rounded-lg md:h-[560px]"
@@ -211,34 +217,10 @@ const kind = data.type === "web" ? "browser" : "phone";
                 </li>
               ))}
             </ul>
-          ) : data.banner ? (
-            <Image
-              src={data.banner}
-              alt={`${data.name}`}
-              widths={[640, 1024, 1376]}
-              sizes="(min-width: 1280px) 1240px, 100vw"
-              class="aspect-[16/9] w-full rounded-xl object-cover md:aspect-[1376/768]"
-            />
-          ) : (
-            <div class="flex gap-5 pb-2" aria-hidden="true">
-              {(kind === "browser" ? [0, 2, 3] : [0, 2, 3, 4]).map((i) => (
-                <div
-                  class:list={[
-                    "relative shrink-0 overflow-hidden border border-outline bg-surface",
-                    kind === "browser"
-                      ? "aspect-[16/10] h-[240px] rounded-[16px] md:h-[300px]"
-                      : "aspect-[9/19.5] h-[360px] rounded-[28px] md:h-[440px]",
-                  ]}
-                >
-                  <ScreenSketch product={product} variant={i} />
-                </div>
-              ))}
-            </div>
-          )
-        }
-        {data.screenshots.length === 0 && !data.banner && <p class="sr-only">{copy.screenshotsSoon}</p>}
-      </div>
-    </div>
+          </div>
+        </div>
+      )
+    }
   </div>
 
   {

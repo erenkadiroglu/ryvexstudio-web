@@ -361,32 +361,30 @@ Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Ne yapıyoruz
-┌ fotoğraf ┐   ┌ fotoğraf ┐   ┌ fotoğraf ┐       ← 3 sütun, 4:5 fotoğraf
+┌ ikonlar ┐    ┌ ikonlar ┐    ┌ ikonlar ┐        ← 3 sütun, 4:3 panelde o türün ikonları
 Uygulamalar    Oyunlar        Web
-açıklama       açıklama       açıklama
-■ ■ ■          ■ ■            ■                  ← o türdeki ürün ikonları
 link           link           link               ← filtreli ürün listesi
 
 █████████████████ koyu vitrin bandı (kenardan kenara) █████████████████
 █  Öne çıkanlar                                                       █
-█  ┌──────┐ sabit cihaz          ■ Oyun, iOS ve Android               █
-█  │eskiz │                      Kelimo                               █
-█  └──────┘                      Her gün yeni bir kelime bulmacası.   █
+█  ┌──────┐ sabit sahne          ■ Oyun, iOS ve Android               █
+█  │ikon  │ (ekran görüntüsü     Kelimo                               █
+█  └──────┘  varsa cihaz)        Her gün yeni bir kelime bulmacası.   █
 ████████████████████████████████████████████████████████████████████████
 
 Nasıl çalışıyoruz
 ●───────────●───────────●───────────●───────────●   ← 5 adım, numaralı
 01 Fikir    02 Tasarım  03 Geliştirme 04 Yayın  05 Destek
 
-Stüdyo hakkında iki paragraf               [fotoğraf, doğal ışık]
+Stüdyo hakkında tek cümle
 
 Footer
 ```
 
 Ana sayfa sırası: hero, sergi duvarı, tek cümlelik manifesto, Ne yapıyoruz
-(fotoğraf, ad ve ürün ikonları; açıklama yok), koyu vitrin bandı, Günlükten ve
+(türün ürün ikonları ve ad; açıklama yok), koyu vitrin bandı, Günlükten ve
 vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
-bilgi kendi sayfasında durur. Sitede kişi fotoğrafı kullanılmaz.
+bilgi kendi sayfasında durur. Sitede kişi fotoğrafı, stok fotoğraf ve yapay zekâ ile üretilmiş görsel kullanılmaz.
 
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
 sayfanın ortasında ritmi değiştiren tek koyu alandır. "Nasıl çalışıyoruz"
@@ -552,14 +550,14 @@ Dolgulu ikon kullanılmaz.
 
 ### Görseller
 
-Ürün ekran görüntüleri gerçek ürünlerden alınır. Bir ürünün ekran görüntüsü
-yoksa, onun yerine ürünün renginde sade bir arayüz eskizi gösterilir
-(uygulamada liste, oyunda ızgara, web'de tarayıcı düzeni); boş çerçeve
-gösterilmez.
+Sitede yalnızca ürünlerin kendi görselleri kullanılır: ürün ikonları ve gerçek
+ürünlerden alınmış ekran görüntüleri. Stok fotoğraf, yapay zekâ ile üretilmiş
+görsel, maket ya da temsili arayüz çizimi kullanılmaz.
 
-Stüdyo ve atmosfer fotoğrafları ticari kullanıma izin veren ücretsiz kaynaklardan (Unsplash,
-Pexels) seçilir: doğal ışık, gerçek mekân, filtresiz. Her görselin kaynağı ve
-fotoğrafçısı `src/assets/CREDITS.md` dosyasında kayıt altına alınır.
+Bir ürünün ekran görüntüsü yoksa cihaz çerçevesi gösterilmez; onun yerine ürünün
+kendi ikonu, ürünün renginde sade bir zemin üzerinde büyük boyda durur. Ekran
+görüntüsü eklendiğinde ürün sayfası ve vitrin bandı onu kendiliğinden cihaz
+çerçevesinde gösterir.
 
 ## Do's and Don'ts
 

@@ -7,7 +7,6 @@ tagline:
   en: "Scan your Okey rack with the camera and instantly see your sets and whether you can open your hand."
 color: "#9A5A2B"
 icon: ../../assets/products/persayar.png
-banner: ../../assets/products/persayar-banner.jpg
 platforms: [android]
 supportEmail: "destek@ryvexstudio.com"
 privacyUpdated: 2026-11-08

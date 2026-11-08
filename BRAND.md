@@ -2,7 +2,7 @@
 name: "Ryvex Studio"
 tagline: "Her ekranda aynı özen."
 specVersion: "0.3.0"
-version: 5
+version: 6
 language: tr
 type: master
 ---
@@ -376,12 +376,12 @@ Son iki birleşim, otomatik üretilmiş sitelerin en tanıdık kalıplarıdır.
 ### Photography & Illustration
 
 - **Ruh hali:** Sakin, aydınlık, gerçek, özenli.
-- **Konular:** Gerçek cihazlarda çalışan ürün ekranları; doğal ışıkta çalışma
-  masası; elde tutulan telefon; oyun oynarken odaklanmış ya da gülümseyen
-  insanlar; ürünün kullanıldığı gündelik mekânlar.
-- **Kaçınılacaklar:** Stok el sıkışma ve toplantı fotoğrafları, kameraya poz
+- **Konular:** Yalnızca ürünlerin kendi görselleri: ürün ikonları ve gerçek
+  cihazlarda alınmış ekran görüntüleri.
+- **Kaçınılacaklar:** Stok fotoğrafın her türü, maketler, temsili arayüz
+  çizimleri, stok el sıkışma ve toplantı fotoğrafları, kameraya poz
   veren ofis ekipleri, neon ışıklı oyuncu odaları, aşırı doygun ve yapay
-  görüntüler, yapay zekâ ile üretildiği belli olan görseller.
+  görüntüler, yapay zekâ ile üretilmiş her türlü görsel.
 - **İllüstrasyon:** Kullanılmaz. Gerektiğinde ince çizgili, tek renkli,
   geometrik diyagramlarla sınırlıdır.
 

@@ -3,7 +3,6 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
 import Process from "@/components/Process.astro";
-import desk from "@/assets/studio/desk.jpg";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, productCaption } from "@/lib/products";
@@ -21,7 +20,6 @@ const copy = {
   tr: {
     title: "Stüdyo",
     lede: "Uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyo.",
-    imageAlt: "Ahşap bir masanın üzerinde defter, kahve fincanı ve dizüstü bilgisayar",
     statement: `Ryvex Studio, ${site.founder} tarafından, dağınık duran ürünleri tek bir imza altında toplamak için kuruldu.`,
     principlesTitle: "Neye önem veriyoruz",
     principles: [
@@ -37,7 +35,6 @@ const copy = {
   en: {
     title: "Studio",
     lede: "An independent studio making apps, games and web products.",
-    imageAlt: "A notebook, a cup of coffee and a laptop on a wooden desk",
     statement: `Ryvex Studio was founded by ${site.founder} to bring scattered products together under one signature.`,
     principlesTitle: "What we care about",
     principles: [
@@ -55,18 +52,7 @@ const copy = {
 
 <PageIntro title={copy.title} lede={copy.lede} />
 
-<div class="container-page mt-14 md:mt-20">
-  <Image
-    src={desk}
-    alt={copy.imageAlt}
-    widths={[640, 1024, 1440, 1800]}
-    sizes="(min-width: 1280px) 1240px, 100vw"
-    class="aspect-[16/9] w-full rounded-lg object-cover md:aspect-[21/9]"
-    loading="eager"
-  />
-</div>
-
-<section class="container-page py-section-mobile md:py-section">
+<section class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
   <p class="max-w-[24ch] text-[2rem] leading-[1.15] font-semibold tracking-[-0.03em] md:text-[3rem] md:leading-[1.1]">
     {copy.statement}
   </p>

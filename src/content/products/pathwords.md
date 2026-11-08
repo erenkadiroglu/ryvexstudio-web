@@ -7,7 +7,6 @@ tagline:
   en: "Trace winding paths through letters, find hidden English words and learn their Turkish meanings."
 color: "#2E9D57"
 icon: ../../assets/products/pathwords.png
-banner: ../../assets/products/pathwords-banner.jpg
 platforms: [ios, android]
 links:
   googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.pathwords"
