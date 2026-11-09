@@ -1,3 +1,4 @@
+import contact from "./contact.json";
 import integrations from "./integrations.json";
 
 export const site = {
@@ -17,14 +18,10 @@ export const site = {
     en: "Ryvex Studio is an independent studio making mobile apps, games and web products.",
   },
   founder: "Eren KADİROĞLU",
-  contactEmail: "hello@ryvexstudio.com",
-  /** Official studio accounts. All use the handle @ryvexstudio. */
-  social: [
-    { name: "Instagram", url: "https://www.instagram.com/ryvexstudio" },
-    { name: "TikTok", url: "https://www.tiktok.com/@ryvexstudio" },
-    { name: "YouTube", url: "https://www.youtube.com/@ryvexstudio" },
-  ],
-  supportEmail: "destek@ryvexstudio.com",
+  /** Addresses and official accounts, edited in the panel (src/config/contact.json). */
+  contactEmail: contact.contactEmail,
+  social: contact.social as { name: string; url: string }[],
+  supportEmail: contact.supportEmail,
   /**
    * Integrations that stay switched off until their value is filled in (src/config/integrations.json):
    * - analyticsToken: Cloudflare Web Analytics site token (cookieless visit counts).

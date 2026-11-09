@@ -45,6 +45,8 @@ export default defineConfig({
     securityHeaders,
     react(),
     sitemap({
+      // The content panel is not a page for visitors.
+      filter: (page) => !page.includes("/panel"),
       i18n: {
         defaultLocale: "tr",
         locales: { tr: "tr-TR", en: "en-US" },

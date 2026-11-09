@@ -9,6 +9,14 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
 
+# The content panel needs GitHub (its API, avatars and status page) and nothing else. "!" drops the
+# site-wide policy above so only this one applies here.
+/panel
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://avatars.githubusercontent.com https://raw.githubusercontent.com; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' data: blob: https://api.github.com https://raw.githubusercontent.com https://www.githubstatus.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 

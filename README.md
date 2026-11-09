@@ -27,17 +27,35 @@ npm run dev
 | `npm run preview` | Derlenmiş siteyi yerelde gösterir |
 | `npm run check` | Astro ve TypeScript tip kontrolü |
 | `npm run format` | Kodu Prettier ile biçimlendirir |
+| `npm run test` | Erişilebilirlik, bağlantı ve panel testleri (Playwright) |
+
+## İçerik paneli
+
+Ürünler, Günlük yazıları ve site ayarları `/panel` adresindeki panelden düzenlenir (Sveltia CMS,
+MIT lisanslı, sürümü `package.json`'da sabit).
+
+- **Yerelde:** `npm run dev` ile siteyi açın, Chrome ya da Edge'de `http://localhost:4321/panel`
+  adresine gidin ve **Yerel Repo ile Çalış** ile proje klasörünü seçin. Değişiklikler doğrudan
+  dosyalara yazılır; ardından her zamanki gibi commit'lenir.
+- **Yayında:** `https://ryvexstudio.com/panel` adresinde GitHub erişim token'ıyla giriş yapılır.
+  Her kayıt, giriş yapan hesabın adıyla `main`'e bir commit olur ve site yeniden derlenir.
+- **Alanlar:** `src/panel/config.ts`. İçerik şeması (`src/content.config.ts`) değiştiğinde bu
+  dosya da aynı commit'te güncellenir; `tests/panel.spec.ts`, içerikte kullanılan her alanın
+  panelde tanımlı olduğunu denetler.
+- **Ayarlar:** İletişim adresleri `src/config/contact.json`, bağlantılar
+  `src/config/integrations.json` dosyasındadır; panelden de düzenlenir.
 
 ## Proje yapısı
 
 ```text
 src/
 ├── components/   Ortak arayüz bileşenleri
-├── config/       Site genel ayarları
+├── config/       Site genel ayarları (iletişim ve bağlantılar panelden düzenlenir)
 ├── content/      Ürün içerikleri (her ürün bir dosya)
 ├── i18n/         Türkçe ve İngilizce arayüz metinleri
 ├── layouts/      Sayfa düzenleri
 ├── pages/        Sayfalar ve yönlendirme
+├── panel/        İçerik panelinin alan tanımları
 └── styles/       Tasarım değerleri ve genel stiller
 ```
 
