@@ -95,10 +95,10 @@ const kinds = types.map((type) => {
   pointer (or keyboard focus) widens to show its line, its products and their real screens; the
   others narrow to their names. On small screens every panel is open, one under the other.
 -->
-<section aria-labelledby="ne-yapiyoruz" class="container-page py-section-mobile md:py-section">
+<section aria-labelledby="ne-yapiyoruz" class="container-page flex flex-col justify-center py-section-mobile md:min-h-[calc(100svh-73px)] md:py-12">
   <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.heading}</h2>
 
-  <ul class="dpanels mt-12 flex flex-col gap-4 md:mt-14 md:h-[600px] md:flex-row" data-dpanels>
+  <ul class="dpanels mt-12 flex flex-col gap-4 md:mt-10 md:h-[clamp(460px,calc(100svh-73px-220px),600px)] md:flex-row" data-dpanels>
     {
       kinds.map(({ type, list, screens, ground, item, href }, i) => {
         const Tag = href ? "a" : "div";
@@ -128,6 +128,39 @@ const kinds = types.map((type) => {
                   </g>
                 </svg>
               )}
+
+              <!-- At rest (desktop), a narrow panel shows a line drawing of its kind; it gives way to the screens when opened. -->
+              <div class="dpanel-glyph pointer-events-none absolute inset-x-0 top-[38%] hidden justify-center md:flex" aria-hidden="true">
+                <span class="flex size-44 items-center justify-center rounded-full border border-white/15 bg-white/[0.04]">
+                  <svg class="size-24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.45" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    {type === "app" && (
+                      <>
+                        <rect x="6" y="2" width="12" height="20" rx="2.6" />
+                        <rect x="8.4" y="5.4" width="3" height="3" rx="0.8" />
+                        <rect x="12.6" y="5.4" width="3" height="3" rx="0.8" />
+                        <rect x="8.4" y="9.6" width="3" height="3" rx="0.8" />
+                        <rect x="12.6" y="9.6" width="3" height="3" rx="0.8" />
+                        <path d="M10.5 19.2h3" />
+                      </>
+                    )}
+                    {type === "game" && (
+                      <>
+                        <path d="M6 11h4M8 9v4" />
+                        <path d="M15 12h.01M18 10h.01" stroke-width="1.1" />
+                        <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />
+                      </>
+                    )}
+                    {type === "web" && (
+                      <>
+                        <rect x="2" y="4" width="20" height="16" rx="2.6" />
+                        <path d="M2 8.5h20" />
+                        <path d="M4.6 6.25h.01M6.6 6.25h.01M8.6 6.25h.01" stroke-width="1" />
+                        <path d="M9.6 11.6 7.4 14l2.2 2.4M14.4 11.6l2.2 2.4-2.2 2.4M12.8 11.2l-1.6 5.6" />
+                      </>
+                    )}
+                  </svg>
+                </span>
+              </div>
 
               <div class="dpanel-shade absolute inset-x-0 bottom-0 h-2/3" aria-hidden="true" />
 

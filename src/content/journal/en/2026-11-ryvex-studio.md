@@ -4,7 +4,6 @@ description: "From scattered projects to one signature: how and why the studio w
 date: 2026-11-08
 lang: en
 translationKey: ryvex-studio-why
-products: [fileconvert, pathwords, persayar]
 tags: ["studio"]
 ---
 

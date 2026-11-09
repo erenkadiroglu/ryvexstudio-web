@@ -1,81 +1,164 @@
 ---
-import PageIntro from "@/components/PageIntro.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
+import { getProducts } from "@/lib/products";
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
+const glow = (await getProducts()).slice(0, 3).map((p) => p.data.color);
 
 const copy = {
   tr: {
     title: "İletişim",
-    lede: "Size en uygun kanalı seçin. Her mesajı okuyoruz.",
+    statement: "Bir fikriniz, sorunuz ya da öneriniz varsa yazın.",
+    promise: "Her mesajı okuyoruz.",
+    copy: "Adresi kopyala",
+    copied: "Kopyalandı",
+    write: "E-posta yaz",
+    channelsTitle: "Doğru kanal",
     channels: [
       {
         title: "Genel",
-        text: "Sorular, öneriler ve iş birliği fikirleri için.",
+        text: "Sorular, öneriler ve iş birliği fikirleri.",
         email: site.contactEmail,
       },
       {
         title: "Ürün desteği",
-        text: "Bir ürünümüzle ilgili sorun yaşıyorsanız. Her ürünün destek sayfasında sık sorulan sorular da var.",
+        text: "Bir ürünümüzle ilgili sorunlar. Her ürünün destek sayfasında sık sorulan sorular da var.",
         email: site.supportEmail,
         link: { href: route("products", "tr"), label: "Ürün destek sayfaları" },
       },
       {
         title: "Basın",
-        text: "Röportaj, haber ve içerik talepleri için. Logo ve ürün bilgileri basın kitinde.",
+        text: "Röportaj, haber ve içerik talepleri. Logo ve ürün bilgileri basın kitinde.",
         email: site.contactEmail,
         link: { href: route("press", "tr"), label: "Basın kiti" },
       },
     ],
+    followTitle: "Bizi takip edin",
+    follow: "Tüm hesaplarımızda kullanıcı adımız aynı.",
   },
   en: {
     title: "Contact",
-    lede: "Pick the channel that fits best. We read every message.",
+    statement: "If you have an idea, a question or a suggestion, write to us.",
+    promise: "We read every message.",
+    copy: "Copy address",
+    copied: "Copied",
+    write: "Write an email",
+    channelsTitle: "The right channel",
     channels: [
       {
         title: "General",
-        text: "For questions, suggestions and ideas to work on together.",
+        text: "Questions, suggestions and ideas to work on together.",
         email: site.contactEmail,
       },
       {
         title: "Product support",
-        text: "If something isn't working in one of our products. Each product's support page also has answers to common questions.",
+        text: "Problems with one of our products. Each product's support page also answers common questions.",
         email: site.supportEmail,
         link: { href: route("products", "en"), label: "Product support pages" },
       },
       {
         title: "Press",
-        text: "For interviews, news and content requests. Logos and product details are in the press kit.",
+        text: "Interviews, news and content requests. Logos and product details are in the press kit.",
         email: site.contactEmail,
         link: { href: route("press", "en"), label: "Press kit" },
       },
     ],
+    followTitle: "Follow us",
+    follow: "We use the same handle everywhere.",
   },
 }[lang];
+
+const handle = "@ryvexstudio";
 ---
 
-<PageIntro title={copy.title} lede={copy.lede} />
+<!--
+  The contact page opens, like the studio page, on a deep band lit by the products' colours.
+  The address itself is the headline; it can be written to or copied in one move.
+-->
+<section
+  class="studio-band relative isolate flex flex-col justify-center overflow-hidden text-primary md:min-h-[calc(100svh-73px)]"
+  data-theme="dark"
+>
+  <div
+    class="studio-glow"
+    style={`--c1:${glow[0] ?? "#8E1B3B"};--c2:${glow[1] ?? "#8E1B3B"};--c3:${glow[2] ?? "#8E1B3B"}`}
+    aria-hidden="true"
+  ></div>
+  <div class="container-page w-full pt-20 pb-16 md:py-16">
+    <h1 class="hero-settle text-body-lg text-secondary" style="--i:0">{copy.title}</h1>
+    <p
+      class="rise-words mt-6 max-w-[22ch] text-[2.25rem] leading-[1.06] font-semibold tracking-[-0.04em] md:text-[4rem] md:leading-[1.02]"
+    >
+      <span class="sr-only">{copy.statement}</span>
+      {
+        copy.statement.split(" ").map((word, i, all) => (
+          <>
+            <span class="w" aria-hidden="true">
+              <span style={`--i:${i}`}>{word}</span>
+            </span>
+            {i < all.length - 1 && " "}
+          </>
+        ))
+      }
+    </p>
 
-<section class="container-page py-section-mobile md:py-section md:pt-20">
-  <ul class="grid gap-6 md:grid-cols-3">
+    <div class="hero-settle mt-12 md:mt-16" style="--i:3">
+      <a
+        href={`mailto:${site.contactEmail}`}
+        class="contact-address inline-block text-[1.75rem] leading-tight font-semibold tracking-[-0.03em] break-all sm:text-[2.5rem] md:text-[3.5rem]"
+      >
+        {site.contactEmail}
+      </a>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href={`mailto:${site.contactEmail}`}
+          data-magnetic
+          class="inline-flex rounded-full bg-[#FFFFFF] px-[24px] py-[15px] text-label font-medium text-[#1C1418] transition-opacity duration-150 hover:opacity-90"
+        >
+          {copy.write}
+        </a>
+        <button
+          type="button"
+          class="inline-flex rounded-full border border-outline px-[23px] py-[14px] text-label font-medium transition-colors duration-150 hover:bg-neutral"
+          data-copy={site.contactEmail}
+          data-copied-label={copy.copied}
+        >
+          <span data-copy-label>{copy.copy}</span>
+        </button>
+        <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+        <span class="ml-2 text-body-md text-secondary">{copy.promise}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="kanallar" class="container-page py-section-mobile md:py-section">
+  <h2 id="kanallar" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.channelsTitle}</h2>
+  <ul class="mt-12 border-t border-outline">
     {
       copy.channels.map((channel) => (
-        <li class="flex flex-col rounded-xl bg-neutral p-8">
-          <h2 class="text-headline-md font-semibold">{channel.title}</h2>
-          <p class="mt-3 flex-1 text-body-md text-secondary">{channel.text}</p>
-          <a href={`mailto:${channel.email}`} class="link-inline mt-6 text-body-md">
+        <li class="contact-row group relative grid gap-3 border-b border-outline py-8 md:grid-cols-12 md:items-baseline md:gap-6 md:py-10">
+          <h3 class="text-headline-md font-semibold md:col-span-3">{channel.title}</h3>
+          <div class="md:col-span-5">
+            <p class="max-w-[46ch] text-body-lg text-secondary">{channel.text}</p>
+            {channel.link && (
+              <a href={channel.link.href} class="link-inline mt-3 inline-block text-body-md">
+                {channel.link.label}
+              </a>
+            )}
+          </div>
+          <a
+            href={`mailto:${channel.email}`}
+            class="contact-mail inline-flex items-baseline gap-3 justify-self-start text-title font-semibold md:col-span-4 md:justify-self-end"
+          >
             {channel.email}
+            <span aria-hidden="true" class="contact-arrow inline-block">↗</span>
           </a>
-          {channel.link && (
-            <a href={channel.link.href} class="mt-2 text-body-sm text-secondary hover:text-primary">
-              {channel.link.label}
-            </a>
-          )}
         </li>
       ))
     }
@@ -83,27 +166,57 @@ const copy = {
 </section>
 
 <section aria-labelledby="takip" class="container-page pb-section-mobile md:pb-section">
-  <div class="flex flex-col gap-6 border-t border-outline pt-10 md:flex-row md:items-center md:justify-between">
-    <div>
-      <h2 id="takip" class="text-headline-md font-semibold">{lang === "tr" ? "Bizi takip edin" : "Follow us"}</h2>
-      <p class="mt-2 text-body-md text-secondary">
-        {lang === "tr" ? "Tüm hesaplarımızda kullanıcı adımız aynı:" : "We use the same handle everywhere:"} @ryvexstudio
-      </p>
-    </div>
-    <ul class="flex flex-wrap gap-2">
-      {
-        site.social.map((s) => (
-          <li>
-            <a
-              href={s.url}
-              rel="me noopener"
-              class="inline-flex rounded-full border border-outline px-[21px] py-[13px] text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral active:bg-neutral-strong"
-            >
-              {s.name}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <h2 id="takip" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.followTitle}</h2>
+    <p class="text-body-md text-secondary">{copy.follow}</p>
   </div>
+  <ul class="mt-12 grid gap-4 md:grid-cols-3">
+    {
+      site.social.map((s) => (
+        <li>
+          <a
+            href={s.url}
+            rel="me noopener"
+            class="social-tile group relative flex h-56 flex-col justify-between overflow-hidden rounded-[24px] border border-outline p-7"
+          >
+            <span class="social-fill" aria-hidden="true" />
+            <span class="relative flex items-start justify-between">
+              <span class="text-body-md text-secondary transition-colors duration-500 group-hover:text-[#FFFFFF]/80">{handle}</span>
+              <span aria-hidden="true" class="contact-arrow text-title transition-colors duration-500 group-hover:text-[#FFFFFF]">↗</span>
+            </span>
+            <span class="relative text-[2.5rem] leading-none font-semibold tracking-[-0.03em] transition-colors duration-500 group-hover:text-[#FFFFFF]">
+              {s.name}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </section>
+
+<script>
+  // Copy the address and say so, both on the button and to assistive technology.
+  const bind = () => {
+    for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+      if (button.dataset.bound) continue;
+      button.dataset.bound = "true";
+      const label = button.querySelector<HTMLElement>("[data-copy-label]");
+      const status = button.parentElement?.querySelector<HTMLElement>("[data-copy-status]");
+      const original = label?.textContent ?? "";
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy ?? "");
+          if (label) label.textContent = button.dataset.copiedLabel ?? original;
+          if (status) status.textContent = button.dataset.copiedLabel ?? "";
+          setTimeout(() => {
+            if (label) label.textContent = original;
+            if (status) status.textContent = "";
+          }, 2000);
+        } catch {
+          window.location.href = `mailto:${button.dataset.copy}`;
+        }
+      });
+    }
+  };
+  document.addEventListener("astro:page-load", bind);
+</script>
