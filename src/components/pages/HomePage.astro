@@ -6,7 +6,6 @@ import Disciplines from "@/components/Disciplines.astro";
 import Manifesto from "@/components/Manifesto.astro";
 import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
-import ScreenReel from "@/components/ScreenReel.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, toWallItem } from "@/lib/products";
@@ -134,12 +133,10 @@ const copy = {
   </div>
 </section>
 
-<section aria-labelledby="duvar" class="container-page pb-section-mobile md:pb-section">
+<section aria-labelledby="duvar" class="container-page">
   <h2 id="duvar" class="sr-only">{copy.wallHeading}</h2>
   <ProductWall items={items} animate />
 </section>
-
-<ScreenReel products={products} lang={lang} />
 
 <Manifesto lang={lang} />
 

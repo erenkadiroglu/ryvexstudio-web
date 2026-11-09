@@ -15,35 +15,45 @@ const copy = {
   tr: {
     heading: "Ne yapıyoruz",
     soon: "Yakında",
+    count: (n: number) => `${n} ürün`,
+    stageSoon: "Web ürünlerimiz hazırlanıyor.",
     items: {
       app: {
         title: "Uygulamalar",
+        text: "Günlük işleri telefonda hızlı ve sade biçimde çözen araçlar.",
         link: "Uygulamaları gör",
       },
       game: {
         title: "Oyunlar",
+        text: "Kısa bir molayı güzelleştiren, oynarken öğreten oyunlar.",
         link: "Oyunları gör",
       },
       web: {
         title: "Web",
-        link: "Web projelerini gör",
+        text: "Kurulum istemeden tarayıcıda çalışan ürünler. Hazırlık aşamasında.",
+        link: "Web ürünlerini gör",
       },
     },
   },
   en: {
     heading: "What we make",
     soon: "Coming soon",
+    count: (n: number) => (n === 1 ? "1 product" : `${n} products`),
+    stageSoon: "Our web products are in preparation.",
     items: {
       app: {
         title: "Apps",
+        text: "Tools that handle everyday tasks on your phone, quickly and simply.",
         link: "See the apps",
       },
       game: {
         title: "Games",
+        text: "Games that brighten a short break and teach while you play.",
         link: "See the games",
       },
       web: {
         title: "Web",
+        text: "Products that run in the browser with nothing to install. In preparation.",
         link: "See the web products",
       },
     },
@@ -51,78 +61,156 @@ const copy = {
 }[lang];
 
 const types: ProductType[] = ["app", "game", "web"];
-// A soft wash from the first product's colour into the second's (or into the page).
-const panelStyle = (list: Product[]) => {
-  const a = list[0].data.color;
-  const b = list[1]?.data.color ?? a;
-  return `background: linear-gradient(150deg, color-mix(in srgb, ${a} 22%, var(--rv-surface)), color-mix(in srgb, ${b} 18%, var(--rv-surface)));`;
-};
 const param = lang === "tr" ? "tur" : "type";
+
+/** Up to two real screens for a kind: one from each product, or two from a single product. */
+const screensFor = (list: Product[]) => {
+  const firsts = list.flatMap((p) => (p.data.screenshots[0] ? [p.data.screenshots[0].src] : []));
+  if (firsts.length >= 2) return firsts.slice(0, 2);
+  return (list[0]?.data.screenshots ?? []).slice(0, 2).map((s) => s.src);
+};
+
+// A wash from the first product's colour into the second's (or into the page).
+const wash = (list: Product[]) => {
+  const a = list[0]?.data.color;
+  if (!a) return undefined;
+  const b = list[1]?.data.color ?? a;
+  return `background: linear-gradient(155deg, color-mix(in srgb, ${a} 26%, var(--rv-surface)), color-mix(in srgb, ${b} 16%, var(--rv-surface)));`;
+};
+
+const kinds = types.map((type, i) => {
+  const list = products.filter((p) => p.data.type === type);
+  return { type, i, list, screens: screensFor(list), wash: wash(list), item: copy.items[type] };
+});
 ---
 
-<section aria-labelledby="ne-yapiyoruz" class="container-page pb-section-mobile md:pb-section">
-  <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">
-    {copy.heading}
-  </h2>
+<!--
+  An index of what the studio makes. Each kind is a large typographic row; choosing one opens
+  it and brings its real screens onto the stage beside the list (desktop). The first kind with
+  products starts open.
+-->
+<section aria-labelledby="ne-yapiyoruz" class="disciplines container-page py-section-mobile md:py-section" data-disciplines>
+  <div class="md:grid md:grid-cols-12 md:items-center md:gap-6">
+    <div class="md:col-span-6">
+      <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.heading}</h2>
 
-  <div class="mt-14 grid gap-x-6 gap-y-14 md:grid-cols-3">
-    {
-      types.map((type) => {
-        const item = copy.items[type];
-        const ofType = products.filter((p) => p.data.type === type);
-        const slug = lang === "tr" ? typeSlugs[type] : type;
-        return (
-          <article class="group flex flex-col">
-            <!-- The products of this kind: their own colours, icons and real screens. -->
-            <div
-              class:list={[
-                "relative aspect-[16/11] overflow-hidden rounded-xl md:aspect-[4/5]",
-                ofType.length === 0 && "flex items-center justify-center bg-neutral",
-              ]}
-              style={ofType.length > 0 ? panelStyle(ofType) : undefined}
-            >
-              {ofType.length === 0 && <span class="text-title font-medium text-secondary">{copy.soon}</span>}
-              {ofType.length > 0 && (
-                <ul class="absolute top-6 left-6 flex gap-2" aria-label={item.title}>
-                  {ofType.map((product) => (
-                    <li>
-                      <Image
-                        src={product.data.icon}
-                        alt={product.data.name}
-                        title={product.data.name}
-                        widths={[44, 88]}
-                        sizes="44px"
-                        class="shape-icon object-depth size-11"
-                      />
-                    </li>
+      <ul class="mt-12 border-t border-outline">
+        {
+          kinds.map(({ type, i, list, item }) => {
+            const slug = lang === "tr" ? typeSlugs[type] : type;
+            return (
+              <li class="discipline border-b border-outline" data-type={type} data-open={i === 0 ? "" : undefined}>
+                <h3>
+                  <button
+                    type="button"
+                    class="discipline-trigger group flex w-full items-baseline justify-between gap-6 py-6 text-left md:py-7"
+                    aria-expanded={i === 0 ? "true" : "false"}
+                    aria-controls={`disiplin-${type}`}
+                  >
+                    <span class="discipline-title text-[2rem] leading-none font-semibold tracking-[-0.03em] md:text-[2.75rem]">
+                      {item.title}
+                    </span>
+                    <span class="shrink-0 text-body-md text-secondary">
+                      {list.length > 0 ? copy.count(list.length) : copy.soon}
+                    </span>
+                  </button>
+                </h3>
+                <div id={`disiplin-${type}`} class="discipline-body" role="region" aria-label={item.title}>
+                  <div class="overflow-hidden">
+                    <p class="max-w-[42ch] text-body-lg text-secondary">{item.text}</p>
+                    {list.length > 0 && (
+                      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4 pb-8">
+                        <ul class="flex gap-2" aria-label={item.title}>
+                          {list.map((product) => (
+                            <li>
+                              <Image
+                                src={product.data.icon}
+                                alt={product.data.name}
+                                title={product.data.name}
+                                widths={[40, 80]}
+                                sizes="40px"
+                                class="shape-icon size-10"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                        <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline text-body-md">
+                          {item.link}
+                        </a>
+                      </div>
+                    )}
+                    {list.length === 0 && <div class="pb-8" />}
+                  </div>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+
+    <!-- The stage: the open kind's colours and real screens. Decorative; the list carries the content. -->
+    <div class="hidden md:col-span-5 md:col-start-8 md:block" aria-hidden="true">
+      <div class="discipline-stage relative aspect-[4/5] overflow-hidden rounded-[28px] bg-neutral">
+        {
+          kinds.map(({ type, i, screens, wash: style }) => (
+            <div class:list={["discipline-scene absolute inset-0", i === 0 && "is-active"]} data-type={type} style={style}>
+              {screens.length > 0 ? (
+                <div class="absolute inset-x-0 top-[12%] flex justify-center">
+                  {screens.map((src, n) => (
+                    <div class="discipline-phone" style={`--n:${n};--count:${screens.length}`}>
+                      <PhoneFrame src={src} alt="" width={screens.length > 1 ? 196 : 220} />
+                    </div>
                   ))}
-                </ul>
-              )}
-              {ofType.length > 0 && (
-                <div class="absolute inset-x-0 bottom-0 flex translate-y-[38%] justify-center gap-4 transition-transform duration-700 ease-[var(--ease-settle)] group-hover:translate-y-[34%]" aria-hidden="true">
-                  {ofType.slice(0, 2).map((product, i) =>
-                    product.data.screenshots[0] ? (
-                      <PhoneFrame
-                        src={product.data.screenshots[0].src}
-                        alt=""
-                        width={ofType.length > 1 ? 150 : 170}
-                        class="phone-compact"
-                        style={ofType.length > 1 ? `rotate:${i === 0 ? -4 : 4}deg` : undefined}
-                      />
-                    ) : null,
-                  )}
+                </div>
+              ) : (
+                <div class="flex size-full flex-col items-center justify-center gap-6">
+                  <svg class="size-20 opacity-90" viewBox="0 0 64 64" focusable="false">
+                    <clipPath id={`rv-stage-mark-${type}`}><rect width="64" height="64" rx="14.4" /></clipPath>
+                    <rect width="64" height="64" rx="14.4" fill="#8E1B3B" />
+                    <g clip-path={`url(#rv-stage-mark-${type})`} fill="none" stroke="#FFFFFF" stroke-width="8">
+                      <path d="M24 16V48" />
+                      <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round" />
+                      <path d="M31 34L64 67" />
+                    </g>
+                  </svg>
+                  <p class="text-title font-medium text-secondary">{copy.stageSoon}</p>
                 </div>
               )}
             </div>
-            <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
-            {ofType.length > 0 && (
-              <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
-                {item.link}
-              </a>
-            )}
-          </article>
-        );
-      })
-    }
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  // One kind open at a time; pointer, click and keyboard all open a row and switch the stage.
+  const bind = () => {
+    const root = document.querySelector<HTMLElement>("[data-disciplines]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "true";
+    const rows = [...root.querySelectorAll<HTMLElement>(".discipline")];
+    const scenes = [...root.querySelectorAll<HTMLElement>(".discipline-scene")];
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    const open = (row: HTMLElement) => {
+      for (const r of rows) {
+        const on = r === row;
+        r.toggleAttribute("data-open", on);
+        r.querySelector("button")?.setAttribute("aria-expanded", String(on));
+      }
+      for (const s of scenes) s.classList.toggle("is-active", s.dataset.type === row.dataset.type);
+    };
+
+    for (const row of rows) {
+      const trigger = row.querySelector<HTMLButtonElement>(".discipline-trigger");
+      trigger?.addEventListener("click", () => open(row));
+      row.addEventListener("pointerenter", () => {
+        if (fine.matches) open(row);
+      });
+    }
+  };
+  document.addEventListener("astro:page-load", bind);
+</script>

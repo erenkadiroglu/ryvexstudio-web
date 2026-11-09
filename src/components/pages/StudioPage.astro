@@ -3,7 +3,6 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
 import PageIntro from "@/components/PageIntro.astro";
 import Process from "@/components/Process.astro";
-import ScreenReel from "@/components/ScreenReel.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, productCaption } from "@/lib/products";
@@ -20,8 +19,9 @@ const productBase = route("products", lang);
 const copy = {
   tr: {
     title: "Stüdyo",
-    lede: "Uygulamalar, oyunlar ve web projeleri üreten bağımsız bir stüdyo.",
-    statement: `Ryvex Studio, ${site.founder} tarafından, dağınık duran ürünleri tek bir imza altında toplamak için kuruldu.`,
+    lede: "Bağımsız bir dijital ürün stüdyosu.",
+    statement: "Mobil uygulamalar, oyunlar ve web ürünleri tasarlıyor, geliştiriyor ve yayınlıyoruz.",
+    detail: `Ryvex Studio, ${site.founder} tarafından kuruldu. Tasarım, geliştirme, yayın ve destek aynı çatı altında yürür; her ürün aynı kalite standardından geçer ve arkasında adı bilinen bir sorumlu bulunur.`,
     principlesTitle: "Neye önem veriyoruz",
     principles: [
       ["Özen", "Detaylar tesadüf değil."],
@@ -35,8 +35,9 @@ const copy = {
   },
   en: {
     title: "Studio",
-    lede: "An independent studio making apps, games and web products.",
-    statement: `Ryvex Studio was founded by ${site.founder} to bring scattered products together under one signature.`,
+    lede: "An independent digital product studio.",
+    statement: "We design, build and publish mobile apps, games and web products.",
+    detail: `Ryvex Studio was founded by ${site.founder}. Design, development, publishing and support happen under one roof; every product meets the same quality standard and has a named person behind it.`,
     principlesTitle: "What we care about",
     principles: [
       ["Care", "Details are never an accident."],
@@ -53,15 +54,14 @@ const copy = {
 
 <PageIntro title={copy.title} lede={copy.lede} />
 
-<section class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
-  <p class="max-w-[24ch] text-[2rem] leading-[1.15] font-semibold tracking-[-0.03em] md:text-[3rem] md:leading-[1.1]">
+<section class="container-page grid gap-10 pt-14 pb-section-mobile md:grid-cols-12 md:gap-6 md:pt-20 md:pb-section">
+  <p class="text-[2rem] leading-[1.12] font-semibold tracking-[-0.03em] text-balance md:col-span-8 md:text-[3.25rem] md:leading-[1.06]">
     {copy.statement}
   </p>
+  <p class="max-w-[40ch] self-end text-body-lg text-secondary md:col-span-4">{copy.detail}</p>
 </section>
 
-<ScreenReel products={products} lang={lang} />
-
-<section aria-labelledby="aile" class="container-page py-section-mobile md:py-section">
+<section aria-labelledby="aile" class="container-page pb-section-mobile md:pb-section">
   <h2 id="aile" class="text-headline-lg font-semibold">{copy.familyTitle}</h2>
   <ul class="mt-10 flex flex-wrap gap-x-12 gap-y-10">
     {

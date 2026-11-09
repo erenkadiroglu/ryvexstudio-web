@@ -443,20 +443,73 @@ html[data-theme="dark"] .showcase-band {
   display: block;
 }
 
-/* Screen reel: real screens glide past in one endless row; hovering holds it still. */
-@keyframes reel {
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+/* What we make: an index of kinds. The open row unfolds; the stage shows its screens. */
+.discipline-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 550ms var(--ease-settle);
 }
 
-.screen-reel-track {
-  animation: reel 80s linear infinite;
+.discipline-body > div {
+  visibility: hidden;
+  transition: visibility 0s 550ms;
 }
 
-.screen-reel:hover .screen-reel-track,
-.screen-reel:focus-within .screen-reel-track {
-  animation-play-state: paused;
+.discipline[data-open] .discipline-body {
+  grid-template-rows: 1fr;
+}
+
+.discipline[data-open] .discipline-body > div {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.discipline-title {
+  color: var(--rv-secondary);
+  display: inline-block;
+  transition:
+    color 300ms var(--ease-settle),
+    transform 450ms var(--ease-settle);
+}
+
+.discipline[data-open] .discipline-title,
+.discipline-trigger:hover .discipline-title {
+  color: var(--rv-primary);
+}
+
+.discipline-trigger:hover .discipline-title {
+  transform: translateX(6px);
+}
+
+.discipline-scene {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition:
+    opacity 600ms var(--ease-settle),
+    transform 800ms var(--ease-settle);
+}
+
+.discipline-scene.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+.discipline-phone {
+  transform: translateY(60px);
+  transition: transform 1000ms var(--ease-settle);
+}
+
+.discipline-scene.is-active .discipline-phone:nth-child(1) {
+  transform: translateX(16px) rotate(-6deg);
+}
+
+.discipline-scene.is-active .discipline-phone:nth-child(2) {
+  transform: translate(-16px, 40px) rotate(6deg);
+  transition-delay: 80ms;
+}
+
+.discipline-scene.is-active .discipline-phone:only-child {
+  transform: none;
 }
 
 /* Hero: soft light in the products' own colours behind the floating icons. */
@@ -583,15 +636,6 @@ html.theme-switching::view-transition-group(*) {
 
   .manifesto-word {
     color: var(--rv-primary);
-  }
-
-  /* The reel stands still; it can be scrolled sideways instead. */
-  .screen-reel {
-    overflow-x: auto;
-  }
-
-  .screen-reel-track {
-    animation: none !important;
   }
 
   .showcase-screen:not(.is-active) {

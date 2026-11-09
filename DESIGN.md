@@ -361,7 +361,10 @@ Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Ne yapıyoruz
-┌ renk+ekran ┐  ┌ renk+ekran ┐  ┌ Yakında ┐     ← 3 sütun, 4:5 panel: ürün renkleri, ikonlar, alttan yükselen gerçek ekranlar
+Uygulamalar            2 ürün   ┌──────────────┐  ← solda büyük yazılı tür listesi,
+  açıklama, ikonlar, link       │ ürün renkleri │    açık olan satır açıklamasını
+Oyunlar                1 ürün   │ gerçek ekranlar│    gösterir; sağdaki sahne o türün
+Web                   Yakında   └──────────────┘    renklerine ve ekranlarına geçer
 Uygulamalar    Oyunlar        Web
 link           link           link               ← filtreli ürün listesi
 
@@ -381,12 +384,10 @@ Stüdyo hakkında tek cümle
 Footer
 ```
 
-Ana sayfa sırası: hero, sergi duvarı, ekran şeridi, tek cümlelik manifesto,
-Ne yapıyoruz (türün renkleri, ikonları ve gerçek ekranları; açıklama yok), koyu
-vitrin bandı, Günlükten ve vişne kapanış bandı. Ekran şeridi bütün gerçek ekran
-görüntülerini telefon çerçevelerinde, kenardan kenara ve yavaşça kayan tek bir
-sırada gösterir; üzerine gelince ya da odaklanınca durur, hareket azaltma
-açıkken durağandır ve yana kaydırılabilir. Stüdyo sayfasında da yer alır. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
+Ana sayfa sırası: hero, sergi duvarı, ortalanmış tek cümlelik manifesto
+("Bir ürünü, adımızı taşımaya hazır olduğunda yayınlıyoruz."), Ne yapıyoruz
+(tür dizini ve gerçek ekranlı sahne; satır başına tek cümle), koyu
+vitrin bandı, Günlükten ve vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
 bilgi kendi sayfasında durur. Sitede kişi fotoğrafı, stok fotoğraf ve yapay zekâ ile üretilmiş görsel kullanılmaz.
 
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
@@ -509,6 +510,10 @@ Hareket ürünleri sahneye taşımak için vardır, süs için değil. Hepsi
 `cubic-bezier(0.2, 0.7, 0.2, 1)` eğrisini kullanır ve `prefers-reduced-motion`
 açıksa kapatılır.
 
+- **Ne yapıyoruz dizini:** Bir seferde tek tür açıktır. Fareyle üzerine gelmek,
+  tıklamak ya da klavyeyle seçmek satırı açar (550ms); kapalı satırların adı
+  ikincil renktedir. Sağdaki sahne çapraz geçişle o türün renk geçişine ve
+  telefonlarına döner; telefonlar 80ms arayla yerine açılır.
 - **Hero ışıltısı:** Uçan ikonların arkasında, ilk üç ürünün renklerinden
   bulanık ve hafif bir ışık durur; koyu temada daha da sönüktür.
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
