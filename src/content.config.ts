@@ -121,6 +121,8 @@ const journal = defineCollection({
     /** Shared key that links the Turkish and English versions of a post. */
     translationKey: z.string(),
     tags: z.array(z.string()).default([]),
+    /** Products the post is about, by id; their icons and colours make the post's cover. */
+    products: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
 });

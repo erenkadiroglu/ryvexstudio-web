@@ -122,7 +122,7 @@ const copy = {
     {
       products.map((product) => (
         <li>
-          <a href={`${productBase}/${product.id}`} class="wall-link group block w-[140px]" data-color={product.data.color}>
+          <a href={`${productBase}/${product.id}`} class="wall-link group block w-[140px]" data-color={product.data.color} data-flood={product.data.color}>
             <Image
               src={product.data.icon}
               alt=""

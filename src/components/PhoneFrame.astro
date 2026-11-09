@@ -7,12 +7,15 @@ interface Props {
   alt: string;
   /** Outer width of the phone in CSS pixels; the bezel and corners scale with it. */
   width: number;
+  /** Fill the parent's width instead; the bezel and corners follow it (container units). */
+  fluid?: boolean;
   class?: string;
   loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "auto";
   style?: string;
 }
 
-const { src, alt, width, class: className, loading = "lazy", style } = Astro.props;
+const { src, alt, width, fluid = false, class: className, loading = "lazy", fetchpriority, style } = Astro.props;
 
 // Proportions of a current flat-screen Android phone with a centred punch-hole camera.
 const bezel = Math.round(width * 0.034);
@@ -20,23 +23,45 @@ const radius = Math.round(width * 0.155);
 const camera = Math.max(6, Math.round(width * 0.036));
 ---
 
-<div
-  class:list={["phone", className]}
-  style={`width:${width}px; padding:${bezel}px; border-radius:${radius}px;${style ? ` ${style}` : ""}`}
->
-  <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
-    <Image
-      src={src}
-      alt={alt}
-      widths={[width, width * 2]}
-      sizes={`${width}px`}
-      loading={loading}
-      class="size-full object-cover object-top"
-    />
-  </div>
-  <span
-    class="phone-camera"
-    style={`width:${camera}px; height:${camera}px; top:${bezel + camera}px`}
-    aria-hidden="true"
-  ></span>
-</div>
+{
+  fluid ? (
+    <div class:list={["phone-fluid", className]} style={style}>
+      <div class="phone phone--fluid">
+        <div class="phone-screen">
+          <Image
+            src={src}
+            alt={alt}
+            widths={[width, width * 2]}
+            sizes={`${width}px`}
+            loading={loading}
+            fetchpriority={fetchpriority}
+            class="size-full object-cover object-top"
+          />
+        </div>
+        <span class="phone-camera" aria-hidden="true" />
+      </div>
+    </div>
+  ) : (
+    <div
+      class:list={["phone", className]}
+      style={`width:${width}px; padding:${bezel}px; border-radius:${radius}px;${style ? ` ${style}` : ""}`}
+    >
+      <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
+        <Image
+          src={src}
+          alt={alt}
+          widths={[width, width * 2]}
+          sizes={`${width}px`}
+          loading={loading}
+          fetchpriority={fetchpriority}
+          class="size-full object-cover object-top"
+        />
+      </div>
+      <span
+        class="phone-camera"
+        style={`width:${camera}px; height:${camera}px; top:${bezel + camera}px`}
+        aria-hidden="true"
+      />
+    </div>
+  )
+}

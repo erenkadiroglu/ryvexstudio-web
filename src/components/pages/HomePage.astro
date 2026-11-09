@@ -4,11 +4,12 @@ import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
 import Manifesto from "@/components/Manifesto.astro";
+import Results from "@/components/Results.astro";
 import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
-import { getProducts, toWallItem } from "@/lib/products";
+import { getProducts, toWallItems } from "@/lib/products";
 
 interface Props {
   lang: Lang;
@@ -16,7 +17,8 @@ interface Props {
 
 const { lang } = Astro.props;
 const products = await getProducts();
-const items = products.map((p) => toWallItem(p, lang));
+// Wall items carry a small copy of the first real screen, shown behind the icon on hover.
+const items = await toWallItems(products, lang, 240);
 const featured = products.filter((p) => p.data.featured);
 
 // Hand-placed composition for the drifting icons on the right of the hero.
@@ -140,6 +142,8 @@ const copy = {
 </section>
 
 <Manifesto lang={lang} />
+
+<Results products={products} lang={lang} />
 
 <Disciplines products={products} lang={lang} />
 

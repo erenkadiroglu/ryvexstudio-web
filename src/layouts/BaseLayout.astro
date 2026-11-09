@@ -35,6 +35,9 @@ const alternates = isNotFound
       { hreflang: "x-default", href: new URL(alternatePath(Astro.url, "tr"), Astro.site) },
     ];
 const ogImageUrl = new URL(ogImage, Astro.site);
+// The text face is preloaded so the first paint already uses it (Latin and Turkish letters).
+import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2?url";
 ---
 
 <!doctype html>
@@ -52,6 +55,8 @@ const ogImageUrl = new URL(ogImage, Astro.site);
       href={`${lang === "tr" ? "/gunluk" : "/en/journal"}/rss.xml`}
     />
     {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geistLatinExt} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
