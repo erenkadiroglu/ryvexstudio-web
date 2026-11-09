@@ -76,3 +76,37 @@ test("the panel opens without configuration errors", async ({ browser }) => {
   await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute("content", "noindex, nofollow");
   await context.close();
 });
+
+// Under its production Content-Security-Policy the panel must still load its icon font and the
+// site's typeface; a policy that blocks them would leave the panel without icons.
+test("the panel keeps its icons and type under its security policy", async ({ browser }) => {
+  const headers = fs.readFileSync("public/_headers", "utf8");
+  const csp = headers.split("/panel")[1]?.match(/^\s+Content-Security-Policy: (.+)$/m)?.[1];
+  expect(csp, "panel CSP in public/_headers").toBeTruthy();
+  const context = await browser.newContext({ locale: "tr-TR" });
+  const page = await context.newPage();
+  await page.route("**/panel", async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp! } });
+  });
+  await page.goto("/panel", { waitUntil: "networkidle" });
+  await expect(page.getByRole("button", { name: "Yerel Repo ile Çalış" })).toBeVisible();
+  const loaded = await page.evaluate(async () => {
+    await document.fonts.ready;
+    return [...document.fonts].filter((f) => f.status === "loaded").map((f) => f.family.replaceAll('"', ""));
+  });
+  expect(loaded).toContain("Material Symbols Outlined");
+  expect(loaded).toContain("Geist Variable");
+  // Proof that the policy is really in force: an image from a host it does not allow is refused.
+  const refused = await page.evaluate(
+    () =>
+      new Promise<string>((resolve) => {
+        document.addEventListener("securitypolicyviolation", (e) => resolve(e.effectiveDirective), { once: true });
+        const img = new Image();
+        img.src = "https://example.com/probe.png";
+        setTimeout(() => resolve("not refused"), 3000);
+      }),
+  );
+  expect(refused).toBe("img-src");
+  await context.close();
+});

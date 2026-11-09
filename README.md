@@ -42,6 +42,9 @@ MIT lisanslı, sürümü `package.json`'da sabit).
 - **Alanlar:** `src/panel/config.ts`. İçerik şeması (`src/content.config.ts`) değiştiğinde bu
   dosya da aynı commit'te güncellenir; `tests/panel.spec.ts`, içerikte kullanılan her alanın
   panelde tanımlı olduğunu denetler.
+- **Görünüm:** Panel sitenin yazı tipi, vişne rengi ve sıcak gri tonlarıyla `src/panel/theme.css`
+  içinden, yalnızca panelin kendi CSS değişkenleri değiştirilerek giydirilir; düzenin kendisine
+  dokunulmaz, böylece güncellemeler onu bozmaz.
 - **Ayarlar:** İletişim adresleri `src/config/contact.json`, bağlantılar
   `src/config/integrations.json` dosyasındadır; panelden de düzenlenir.
 
