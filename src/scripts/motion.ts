@@ -4,6 +4,7 @@
  */
 
 import Lenis from "lenis";
+import { navigate } from "astro:transitions/client";
 import "lenis/dist/lenis.css";
 
 const root = document.documentElement;
@@ -21,6 +22,41 @@ function startSmoothScroll() {
   lenis = null;
   if (reducedMotion.matches) return;
   lenis = new Lenis({ autoRaf: true, anchors: true, lerp: 0.1 });
+}
+
+/* ---------- Colour flood: a product's colour spreads from the click, its page opens out of it ---------- */
+
+const FLOOD_IN = 560;
+const FLOOD_OUT = 520;
+
+document.addEventListener("click", (event) => {
+  if (reducedMotion.matches || event.defaultPrevented || event.button !== 0) return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = (event.target as Element | null)?.closest<HTMLAnchorElement>("a[data-flood]");
+  if (!link || link.target === "_blank" || link.origin !== location.origin) return;
+  event.preventDefault();
+  const flood = document.createElement("div");
+  flood.className = "flood";
+  flood.style.backgroundColor = link.dataset.flood ?? "";
+  // Appended to <html>, not <body>, so it stays in place while the page underneath is swapped.
+  root.append(flood);
+  const x = `${event.clientX}px`;
+  const y = `${event.clientY}px`;
+  flood
+    .animate(
+      { clipPath: [`circle(0px at ${x} ${y})`, `circle(150vmax at ${x} ${y})`] },
+      { duration: FLOOD_IN, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "forwards" },
+    )
+    .finished.then(() => navigate(link.href));
+  // Capture phase, so this runs before the router's own link handler.
+}, true);
+
+function clearFlood() {
+  for (const flood of document.querySelectorAll<HTMLElement>(".flood")) {
+    flood
+      .animate({ opacity: [1, 0] }, { duration: FLOOD_OUT, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", fill: "forwards" })
+      .finished.then(() => flood.remove());
+  }
 }
 
 /* ---------- Page tint ---------- */
@@ -146,9 +182,29 @@ function runShowcase() {
   const screens = [...showcase.querySelectorAll<HTMLElement>(".showcase-screen")];
   const device = showcase.querySelector<HTMLElement>(".showcase-device");
 
+  const rail = [...showcase.querySelectorAll<HTMLButtonElement>("[data-rail]")];
+  rail.forEach((button, i) =>
+    button.addEventListener(
+      "click",
+      () => {
+        const step = steps[i];
+        if (!step) return;
+        const y = step.getBoundingClientRect().top + window.scrollY - (window.innerHeight - step.offsetHeight) / 2;
+        if (lenis) lenis.scrollTo(y);
+        else window.scrollTo({ top: y });
+      },
+      { signal: pageListeners.signal },
+    ),
+  );
+
   const activate = (index: number) => {
     steps.forEach((step, i) => step.classList.toggle("is-active", i === index));
     screens.forEach((screen, i) => screen.classList.toggle("is-active", i === index));
+    rail.forEach((button, i) => {
+      button.classList.toggle("is-active", i === index);
+      if (i === index) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    });
     const step = steps[index];
     if (device && step) device.dataset.kind = step.dataset.kind ?? "phone";
     if (!reducedMotion.matches) setBandTint(step?.dataset.color);
@@ -192,6 +248,58 @@ function revealOnView() {
     { rootMargin: "0px 0px -20% 0px" },
   );
   targets.forEach((t) => observer.observe(t));
+  observers.push(observer);
+}
+
+/* ---------- Product page opening: as you scroll, the phone turns and steps back ---------- */
+
+function runProductHero() {
+  const hero = document.querySelector<HTMLElement>("[data-pd-hero]");
+  const phone = hero?.querySelector<HTMLElement>(".pd-phone > *");
+  if (!hero || !phone || reducedMotion.matches || phone.offsetParent === null) return;
+  let frame = 0;
+  const render = () => {
+    frame = 0;
+    const progress = clamp(window.scrollY / Math.max(1, hero.offsetHeight));
+    phone.style.transform =
+      `translate3d(${(-progress * 40).toFixed(1)}px, ${(progress * 60).toFixed(1)}px, 0) ` +
+      `rotateY(${(-progress * 18).toFixed(2)}deg) rotateX(${(progress * 6).toFixed(2)}deg) scale(${(1 - progress * 0.08).toFixed(3)})`;
+  };
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(render);
+  };
+  window.addEventListener("scroll", schedule, { passive: true, signal: pageListeners.signal });
+  render();
+}
+
+/* ---------- Results: each figure counts up once, from zero to its real value ---------- */
+
+function runCounts() {
+  const counters = [...document.querySelectorAll<HTMLElement>("[data-count]")];
+  if (!counters.length || reducedMotion.matches) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        observer.unobserve(el);
+        const target = Number(el.dataset.count);
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = clamp((now - start) / 1600);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 4))));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    },
+    { rootMargin: "0px 0px -20% 0px" },
+  );
+  counters.forEach((el) => {
+    // Start from zero only when the figure is still below the fold.
+    if (el.getBoundingClientRect().top > window.innerHeight) el.textContent = "0";
+    observer.observe(el);
+  });
   observers.push(observer);
 }
 
@@ -239,7 +347,7 @@ function runHero() {
     icons.forEach((el) => (el.style.transform = "none"));
     const sy = window.scrollY;
     flights = icons.flatMap((el) => {
-      const target = items.find((li) => li.dataset.product === el.dataset.product)?.querySelector("img");
+      const target = items.find((li) => li.dataset.product === el.dataset.product)?.querySelector(".wall-icon");
       const float = el.firstElementChild as HTMLElement | null;
       if (!target || !float) return [];
       const a = el.getBoundingClientRect();
@@ -277,7 +385,7 @@ function runHero() {
 
     for (const li of items) {
       const hasFlight = flights.some((f) => f.el.dataset.product === li.dataset.product);
-      const img = li.querySelector<HTMLElement>("img");
+      const img = li.querySelector<HTMLElement>(".wall-icon");
       const text = [...li.querySelectorAll<HTMLElement>("a > span")];
       if (img) img.style.opacity = hasFlight ? (landed ? "1" : "0") : String(clamp((e - 0.6) / 0.4));
       text.forEach((t) => (t.style.opacity = String(clamp((e - 0.7) / 0.3))));
@@ -352,12 +460,15 @@ function runManifesto() {
 
 document.addEventListener("astro:page-load", () => {
   startSmoothScroll();
+  clearFlood();
   setTint(undefined);
   setBandTint(undefined);
   runHero();
   revealWalls();
   runShowcase();
   runStory();
+  runProductHero();
+  runCounts();
   revealOnView();
   runManifesto();
 });

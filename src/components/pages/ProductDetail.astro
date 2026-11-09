@@ -108,6 +108,10 @@ const facts = [
   data.releaseDate && { label: copy.released, value: dateFormat.format(data.releaseDate) },
 ].filter(Boolean) as { label: string; value: string; mono?: boolean }[];
 
+// The opening: the product's colour as a soft light behind the phone, over a light tint of it.
+const heroGround = (color: string) =>
+  `background: radial-gradient(60% 80% at 78% 45%, color-mix(in srgb, ${color} 20%, transparent), transparent 70%), color-mix(in srgb, ${color} 7%, var(--rv-surface));`;
+
 // The product's own colour, mixed into the page surface, carries the top of the page.
 const tint = (color: string, pct: number) =>
   `background-color: color-mix(in srgb, ${color} ${pct}%, var(--rv-surface));`;
@@ -134,14 +138,14 @@ const camera = Math.round(phoneWidth * 0.036);
 
 <article>
   <!-- Product band: header and screenshots sit on the product's own tint. -->
-  <div style={tint(data.color, 7)}>
-    <header class="container-page grid items-center gap-12 pt-14 pb-16 md:grid-cols-12 md:pt-20 md:pb-20">
+  <div style={heroGround(data.color)}>
+    <header class="pd-hero container-page grid items-center gap-12 pt-14 pb-16 md:min-h-[calc(100svh-73px)] md:grid-cols-12 md:py-12" data-pd-hero>
       <div class="md:col-span-7">
         <a href={base} class="group inline-flex items-center gap-2 text-label font-medium text-secondary hover:text-primary">
           <span aria-hidden="true" class="transition-transform duration-300 ease-[var(--ease-settle)] group-hover:-translate-x-1">←</span>
           {copy.back}
         </a>
-        <div class="mt-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10">
+        <div class="mt-8 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10">
           <Image
             src={data.icon}
             alt=""
@@ -165,7 +169,7 @@ const camera = Math.round(phoneWidth * 0.036);
           </div>
         </div>
         <p class="mt-8 max-w-[40ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
-        {soon && storeList && <p class="mt-10 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>}
+        {soon && storeList && <p class="mt-8 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>}
         {
           stores.length > 0 && (
             <ul class="mt-10 flex flex-wrap gap-3">
@@ -189,7 +193,9 @@ const camera = Math.round(phoneWidth * 0.036);
       <div class="hidden justify-center md:col-span-5 md:flex" aria-hidden="true">
         {
           shot && kind === "phone" ? (
-            <PhoneFrame src={shot} alt="" width={280} loading="eager" />
+            <div class="pd-phone">
+              <PhoneFrame src={shot} alt="" width={290} fluid loading="eager" fetchpriority="high" />
+            </div>
           ) : shot ? (
             <div class="object-depth relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-outline bg-surface">
               <Image src={shot} alt="" widths={[400, 800]} sizes="520px" class="absolute inset-0 size-full object-cover object-top" />
@@ -347,7 +353,7 @@ const camera = Math.round(phoneWidth * 0.036);
         <ul class="mt-8 grid gap-6 sm:grid-cols-3">
           {related.map((p) => (
             <li>
-              <a href={`${base}/${p.id}`} class="group flex items-center gap-4 rounded-xl border border-outline p-4 transition-colors duration-150 hover:bg-neutral">
+              <a href={`${base}/${p.id}`} data-flood={p.data.color} class="group flex items-center gap-4 rounded-xl border border-outline p-4 transition-colors duration-150 hover:bg-neutral">
                 <Image src={p.data.icon} alt="" width={56} height={56} class="shape-icon size-14" />
                 <span>
                   <span class="block text-title font-semibold">{p.data.name}</span>
@@ -365,6 +371,7 @@ const camera = Math.round(phoneWidth * 0.036);
     next && (
       <a
         href={`${base}/${next.id}`}
+        data-flood={next.data.color}
         class="group block border-t border-outline"
         style={tint(next.data.color, 7)}
       >

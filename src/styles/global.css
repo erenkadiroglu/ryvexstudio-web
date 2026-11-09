@@ -159,15 +159,24 @@
     }
   }
 
+  /* Inline links stay underlined; on hover the line is redrawn from the left, a little bolder. */
   .link-inline {
     color: var(--rv-tertiary);
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 calc(100% - 0px);
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition:
+      background-size 450ms var(--ease-settle),
+      text-decoration-color 200ms;
   }
 
   .link-inline:hover {
-    text-decoration-thickness: 2px;
+    text-decoration-color: transparent;
+    background-size: 100% 2px;
   }
 
   .shape-icon {
@@ -421,6 +430,106 @@ html[data-theme="dark"] .showcase-band {
   border-radius: 9999px;
   background: #050405;
   box-shadow: inset 0 0 0 1.5px #1f1b1d;
+}
+
+/* A phone that fills its parent: bezel, corners and camera follow the width (container units). */
+.phone-fluid {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.phone--fluid {
+  width: 100%;
+  padding: 3.4cqw;
+  border-radius: 15.5cqw;
+}
+
+.phone--fluid .phone-screen {
+  border-radius: 12.1cqw;
+}
+
+.phone--fluid .phone-camera {
+  width: 3.6cqw;
+  height: 3.6cqw;
+  top: 7cqw;
+}
+
+/* Wall: the product's screen peeks up from behind its icon on hover (fine pointers only). */
+.wall-peek {
+  translate: -50% 40px;
+  opacity: 0;
+  rotate: -4deg;
+  transition:
+    translate 650ms var(--ease-settle),
+    opacity 350ms var(--ease-settle),
+    rotate 650ms var(--ease-settle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wall-link:hover .wall-peek,
+  .wall-link:focus-visible .wall-peek {
+    translate: -50% -8px;
+    opacity: 1;
+    rotate: 0deg;
+  }
+}
+
+/* Showcase rail: the active product's icon is lit and ringed; the others rest dimmed. */
+.showcase-rail-item {
+  opacity: 0.45;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  transition:
+    opacity 300ms var(--ease-settle),
+    outline-color 300ms var(--ease-settle),
+    transform 300ms var(--ease-settle);
+}
+
+.showcase-rail-item:hover,
+.showcase-rail-item.is-active {
+  opacity: 1;
+}
+
+.showcase-rail-item.is-active {
+  outline-color: rgb(255 255 255 / 0.5);
+  transform: scale(1.08);
+}
+
+/* Journal covers: deep ink lit by the post's products; the icons lift a little on hover. */
+.journal-cover {
+  background:
+    radial-gradient(55% 70% at 20% 30%, color-mix(in srgb, var(--c1) 55%, transparent), transparent 70%),
+    radial-gradient(50% 65% at 85% 25%, color-mix(in srgb, var(--c2) 50%, transparent), transparent 70%),
+    radial-gradient(60% 70% at 55% 100%, color-mix(in srgb, var(--c3) 45%, transparent), transparent 70%),
+    #160f12;
+}
+
+.journal-cover-icons > * {
+  transition: transform 700ms var(--ease-settle);
+  transition-delay: calc(var(--i, 0) * 50ms);
+}
+
+.group:hover .journal-cover-icons > * {
+  transform: translateY(-8px);
+}
+
+/* The colour flood that carries a click on a product into its page. */
+.flood {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+}
+
+/* Product page opening: one screen tall below the header; the phone is sized to fit it. */
+.pd-phone {
+  width: min(290px, calc((100svh - 73px - 112px) * 0.449));
+  perspective: 1400px;
+}
+
+.pd-phone > * {
+  transform-origin: 50% 40%;
+  will-change: transform;
 }
 
 /* In the showcase the device becomes this phone when the active product has a screenshot. */

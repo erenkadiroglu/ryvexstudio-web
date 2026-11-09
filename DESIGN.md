@@ -531,6 +531,31 @@ açıksa kapatılır.
   maskeden yükselir, büyük R işareti çizilir ve butonlar belirir. Alt bilginin
   en altında "Ryvex Studio" adı sayfa ızgarası genişliğinde yazılıdır ve görünür
   olunca yerine yükselir. Hareket azaltma açıksa hepsi baştan yerindedir.
+- **Renk taşması (sayfa geçişi):** Bir ürüne tıklanınca o ürünün rengi
+  tıklanan noktadan daire olarak tüm ekrana yayılır (560ms); ürün sayfası bu
+  rengin altında açılır ve renk 520ms'de çözülür. Hareket azaltma açıksa normal
+  geçiş kullanılır.
+- **Ürün sayfası açılışı:** Ürünün üst bölümü başlığın altındaki ekran
+  yüksekliği kadardır; metin ve telefon dikeyde ortalanır, telefonun boyu kısa
+  ekranlarda ekrana sığacak şekilde küçülür. Aşağı kaydırıldıkça telefon hafifçe
+  döner (en fazla 18 derece) ve geri çekilir.
+- **Rakamlarla:** Ürünlerin kendi ekranlarından okunan gerçek değerler (%95
+  küçülme, 21 taş, 5 dünya) büyük ve ürün renginde yazılır; ekrana girince
+  sıfırdan sayarak dolar (1600ms). Hiçbir değer yuvarlanmaz ya da süslenmez.
+- **Duvarda ekran önizlemesi:** Fareyle bir ürünün ikonuna gelince arkasından
+  o ürünün ilk gerçek ekranını gösteren küçük bir telefon yükselir.
+- **Cam başlık ve bağlantılar:** Kaydırınca başlık yüzde 86 opak, buzlu cama
+  döner. Metin içi bağlantıların alt çizgisi üzerine gelince soldan sağa daha
+  kalın çizilir; çizgi hiçbir zaman tamamen kaybolmaz.
+- **Vitrin göstergesi:** Koyu vitrin bandında ürün ikonlarından oluşan dikey
+  bir sıra, hangi üründe olunduğunu gösterir ve tıklanınca o ürüne kaydırır.
+- **Günlük kapakları:** Her yazının kapağı, yazının konu aldığı ürünlerin
+  renkleriyle aydınlanan koyu bir zemin ve o ürünlerin ikonlarıdır (`products`
+  alanı). İlk yazı geniş, diğerleri iki sütunlu kartlarla gösterilir.
+- **Basın kiti:** Logo ve sembol, kendileri için yapıldıkları zeminlerde büyük
+  karolar olarak durur; indirme düğmeleri karonun üzerindedir.
+- **Hız:** Duvar ve kart görselleri derlemede WebP'ye çevrilir (ikon 320px);
+  metin yazı tipi önden yüklenir. Ana sayfa mobilde yaklaşık 110 KB'tır.
 - **Stüdyo bandı:** Stüdyo sayfası, ürün renklerinin ışığıyla aydınlanan koyu
   bir bantla açılır; cümle kelime kelime yükselir, altında kurucu, kapsam ve
   ürünler yazar.

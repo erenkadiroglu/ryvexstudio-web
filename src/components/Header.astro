@@ -19,7 +19,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 ---
 
 <header
-  class="site-header sticky top-0 z-40 border-b border-transparent bg-[var(--rv-page)] transition-[background-color,border-color] duration-500 data-[scrolled]:border-outline"
+  class="site-header sticky top-0 z-40 border-b border-transparent bg-[var(--rv-page)] transition-[background-color,border-color] duration-500 data-[scrolled]:border-outline data-[scrolled]:bg-[color-mix(in_srgb,var(--rv-page)_86%,transparent)] data-[scrolled]:backdrop-blur-xl data-[scrolled]:backdrop-saturate-150"
 >
   <div class="container-page flex h-[72px] items-center justify-between">
     <Logo href={route("home", lang)} />
