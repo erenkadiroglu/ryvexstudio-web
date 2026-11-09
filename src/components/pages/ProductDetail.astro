@@ -1,4 +1,5 @@
 ---
+import { existsSync } from "node:fs";
 import ClosingBand from "@/components/ClosingBand.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import { Image } from "astro:assets";
@@ -38,6 +39,9 @@ const copy = {
     version: "Sürüm",
     released: "Yayın tarihi",
     privacy: "Gizlilik politikası",
+    glance: "Gizlilik özeti",
+    releasesFeed: "Sürüm notlarını RSS ile takip edin",
+    fullPolicy: "Gizlilik politikasının tamamı",
     support: "Destek",
     back: "Tüm ürünler",
     features: "Öne çıkan özellikler",
@@ -61,6 +65,9 @@ const copy = {
     version: "Version",
     released: "Released",
     privacy: "Privacy policy",
+    glance: "Privacy at a glance",
+    releasesFeed: "Follow release notes via RSS",
+    fullPolicy: "Read the full privacy policy",
     support: "Support",
     back: "All products",
     features: "Highlights",
@@ -94,11 +101,33 @@ const storeList =
     ? `${storeNames.slice(0, -1).join(", ")}${lang === "tr" ? " ve " : " and "}${storeNames.at(-1)}`
     : (storeNames[0] ?? "");
 
+// Official store badges are used when their files are in public/badges/ (see the badge guide);
+// until then the stores are plain buttons with the same words.
+const badgeFile = (store: string) =>
+  ["svg", "png"].map((ext) => `badges/${store}-${lang}.${ext}`).find((f) => existsSync(`public/${f}`));
 const stores = soon ? [] : [
-  data.links.appStore && { href: data.links.appStore, label: copy.appStore },
-  data.links.googlePlay && { href: data.links.googlePlay, label: copy.googlePlay },
+  data.links.appStore && { href: data.links.appStore, label: copy.appStore, badge: badgeFile("app-store") },
+  data.links.googlePlay && { href: data.links.googlePlay, label: copy.googlePlay, badge: badgeFile("google-play") },
   data.links.web && { href: data.links.web, label: copy.web },
-].filter(Boolean) as { href: string; label: string }[];
+].filter(Boolean) as { href: string; label: string; badge?: string }[];
+
+// Privacy at a glance, read from the same record as the full policy.
+const serverData = data.privacy.dataCollected.filter((d) => d.storage === "server").length;
+const thirdParties = data.privacy.thirdParties;
+const privacyGlance = {
+  tr: [
+    { icon: "user", title: data.privacy.accountRequired ? "Hesap gerekir" : "Hesap gerekmez", text: data.privacy.accountRequired ? "Kullanmak için hesap açmanız gerekir." : "Hesap açmadan kullanabilirsiniz." },
+    { icon: data.privacy.tracking ? "eye" : "eye-off", title: data.privacy.tracking ? "Reklam takibi var" : "Reklam takibi yok", text: data.privacy.tracking ? "Reklamlar için takip yapılır; ayrıntılar politikada." : "Reklam ya da pazarlama amacıyla takip yapılmaz." },
+    { icon: serverData ? "server" : "phone", title: serverData ? `${serverData} veri türü sunucuda` : "Veriler cihazınızda", text: serverData ? "Hangi verinin nerede tutulduğu politikada yazar." : "Hiçbir veri cihazınızdan çıkmaz." },
+    { icon: "share", title: thirdParties.length ? `${thirdParties.length} üçüncü taraf hizmet` : "Üçüncü taraf yok", text: thirdParties.length ? thirdParties.map((t) => t.name).join(", ") : "Verileriniz kimseyle paylaşılmaz." },
+  ],
+  en: [
+    { icon: "user", title: data.privacy.accountRequired ? "Account required" : "No account needed", text: data.privacy.accountRequired ? "You need an account to use it." : "Use it without creating an account." },
+    { icon: data.privacy.tracking ? "eye" : "eye-off", title: data.privacy.tracking ? "Ad tracking used" : "No ad tracking", text: data.privacy.tracking ? "Tracking is used for ads; details in the policy." : "No tracking for advertising or marketing." },
+    { icon: serverData ? "server" : "phone", title: serverData ? `${serverData} ${serverData === 1 ? "kind" : "kinds"} of data on servers` : "Data stays on your device", text: serverData ? "The policy says which data is kept where." : "No data leaves your device." },
+    { icon: "share", title: thirdParties.length ? `${thirdParties.length} third-party ${thirdParties.length === 1 ? "service" : "services"}` : "No third parties", text: thirdParties.length ? thirdParties.map((t) => t.name).join(", ") : "Your data is shared with no one." },
+  ],
+}[lang];
 
 const facts = [
   { label: copy.developer, value: site.name },
@@ -179,13 +208,19 @@ const camera = Math.round(phoneWidth * 0.036);
             <ul class="mt-10 flex flex-wrap gap-3">
               {stores.map((store) => (
                 <li>
-                  <a
-                    href={store.href}
-                    rel="noopener"
-                    class="inline-flex rounded-full bg-primary px-[22px] py-[14px] text-label font-medium text-surface transition-opacity duration-150 hover:opacity-85"
-                  >
-                    {store.label}
-                  </a>
+                  {store.badge ? (
+                    <a href={store.href} rel="noopener" class="inline-block transition-opacity duration-150 hover:opacity-85">
+                      <img src={`/${store.badge}`} alt={store.label} height="48" class="h-12 w-auto" />
+                    </a>
+                  ) : (
+                    <a
+                      href={store.href}
+                      rel="noopener"
+                      class="inline-flex rounded-full bg-primary px-[22px] py-[14px] text-label font-medium text-surface transition-opacity duration-150 hover:opacity-85"
+                    >
+                      {store.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -308,6 +343,31 @@ const camera = Math.round(phoneWidth * 0.036);
   }
 
   <div class="container-page py-section-mobile md:py-section">
+    <section aria-labelledby="gizlilik-ozeti" class="mb-16 md:mb-20">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="gizlilik-ozeti" class="text-headline-lg font-semibold">{copy.glance}</h2>
+        <a href={privacyHref} class="link-inline text-body-md">{copy.fullPolicy}</a>
+      </div>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          privacyGlance.map((item) => (
+            <li class="rounded-xl border border-outline p-6">
+              <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style={`color:color-mix(in srgb, ${data.color} 60%, var(--rv-primary))`}>
+                {item.icon === "user" && (<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></>)}
+                {item.icon === "eye" && (<><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></>)}
+                {item.icon === "eye-off" && (<><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /><path d="m2 2 20 20" /></>)}
+                {item.icon === "phone" && (<><rect width="14" height="20" x="5" y="2" rx="2" /><path d="M12 18h.01" /></>)}
+                {item.icon === "server" && (<><rect width="20" height="8" x="2" y="2" rx="2" /><rect width="20" height="8" x="2" y="14" rx="2" /><path d="M6 6h.01M6 18h.01" /></>)}
+                {item.icon === "share" && (<><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98" /></>)}
+              </svg>
+              <h3 class="mt-5 text-title font-semibold">{item.title}</h3>
+              <p class="mt-2 text-body-sm text-secondary">{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
     <section aria-labelledby="urun-bilgileri" class="rounded-xl bg-neutral p-8 md:p-10">
       <h2 id="urun-bilgileri" class="sr-only">{copy.facts}</h2>
       <dl class="grid gap-x-6 gap-y-6 text-body-sm sm:grid-cols-2 lg:grid-cols-4">
@@ -361,6 +421,9 @@ const camera = Math.round(phoneWidth * 0.036);
               </li>
             ))}
           </ol>
+          <a href={lang === "tr" ? "/urunler/surumler.xml" : "/en/products/releases.xml"} class="link-inline mt-8 inline-block text-body-sm">
+            {copy.releasesFeed}
+          </a>
         </section>
       )
     }
