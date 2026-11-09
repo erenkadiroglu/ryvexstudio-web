@@ -1,0 +1,295 @@
+---
+/**
+ * The product's real screens, large: arrows, swipe or the keyboard to move, and (where the
+ * screens exist) a switch between the light and dark theme and between Turkish and English.
+ * Opened from the "Screens" button, the large phone or a screen in the strip.
+ */
+import { getImage } from "astro:assets";
+import type { Lang } from "@/i18n/ui";
+import type { Product } from "@/lib/products";
+
+interface Props {
+  product: Product;
+  lang: Lang;
+}
+
+const { product, lang } = Astro.props;
+const { data } = product;
+
+const copy = {
+  tr: {
+    label: `${data.name} ekranları`,
+    close: "Kapat",
+    prev: "Önceki ekran",
+    next: "Sonraki ekran",
+    theme: "Tema",
+    light: "Aydınlık",
+    dark: "Karanlık",
+    language: "Dil",
+    position: "{i} / {n}",
+    missing: "Bu ekranın bu hâli henüz yok; en yakın hâli gösteriliyor.",
+    thumbs: "Ekranlar",
+    go: (i: number) => `${i}. ekrana git`,
+  },
+  en: {
+    label: `${data.name} screens`,
+    close: "Close",
+    prev: "Previous screen",
+    next: "Next screen",
+    theme: "Theme",
+    light: "Light",
+    dark: "Dark",
+    language: "Language",
+    position: "{i} of {n}",
+    missing: "This screen isn't available in this version yet; the closest one is shown.",
+    thumbs: "Screens",
+    go: (i: number) => `Go to screen ${i}`,
+  },
+}[lang];
+
+// Every variant at gallery size, as WebP so it shows in every browser the gallery runs in.
+const big = async (src: ImageMetadata | undefined) =>
+  src ? (await getImage({ src, width: 760, format: "webp" })).src : undefined;
+const small = async (src: ImageMetadata) =>
+  (await getImage({ src, width: 120, format: "webp" })).src;
+
+const screens = await Promise.all(
+  data.screenshots.map(async (s) => ({
+    tr: { light: (await big(s.src))!, dark: await big(s.dark) },
+    en: { light: await big(s.en), dark: await big(s.darkEn) },
+    thumb: await small(s.src),
+    alt: { tr: s.alt.tr, en: s.alt.en },
+  })),
+);
+const hasDark = screens.some((s) => s.tr.dark || s.en.dark);
+const hasEnglish = screens.some((s) => s.en.light);
+const gallery = {
+  screens,
+  lang,
+  copy: { position: copy.position, missing: copy.missing, name: data.name },
+};
+---
+
+{screens.length > 0 && (
+  <dialog class="screen-gallery" aria-label={copy.label} data-lenis-prevent>
+    <div class="sg-top">
+      <div class="sg-switches">
+        {hasDark && (
+          <div class="sg-switch" role="group" aria-label={copy.theme}>
+            <button type="button" data-sg-theme="light" aria-pressed="true">
+              {copy.light}
+            </button>
+            <button type="button" data-sg-theme="dark" aria-pressed="false">
+              {copy.dark}
+            </button>
+          </div>
+        )}
+        {hasEnglish && (
+          <div class="sg-switch" role="group" aria-label={copy.language}>
+            <button
+              type="button"
+              data-sg-lang="tr"
+              aria-pressed={lang === "tr" ? "true" : "false"}
+              lang="tr"
+            >
+              Türkçe
+            </button>
+            <button
+              type="button"
+              data-sg-lang="en"
+              aria-pressed={lang === "en" ? "true" : "false"}
+              lang="en"
+            >
+              English
+            </button>
+          </div>
+        )}
+      </div>
+      <p class="sg-count" aria-live="polite" />
+      <button type="button" class="sg-close" data-sg-close aria-label={copy.close}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="sg-stage">
+      <button type="button" class="sg-arrow" data-sg-step="-1" aria-label={copy.prev}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M15 5l-7 7 7 7" />
+        </svg>
+      </button>
+      <figure class="sg-figure">
+        <div class="sg-phone">
+          <img class="sg-image" alt="" decoding="async" />
+        </div>
+        <figcaption class="sg-caption" />
+      </figure>
+      <button type="button" class="sg-arrow" data-sg-step="1" aria-label={copy.next}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <ul class="sg-thumbs" aria-label={copy.thumbs}>
+      {screens.map((s, i) => (
+        <li>
+          <button type="button" data-sg-go={i} aria-label={copy.go(i + 1)}>
+            <img src={s.thumb} alt="" width="48" height="107" loading="lazy" decoding="async" />
+          </button>
+        </li>
+      ))}
+    </ul>
+    <script type="application/json" class="sg-data" set:html={JSON.stringify(gallery)} />
+  </dialog>
+)}
+
+<script>
+  type Variant = { light?: string; dark?: string };
+  type Screen = { tr: Variant; en: Variant; alt: { tr: string; en: string } };
+  type Data = {
+    screens: Screen[];
+    lang: "tr" | "en";
+    copy: { position: string; missing: string; name: string };
+  };
+
+  let index = 0;
+  let theme: "light" | "dark" = "light";
+  let language: "tr" | "en" = "tr";
+
+  const dialog = () => document.querySelector<HTMLDialogElement>(".screen-gallery");
+  const read = (d: HTMLDialogElement): Data =>
+    JSON.parse(d.querySelector(".sg-data")?.textContent ?? "{}");
+
+  /** The wanted version of a screen, or the nearest one that exists. */
+  function pick(s: Screen) {
+    const inLang = language === "en" && s.en.light ? s.en : s.tr;
+    const wanted = theme === "dark" ? inLang.dark : inLang.light;
+    const exact = Boolean(wanted) && (language === "tr" || Boolean(s.en.light));
+    return { src: wanted ?? inLang.light ?? s.tr.light ?? "", exact };
+  }
+
+  function show(d: HTMLDialogElement, next: number, direction = 0) {
+    const data = read(d);
+    const n = data.screens.length;
+    index = (next + n) % n;
+    const screen = data.screens[index];
+    const { src, exact } = pick(screen);
+    const img = d.querySelector<HTMLImageElement>(".sg-image")!;
+    img.src = src;
+    img.alt = `${data.copy.name}: ${screen.alt[language]}`;
+    if (direction && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      img.animate(
+        [
+          { opacity: 0, transform: `translateX(${direction * 28}px)` },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 320, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" },
+      );
+    }
+    d.querySelector(".sg-caption")!.textContent = exact
+      ? screen.alt[language]
+      : `${screen.alt[language]} · ${data.copy.missing}`;
+    d.querySelector(".sg-count")!.textContent = data.copy.position
+      .replace("{i}", String(index + 1))
+      .replace("{n}", String(n));
+    d.querySelectorAll<HTMLButtonElement>("[data-sg-go]").forEach((b, i) =>
+      b.setAttribute("aria-current", String(i === index)),
+    );
+    d.querySelectorAll<HTMLButtonElement>("[data-sg-theme]").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.sgTheme === theme)),
+    );
+    d.querySelectorAll<HTMLButtonElement>("[data-sg-lang]").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.sgLang === language)),
+    );
+    d.dataset.theme = theme;
+  }
+
+  function open(at: number) {
+    const d = dialog();
+    if (!d) return;
+    const data = read(d);
+    // Starts in the visitor's theme and the page's language.
+    theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    language = data.lang;
+    d.showModal();
+    document.dispatchEvent(new CustomEvent("rv:scroll-lock"));
+    show(d, at);
+  }
+
+  document.addEventListener("click", (event) => {
+    const opener = (event.target as Element | null)?.closest<HTMLElement>("[data-gallery-open]");
+    if (opener) {
+      // The story phone opens on the screen it is showing.
+      const active = opener.querySelector<HTMLElement>(".story-screen.is-active");
+      open(Number(active?.dataset.shot ?? opener.dataset.galleryOpen ?? 0));
+      return;
+    }
+    const d = dialog();
+    if (!d?.open) return;
+    const target = event.target as Element;
+    const step = target.closest<HTMLElement>("[data-sg-step]");
+    const go = target.closest<HTMLElement>("[data-sg-go]");
+    const themeButton = target.closest<HTMLElement>("[data-sg-theme]");
+    const langButton = target.closest<HTMLElement>("[data-sg-lang]");
+    if (step) show(d, index + Number(step.dataset.sgStep), Number(step.dataset.sgStep));
+    else if (go) show(d, Number(go.dataset.sgGo), Math.sign(Number(go.dataset.sgGo) - index));
+    else if (themeButton) {
+      theme = themeButton.dataset.sgTheme === "dark" ? "dark" : "light";
+      show(d, index);
+    } else if (langButton) {
+      language = langButton.dataset.sgLang === "en" ? "en" : "tr";
+      show(d, index);
+    } else if (target.closest("[data-sg-close]") || target === d) d.close();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const d = dialog();
+    if (!d?.open) return;
+    if (event.key === "ArrowRight") show(d, index + 1, 1);
+    else if (event.key === "ArrowLeft") show(d, index - 1, -1);
+  });
+
+  // Swipe on touch screens.
+  let startX: number | null = null;
+  document.addEventListener("pointerdown", (event) => {
+    if ((event.target as Element).closest(".sg-figure")) startX = event.clientX;
+  });
+  document.addEventListener("pointerup", (event) => {
+    const d = dialog();
+    if (startX === null || !d?.open) return;
+    const dx = event.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40) show(d, index + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    dialog()?.addEventListener("close", () =>
+      document.dispatchEvent(new CustomEvent("rv:scroll-unlock")),
+    );
+  });
+</script>

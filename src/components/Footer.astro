@@ -86,7 +86,17 @@ import NewsletterForm from "@/components/NewsletterForm.astro";
     </div>
   </div>
   <div class="container-page">
-    <p class="border-t border-outline py-6">© {year} {site.name}. {t("footer.rights")}</p>
+    <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-outline py-6">
+      <p>© {year} {site.name}. {t("footer.rights")}</p>
+      {/* True as long as nothing on the site sets a cookie; see the cookie policy. */}
+      <a href={route("cookies", lang)} class="inline-flex items-center gap-2 hover:text-primary">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3 5 6v5c0 4.4 3 8.3 7 9.5 4-1.2 7-5.1 7-9.5V6l-7-3Z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+        {t("footer.noCookies")}
+      </a>
+    </div>
     <!-- The studio's name, set across the full width of the page, rises into place at the very end. -->
     <div class="footer-word overflow-hidden pb-2" data-reveal-on-view="end" aria-hidden="true">
       <svg class="block w-full text-primary" viewBox="0 0 1000 172" focusable="false">

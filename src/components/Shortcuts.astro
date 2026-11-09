@@ -1,0 +1,170 @@
+---
+/**
+ * Keyboard shortcuts, listed with "?": search, going to the main pages with G and a letter,
+ * switching the theme and the language. They work only when no field is being typed in.
+ */
+import { getLangFromUrl, route } from "@/i18n/ui";
+
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  tr: {
+    title: "Klavye kısayolları",
+    close: "Kapat",
+    then: "sonra",
+    groups: [
+      {
+        name: "Genel",
+        rows: [
+          { keys: ["Ctrl", "K"], label: "Sitede ara" },
+          { keys: ["/"], label: "Sitede ara" },
+          { keys: ["T"], label: "Temayı değiştir" },
+          { keys: ["L"], label: "Dili değiştir (English)" },
+          { keys: ["?"], label: "Bu listeyi aç" },
+        ],
+      },
+      {
+        name: "Git",
+        rows: [
+          { keys: ["G", "H"], label: "Ana sayfa" },
+          { keys: ["G", "P"], label: "Ürünler" },
+          { keys: ["G", "S"], label: "Stüdyo" },
+          { keys: ["G", "J"], label: "Günlük" },
+          { keys: ["G", "C"], label: "İletişim" },
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Keyboard shortcuts",
+    close: "Close",
+    then: "then",
+    groups: [
+      {
+        name: "General",
+        rows: [
+          { keys: ["Ctrl", "K"], label: "Search the site" },
+          { keys: ["/"], label: "Search the site" },
+          { keys: ["T"], label: "Switch theme" },
+          { keys: ["L"], label: "Switch language (Türkçe)" },
+          { keys: ["?"], label: "Open this list" },
+        ],
+      },
+      {
+        name: "Go to",
+        rows: [
+          { keys: ["G", "H"], label: "Home" },
+          { keys: ["G", "P"], label: "Products" },
+          { keys: ["G", "S"], label: "Studio" },
+          { keys: ["G", "J"], label: "Journal" },
+          { keys: ["G", "C"], label: "Contact" },
+        ],
+      },
+    ],
+  },
+}[lang];
+const targets = {
+  h: route("home", lang),
+  p: route("products", lang),
+  s: route("studio", lang),
+  j: route("journal", lang),
+  c: route("contact", lang),
+};
+---
+
+<dialog class="shortcuts" aria-labelledby="kisayollar" data-targets={JSON.stringify(targets)}>
+  <div class="shortcuts-panel">
+    <div class="flex items-center justify-between gap-4">
+      <h2 id="kisayollar" class="text-title font-semibold">
+        {copy.title}
+      </h2>
+      <button type="button" class="shortcuts-close" data-shortcuts-close aria-label={copy.close}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="mt-6 grid gap-8 sm:grid-cols-2">
+      {copy.groups.map((group) => (
+        <section>
+          <h3 class="text-label font-medium text-secondary">{group.name}</h3>
+          <dl class="mt-3 space-y-2.5">
+            {group.rows.map((row) => (
+              <div class="flex items-center justify-between gap-4">
+                <dt class="text-body-sm">{row.label}</dt>
+                <dd class="flex items-center gap-1 text-[0.75rem] text-secondary">
+                  {row.keys.map((key, i) => (
+                    <>
+                      {i > 0 && group.rows === copy.groups[1].rows && <span>{copy.then}</span>}
+                      <kbd data-key={key === "Ctrl" ? "mod" : undefined}>{key}</kbd>
+                    </>
+                  ))}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ))}
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  const typing = (target: EventTarget | null) =>
+    target instanceof Element &&
+    Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
+  const anyDialogOpen = () => Boolean(document.querySelector("dialog[open]"));
+  let awaitingGo = 0;
+
+  document.addEventListener("keydown", (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || typing(event.target)) return;
+    const dialog = document.querySelector<HTMLDialogElement>(".shortcuts");
+    if (event.key === "?") {
+      event.preventDefault();
+      if (dialog?.open) dialog.close();
+      else if (!anyDialogOpen()) dialog?.showModal();
+      return;
+    }
+    if (anyDialogOpen()) return;
+    const key = event.key.toLowerCase();
+    if (awaitingGo && Date.now() - awaitingGo < 1200) {
+      awaitingGo = 0;
+      const targets = JSON.parse(dialog?.dataset.targets ?? "{}") as Record<string, string>;
+      if (targets[key]) {
+        event.preventDefault();
+        void navigate(targets[key]);
+      }
+      return;
+    }
+    if (key === "g") awaitingGo = Date.now();
+    else if (key === "t") document.querySelector<HTMLButtonElement>(".theme-toggle")?.click();
+    else if (key === "l") {
+      const href = document.querySelector<HTMLAnchorElement>("header a[hreflang]")?.href;
+      if (href) void navigate(href);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const dialog = document.querySelector<HTMLDialogElement>(".shortcuts");
+    if (!dialog?.open) return;
+    if ((event.target as Element).closest("[data-shortcuts-close]") || event.target === dialog)
+      dialog.close();
+  });
+
+  // Apple keyboards say ⌘ rather than Ctrl.
+  document.addEventListener("astro:page-load", () => {
+    if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) {
+      document
+        .querySelectorAll(".shortcuts [data-key='mod']")
+        .forEach((k) => (k.textContent = "⌘"));
+    }
+  });
+</script>
