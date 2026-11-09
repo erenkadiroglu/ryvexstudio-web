@@ -33,6 +33,12 @@ const copy = {
       ["Keyif", "Kullanması insanı mutlu etmeli."],
     ],
     familyTitle: "Ryvex ailesi",
+    noteTitle: "Kurucudan",
+    note: [
+      "Ryvex Studio'yu, uygulamaların, oyunların ve web ürünlerinin tek bir kalite anlayışıyla yapılabileceğine inandığım için kurdum.",
+      "Her ürün, kendim kullanmak isteyeceğim seviyeye gelmeden yayınlanmaz. Yayından sonra da işimiz bitmez: sorularınızı yanıtlar, verinize saygı gösterir ve ürünlerimizi geliştirmeye devam ederiz.",
+    ],
+    noteRole: "Kurucu",
     facts: {
       founder: "Kurucu",
       scope: "Kapsam",
@@ -56,6 +62,12 @@ const copy = {
       ["Delight", "Using it should feel good."],
     ],
     familyTitle: "The Ryvex family",
+    noteTitle: "From the founder",
+    note: [
+      "I founded Ryvex Studio because I believe apps, games and web products can all be made to one standard of quality.",
+      "No product is released before it is something I would want to use myself. Our work does not end at release either: we answer your questions, respect your data and keep improving our products.",
+    ],
+    noteRole: "Founder",
     facts: {
       founder: "Founder",
       scope: "Scope",
@@ -113,6 +125,18 @@ const copy = {
         </dd>
       </div>
     </dl>
+  </div>
+</section>
+
+<section aria-labelledby="kurucudan" class="container-page pt-section-mobile md:pt-section">
+  <div class="mx-auto max-w-[44rem] border-l-2 border-tertiary pl-8 md:pl-12">
+    <h2 id="kurucudan" class="text-body-lg text-secondary">{copy.noteTitle}</h2>
+    {copy.note.map((paragraph, i) => (
+      <p class:list={["text-[1.375rem] leading-[1.5] tracking-[-0.01em] md:text-[1.625rem]", i === 0 ? "mt-6" : "mt-5"]}>{paragraph}</p>
+    ))}
+    <p class="mt-8 text-title font-semibold">{site.founder}</p>
+    <p class="text-body-sm text-secondary">{copy.noteRole}, {site.name}</p>
+    <a href={`mailto:${site.contactEmail}`} class="link-inline mt-3 inline-block text-body-md">{site.contactEmail}</a>
   </div>
 </section>
 

@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import { route, type Lang } from "@/i18n/ui";
-import { comingSoonLabel, productCaption, productTagline, type Product } from "@/lib/products";
+import { comingSoonLabel, productCaption, productTagline, screenFor, type Product } from "@/lib/products";
 
 interface Props {
   products: Product[];
@@ -86,13 +86,24 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
               products.map((product) => (
                 <div class="showcase-screen absolute inset-0" style={product.data.screenshots[0] ? undefined : panel(product.data.color)}>
                   {product.data.screenshots[0] ? (
-                    <Image
-                      src={product.data.screenshots[0].src}
-                      alt=""
-                      class="absolute inset-0 size-full object-cover object-top"
-                      widths={[400, 800]}
-                      sizes="520px"
-                    />
+                    <>
+                      <Image
+                        src={screenFor(product.data.screenshots[0], lang).src}
+                        alt=""
+                        class:list={["absolute inset-0 size-full object-cover object-top", screenFor(product.data.screenshots[0], lang).dark && "shot-light"]}
+                        widths={[400, 800]}
+                        sizes="520px"
+                      />
+                      {screenFor(product.data.screenshots[0], lang).dark && (
+                        <Image
+                          src={screenFor(product.data.screenshots[0], lang).dark!}
+                          alt=""
+                          class="shot-dark absolute inset-0 size-full object-cover object-top"
+                          widths={[400, 800]}
+                          sizes="520px"
+                        />
+                      )}
+                    </>
                   ) : (
                     <div class="flex size-full items-center justify-center">
                       <Image src={product.data.icon} alt="" widths={[192, 384]} sizes="192px" class="shape-icon object-depth size-48" />
@@ -124,7 +135,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
               >
                 {product.data.screenshots[0] ? (
                   <div class="-mb-24">
-                    <PhoneFrame src={product.data.screenshots[0].src} alt="" width={210} />
+                    <PhoneFrame src={screenFor(product.data.screenshots[0], lang).src} darkSrc={screenFor(product.data.screenshots[0], lang).dark} alt="" width={210} />
                   </div>
                 ) : (
                   <Image src={product.data.icon} alt="" widths={[112, 224]} sizes="112px" class="shape-icon object-depth size-28" />

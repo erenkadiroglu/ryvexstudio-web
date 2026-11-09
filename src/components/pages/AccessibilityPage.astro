@@ -1,0 +1,116 @@
+---
+import LegalDocument, { type LegalSection } from "@/components/LegalDocument.astro";
+import { site } from "@/config/site";
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const updated = new Date("2026-11-09");
+
+// Every claim here is checked by the site's own test suite or is plainly true of the build.
+const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
+  tr: {
+    title: "Erişilebilirlik",
+    lede: "ryvexstudio.com'u herkesin rahatça kullanabilmesi için tasarlıyoruz. Bu sayfa neyi hedeflediğimizi, bunu nasıl denetlediğimizi ve bir sorunu nasıl bildirebileceğinizi anlatır.",
+    sections: [
+      {
+        heading: "Hedefimiz",
+        paragraphs: [
+          "Site, Web İçeriği Erişilebilirlik Yönergeleri'nin (WCAG) 2.2 sürümünün AA düzeyine uymayı hedefler.",
+        ],
+      },
+      {
+        heading: "Nasıl denetliyoruz",
+        paragraphs: [
+          "Sitedeki her sayfa, her değişiklikte aydınlık ve karanlık temada otomatik erişilebilirlik testlerinden geçer. Bu testlerden geçmeyen bir değişiklik yayınlanmaz.",
+          "Otomatik testler her sorunu yakalayamaz. Bu yüzden karşılaştığınız her sorunu bize bildirmenizi önemsiyoruz.",
+        ],
+      },
+      {
+        heading: "Sitede neler var",
+        list: [
+          "Metin ile zemini arasında en az 4,5:1, büyük metinde en az 3:1 kontrast.",
+          "Bütün sayfalar klavyeyle kullanılabilir; odaklanılan öğe her zaman görünür.",
+          "Sayfa başında içeriğe atlama bağlantısı.",
+          "Görsellerde, ne gösterdiklerini anlatan açıklama metinleri.",
+          "İşletim sisteminizde hareketi azaltma ayarı açıksa açılış animasyonu, kayan geçişler ve akıcı kaydırma kapanır; içerik baştan yerindedir.",
+          "Aydınlık ve karanlık tema.",
+          "Yazı büyütmeye ve dar ekranlara uyum sağlayan sayfalar.",
+        ],
+      },
+      {
+        heading: "Bilinen sınırlamalar",
+        paragraphs: [
+          "Ürün sayfalarındaki ekran görüntüleri uygulamaların gerçek ekranlarıdır. İçlerindeki küçük yazılar görselin parçası olduğu için ekran okuyucuyla okunamaz; her görüntünün ne gösterdiği açıklama metninde yazar.",
+        ],
+      },
+      {
+        heading: "Ürünlerimiz",
+        paragraphs: [
+          "Uygulamalarımızda ve oyunlarımızda karşılaştığınız erişilebilirlik sorunlarını her ürünün destek sayfasındaki adresten bize iletebilirsiniz.",
+        ],
+      },
+      {
+        heading: "Bize bildirin",
+        paragraphs: [
+          `Sitede erişilebilirlikle ilgili bir sorunla karşılaşırsanız ${site.contactEmail} adresine yazın. Hangi sayfada, hangi cihazda ve varsa hangi yardımcı teknolojiyle karşılaştığınızı belirtirseniz sorunu daha hızlı düzeltebiliriz.`,
+        ],
+      },
+    ],
+  },
+  en: {
+    title: "Accessibility",
+    lede: "We design ryvexstudio.com so that everyone can use it comfortably. This page explains what we aim for, how we check it and how to tell us about a problem.",
+    sections: [
+      {
+        heading: "Our aim",
+        paragraphs: ["The site aims to conform to level AA of the Web Content Accessibility Guidelines (WCAG) 2.2."],
+      },
+      {
+        heading: "How we check",
+        paragraphs: [
+          "Every page on the site goes through automated accessibility tests in both the light and the dark theme on every change. A change that fails these tests is not published.",
+          "Automated tests cannot catch every problem, which is why we want to hear about any you run into.",
+        ],
+      },
+      {
+        heading: "What the site offers",
+        list: [
+          "Contrast of at least 4.5:1 between text and its background, and at least 3:1 for large text.",
+          "Every page works with a keyboard, and the focused element is always visible.",
+          "A link at the top of each page to skip to the content.",
+          "Descriptions on images that say what they show.",
+          "With reduced motion turned on in your system, the opening animation, sliding transitions and smooth scrolling are off and content is in place from the start.",
+          "A light and a dark theme.",
+          "Pages that adapt to larger text and narrow screens.",
+        ],
+      },
+      {
+        heading: "Known limitations",
+        paragraphs: [
+          "The screenshots on product pages are the apps' real screens. Small text inside them is part of the image and cannot be read by a screen reader; each image's description says what it shows.",
+        ],
+      },
+      {
+        heading: "Our products",
+        paragraphs: [
+          "You can report accessibility problems in our apps and games through the address on each product's support page.",
+        ],
+      },
+      {
+        heading: "Tell us",
+        paragraphs: [
+          `If you run into an accessibility problem on the site, write to ${site.contactEmail}. Telling us the page, the device and any assistive technology you use helps us fix it faster.`,
+        ],
+      },
+    ],
+  },
+};
+
+const c = content[lang];
+---
+
+<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />

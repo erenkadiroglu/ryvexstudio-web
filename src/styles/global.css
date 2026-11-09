@@ -432,6 +432,20 @@ html[data-theme="dark"] .showcase-band {
   box-shadow: inset 0 0 0 1.5px #1f1b1d;
 }
 
+/* Screens follow the site's theme: the app's dark screen appears only in the dark theme. Keyed to
+   <html>, so the always-dark showcase band does not switch screens on its own. */
+.shot-dark {
+  display: none;
+}
+
+html[data-theme="dark"] .shot-dark {
+  display: block;
+}
+
+html[data-theme="dark"] .shot-light {
+  display: none;
+}
+
 /* A phone that fills its parent: bezel, corners and camera follow the width (container units). */
 .phone-fluid {
   container-type: inline-size;

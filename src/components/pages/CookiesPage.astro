@@ -1,5 +1,6 @@
 ---
 import LegalDocument, { type LegalSection } from "@/components/LegalDocument.astro";
+import { site } from "@/config/site";
 import type { Lang } from "@/i18n/ui";
 
 interface Props {
@@ -7,12 +8,12 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const updated = new Date("2026-11-08");
+const updated = new Date("2026-11-09");
 
 const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
   tr: {
     title: "Çerez Politikası",
-    lede: "Kısaca: ryvexstudio.com çerez kullanmaz. Bu sayfa, bunun ne anlama geldiğini ve tarayıcınızda saklanan tek bilgiyi açıklar.",
+    lede: "Kısaca: ryvexstudio.com çerez kullanmaz. Bu sayfa, bunun ne anlama geldiğini ve tarayıcınızda saklanan iki küçük bilgiyi açıklar.",
     sections: [
       {
         heading: "Çerez nedir?",
@@ -23,15 +24,18 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
       {
         heading: "Bu sitede çerez kullanılıyor mu?",
         paragraphs: [
-          "Hayır. ryvexstudio.com çerez yerleştirmez; ziyaretçi istatistiği, reklam ya da pazarlama amaçlı takip aracı kullanmaz. Yazı tipleri sitenin kendi sunucusundan yüklenir, bu yüzden üçüncü taraf servislerin çerezleri de tarayıcınıza gelmez.",
+          site.integrations.analyticsToken
+            ? "Hayır. ryvexstudio.com çerez yerleştirmez; reklam ya da pazarlama amaçlı takip aracı kullanmaz. Ziyaret sayıları için kullanılan Cloudflare Web Analytics de çerez kullanmaz ve sizi tanımlamaz. Yazı tipleri sitenin kendi sunucusundan yüklenir."
+            : "Hayır. ryvexstudio.com çerez yerleştirmez; ziyaretçi istatistiği, reklam ya da pazarlama amaçlı takip aracı kullanmaz. Yazı tipleri sitenin kendi sunucusundan yüklenir, bu yüzden üçüncü taraf servislerin çerezleri de tarayıcınıza gelmez.",
           "Bu nedenle sitede bir çerez onay penceresi bulunmaz.",
         ],
       },
       {
-        heading: "Tarayıcınızda saklanan tek bilgi",
+        heading: "Tarayıcınızda saklanan bilgiler",
         paragraphs: [
           "Aydınlık ya da karanlık temayı seçtiğinizde, bu tercih tarayıcınızın yerel depolama alanında (localStorage) \"rv-theme\" adıyla saklanır. Bu bilgi bize gönderilmez, sizi tanımlamaz ve yalnızca bir sonraki ziyaretinizde seçtiğiniz temayı göstermek için kullanılır.",
-          "Tarayıcınızın site verilerini temizleyerek bu tercihi istediğiniz zaman silebilirsiniz.",
+          "Sitenin kısa açılış animasyonunu aynı ziyarette tekrar göstermemek için, tarayıcınızın oturum depolama alanında (sessionStorage) \"rv-intro\" adıyla bir işaret tutulur. Bu işaret de bize gönderilmez ve sekmeyi kapattığınızda kendiliğinden silinir.",
+          "Tarayıcınızın site verilerini temizleyerek bu bilgileri istediğiniz zaman silebilirsiniz.",
         ],
       },
       {
@@ -50,7 +54,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
   },
   en: {
     title: "Cookie Policy",
-    lede: "In short: ryvexstudio.com does not use cookies. This page explains what that means and the one piece of information stored in your browser.",
+    lede: "In short: ryvexstudio.com does not use cookies. This page explains what that means and the two small pieces of information stored in your browser.",
     sections: [
       {
         heading: "What are cookies?",
@@ -61,15 +65,18 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
       {
         heading: "Does this site use cookies?",
         paragraphs: [
-          "No. ryvexstudio.com sets no cookies and uses no visitor statistics, advertising or marketing trackers. Fonts are served from the site itself, so no third-party service cookies reach your browser either.",
+          site.integrations.analyticsToken
+            ? "No. ryvexstudio.com sets no cookies and uses no advertising or marketing trackers. Cloudflare Web Analytics, used for visit counts, sets no cookies either and does not identify you. Fonts are served from the site itself."
+            : "No. ryvexstudio.com sets no cookies and uses no visitor statistics, advertising or marketing trackers. Fonts are served from the site itself, so no third-party service cookies reach your browser either.",
           "That is why the site has no cookie consent banner.",
         ],
       },
       {
-        heading: "The one thing stored in your browser",
+        heading: "What is stored in your browser",
         paragraphs: [
           "When you choose the light or dark theme, the choice is stored in your browser's local storage under the name \"rv-theme\". It is never sent to us, does not identify you, and is used only to show your chosen theme on your next visit.",
-          "You can remove it at any time by clearing your browser's site data.",
+          "So that the site's short opening animation is not shown again during the same visit, a marker named \"rv-intro\" is kept in your browser's session storage. It is never sent to us either, and it is removed automatically when you close the tab.",
+          "You can remove this information at any time by clearing your browser's site data.",
         ],
       },
       {

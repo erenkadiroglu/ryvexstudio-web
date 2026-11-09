@@ -563,6 +563,22 @@ açıksa kapatılır.
   kelime kelime yükselir, e-posta adresi sayfanın büyük öğesidir ve tek tıkla
   kopyalanır. Kanallar satır satır listelenir; sosyal hesaplar üzerine gelince
   vişneyle dolan büyük karolardır.
+- **Ekran varyantları ve video:** Her ekran görüntüsünün İngilizcesi (`en`) ve
+  uygulamanın gece modundaki hâli (`dark`, `darkEn`) tanımlanabilir. Sayfa kendi
+  dilindeki ekranı seçer; site koyu temadayken gece modu ekranı gösterilir.
+  İngilizce sayfada Türkçe gece ekranına düşülmez. Ürün sayfası girişindeki
+  telefonda, varsa o dildeki kısa ekran kaydı (`video`) sessiz ve döngüyle oynar;
+  yalnızca ekrandayken ve hareket azaltma kapalıyken.
+- **Gizlilik özeti:** Ürün sayfasında hesap, reklam takibi, verinin nerede
+  tutulduğu ve üçüncü taraflar dört karo hâlinde, tam politikayla aynı kayıttan
+  okunarak gösterilir.
+- **Mağaza rozetleri:** Yayındaki ürünlerde resmî Google Play ve App Store
+  rozetleri `public/badges/` içine konduğunda kullanılır; yoksa düz düğme durur.
+- **Ailedeki açılışlar:** Stüdyo, İletişim ve Basın kiti aynı koyu, ürün
+  ışıklarıyla aydınlanan açılışla başlar. Stüdyo'da kısa, imzalı bir kurucu notu
+  vişne bir çizgiyle durur.
+- **Paylaşım görselleri:** Koyu zemin, ürün renginin ışığı, beyaz yazı ve ürün
+  ikonu; sitenin görselinde üç ürünün ikonu.
 - **Stüdyo bandı:** Stüdyo sayfası, ürün renklerinin ışığıyla aydınlanan koyu
   bir bantla açılır; cümle kelime kelime yükselir, altında kurucu, kapsam ve
   ürünler yazar.

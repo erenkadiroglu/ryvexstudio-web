@@ -26,6 +26,7 @@ export const ui = {
     "footer.terms": "Kullanım Koşulları",
     "footer.kvkk": "KVKK Aydınlatma Metni",
     "footer.cookies": "Çerez Politikası",
+    "footer.accessibility": "Erişilebilirlik",
     "footer.rights": "Tüm hakları saklıdır.",
     "footer.follow": "Takip edin",
     "skip.content": "İçeriğe geç",
@@ -48,6 +49,7 @@ export const ui = {
     "footer.terms": "Terms of Use",
     "footer.kvkk": "Personal Data Notice",
     "footer.cookies": "Cookie Policy",
+    "footer.accessibility": "Accessibility",
     "footer.rights": "All rights reserved.",
     "footer.follow": "Follow us",
     "skip.content": "Skip to content",
@@ -77,6 +79,7 @@ export const routes = {
   terms: { tr: "/kullanim-kosullari", en: "/en/terms" },
   kvkk: { tr: "/kvkk", en: "/en/personal-data" },
   cookies: { tr: "/cerez-politikasi", en: "/en/cookies" },
+  accessibility: { tr: "/erisilebilirlik", en: "/en/accessibility" },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 export type RouteName = keyof typeof routes;
