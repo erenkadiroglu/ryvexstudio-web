@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import Image from "@/components/Img.astro";
 import { route, type Lang } from "@/i18n/ui";
 import type { Product } from "@/lib/products";
 import { iconTransitionName } from "@/lib/transitions";
@@ -24,7 +24,7 @@ const updatedLabel = lang === "tr" ? "Son güncelleme" : "Last updated";
 ---
 
 <article class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
-  <div class="max-w-[64ch]">
+  <div class="mx-auto max-w-[64ch]">
     <a href={productHref} class="inline-flex items-center gap-3 text-label font-medium text-secondary hover:text-primary">
       <Image
         src={product.data.icon}

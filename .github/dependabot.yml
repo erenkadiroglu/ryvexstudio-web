@@ -1,0 +1,22 @@
+# Weekly dependency updates. Minor and patch updates arrive together in one pull request per
+# ecosystem; security fixes arrive as soon as they are published. Every update must pass CI.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: deps
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci

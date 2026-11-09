@@ -37,7 +37,7 @@ const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
 
 <PageIntro title={copy.title} lede={copy.lede} />
 
-<section class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
+<section class="container-page pb-section-mobile md:pb-section">
   {
     posts.length === 0 ? (
       <p class="text-body-md text-secondary">{copy.empty}</p>

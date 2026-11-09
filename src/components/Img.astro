@@ -1,0 +1,21 @@
+---
+/**
+ * Every built image as AVIF (about a quarter smaller at the same sharpness) with a WebP fallback
+ * for browsers without AVIF. The <picture> wrapper takes no space of its own, so layout and styles
+ * written for a plain <img> keep working.
+ */
+import { Picture } from "astro:assets";
+import type { ComponentProps } from "astro/types";
+
+type Props = Omit<
+  ComponentProps<typeof Picture>,
+  "formats" | "fallbackFormat" | "pictureAttributes"
+>;
+---
+
+<Picture
+  {...(Astro.props as ComponentProps<typeof Picture>)}
+  formats={["avif", "webp"]}
+  fallbackFormat="webp"
+  pictureAttributes={{ style: "display: contents" }}
+/>

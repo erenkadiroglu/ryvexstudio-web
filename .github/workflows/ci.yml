@@ -29,5 +29,18 @@ jobs:
       - name: Install browser
         run: npx playwright install --with-deps chromium
 
-      - name: Accessibility, console and link tests
-        run: npm run test
+      # Missing reference images are written (and the run still passes); they are kept as an
+      # artifact so they can be added to the repository. Existing references are compared.
+      - name: Accessibility, console, link, budget and visual tests
+        run: npm run test -- --update-snapshots=missing
+
+      - name: Keep visual references and differences
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual
+          path: |
+            tests/visual.spec.ts-snapshots/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14

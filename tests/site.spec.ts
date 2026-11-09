@@ -39,7 +39,8 @@ test("internal links point to existing pages", async ({ page }) => {
     for (const href of hrefs) {
       if (!href.startsWith("/") || href.startsWith("//")) continue;
       const clean = href.split(/[?#]/)[0].replace(/\/$/, "") || "/";
-      if (!known.has(clean) && !/\.(xml|svg|png|jpg|webmanifest)$/.test(clean)) broken.push(`${url} -> ${href}`);
+      if (!known.has(clean) && !/\.(xml|svg|png|jpg|webmanifest)$/.test(clean))
+        broken.push(`${url} -> ${href}`);
     }
   }
   expect(broken).toEqual([]);

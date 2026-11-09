@@ -5,7 +5,12 @@ import { parse } from "yaml";
 import { panelConfig } from "../src/panel/config";
 
 type Field = { name: string; fields?: Field[]; field?: Field };
-type Collection = { name: string; folder?: string; fields?: Field[]; files?: { file: string; fields: Field[] }[] };
+type Collection = {
+  name: string;
+  folder?: string;
+  fields?: Field[];
+  files?: { file: string; fields: Field[] }[];
+};
 
 /** Every key path a panel field list can write, e.g. "privacy.dataCollected.purpose.tr". */
 function fieldPaths(fields: Field[], prefix = ""): Set<string> {
@@ -67,13 +72,17 @@ test("the panel opens without configuration errors", async ({ browser }) => {
   page.on("pageerror", (e) => problems.push(e.message));
   page.on("console", (m) => {
     // Network failures to GitHub's status page are expected offline; configuration errors are not.
-    if (m.type() === "error" && /configuration|yapılandırma/i.test(m.text())) problems.push(m.text());
+    if (m.type() === "error" && /configuration|yapılandırma/i.test(m.text()))
+      problems.push(m.text());
   });
   await page.goto("/panel", { waitUntil: "networkidle" });
   await expect(page.getByRole("button", { name: "Yerel Repo ile Çalış" })).toBeVisible();
   await expect(page.getByText(/yapılandırmasında bir hata/)).toHaveCount(0);
   expect(problems).toEqual([]);
-  await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute("content", "noindex, nofollow");
+  await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute(
+    "content",
+    "noindex, nofollow",
+  );
   await context.close();
 });
 
@@ -87,13 +96,18 @@ test("the panel keeps its icons and type under its security policy", async ({ br
   const page = await context.newPage();
   await page.route("**/panel", async (route) => {
     const response = await route.fetch();
-    await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp! } });
+    await route.fulfill({
+      response,
+      headers: { ...response.headers(), "content-security-policy": csp! },
+    });
   });
   await page.goto("/panel", { waitUntil: "networkidle" });
   await expect(page.getByRole("button", { name: "Yerel Repo ile Çalış" })).toBeVisible();
   const loaded = await page.evaluate(async () => {
     await document.fonts.ready;
-    return [...document.fonts].filter((f) => f.status === "loaded").map((f) => f.family.replaceAll('"', ""));
+    return [...document.fonts]
+      .filter((f) => f.status === "loaded")
+      .map((f) => f.family.replaceAll('"', ""));
   });
   expect(loaded).toContain("Material Symbols Outlined");
   expect(loaded).toContain("Geist Variable");
@@ -101,7 +115,9 @@ test("the panel keeps its icons and type under its security policy", async ({ br
   const refused = await page.evaluate(
     () =>
       new Promise<string>((resolve) => {
-        document.addEventListener("securitypolicyviolation", (e) => resolve(e.effectiveDirective), { once: true });
+        document.addEventListener("securitypolicyviolation", (e) => resolve(e.effectiveDirective), {
+          once: true,
+        });
         const img = new Image();
         img.src = "https://example.com/probe.png";
         setTimeout(() => resolve("not refused"), 3000);

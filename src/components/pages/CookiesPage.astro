@@ -13,7 +13,7 @@ const updated = new Date("2026-11-09");
 const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
   tr: {
     title: "Çerez Politikası",
-    lede: "Kısaca: ryvexstudio.com çerez kullanmaz. Bu sayfa, bunun ne anlama geldiğini ve tarayıcınızda saklanan iki küçük bilgiyi açıklar.",
+    lede: "Kısaca: ryvexstudio.com çerez kullanmaz. Bu sayfa, bunun ne anlama geldiğini ve tarayıcınızda saklanan birkaç küçük bilgiyi açıklar.",
     sections: [
       {
         heading: "Çerez nedir?",
@@ -35,6 +35,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         paragraphs: [
           "Aydınlık ya da karanlık temayı seçtiğinizde, bu tercih tarayıcınızın yerel depolama alanında (localStorage) \"rv-theme\" adıyla saklanır. Bu bilgi bize gönderilmez, sizi tanımlamaz ve yalnızca bir sonraki ziyaretinizde seçtiğiniz temayı göstermek için kullanılır.",
           "Sitenin kısa açılış animasyonunu aynı ziyarette tekrar göstermemek için, tarayıcınızın oturum depolama alanında (sessionStorage) \"rv-intro\" adıyla bir işaret tutulur. Bu işaret de bize gönderilmez ve sekmeyi kapattığınızda kendiliğinden silinir.",
+          "Sitenin üstünde yeni bir ürünün duyurusu çıktığında ve onu kapattığınızda, aynı duyuruyu tekrar göstermemek için \"rv-announce-closed\" adıyla ürünün adı yerel depolama alanında tutulur. Bu da bize gönderilmez.",
           "Tarayıcınızın site verilerini temizleyerek bu bilgileri istediğiniz zaman silebilirsiniz.",
         ],
       },
@@ -54,7 +55,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
   },
   en: {
     title: "Cookie Policy",
-    lede: "In short: ryvexstudio.com does not use cookies. This page explains what that means and the two small pieces of information stored in your browser.",
+    lede: "In short: ryvexstudio.com does not use cookies. This page explains what that means and the few small pieces of information stored in your browser.",
     sections: [
       {
         heading: "What are cookies?",
@@ -76,6 +77,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         paragraphs: [
           "When you choose the light or dark theme, the choice is stored in your browser's local storage under the name \"rv-theme\". It is never sent to us, does not identify you, and is used only to show your chosen theme on your next visit.",
           "So that the site's short opening animation is not shown again during the same visit, a marker named \"rv-intro\" is kept in your browser's session storage. It is never sent to us either, and it is removed automatically when you close the tab.",
+          "When an announcement of a new product appears at the top of the site and you close it, the product's name is kept in local storage under \"rv-announce-closed\" so the same announcement is not shown again. It is never sent to us either.",
           "You can remove this information at any time by clearing your browser's site data.",
         ],
       },

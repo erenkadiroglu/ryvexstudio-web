@@ -4,7 +4,8 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import LaunchNotify from "@/components/LaunchNotify.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import ShareButton from "@/components/ShareButton.astro";
-import { Image } from "astro:assets";
+import ScreenGallery from "@/components/ScreenGallery.astro";
+import Image from "@/components/Img.astro";
 import { site } from "@/config/site";
 import qrcode from "qrcode-generator";
 import { launchDateNote, newLabel, newUntil } from "@/lib/launch";
@@ -35,6 +36,8 @@ const copy = {
     googlePlay: "Google Play'den indir",
     web: "Tarayıcıda aç",
     screenshots: "Ekran görüntüleri",
+    screens: (n: number) => `Ekranlar (${n})`,
+    enlarge: "büyüt",
     about: "Ne yapar",
     facts: "Ürün bilgileri",
     developer: "Geliştirici",
@@ -73,6 +76,8 @@ const copy = {
     googlePlay: "Get it on Google Play",
     web: "Open in browser",
     screenshots: "Screenshots",
+    screens: (n: number) => `Screens (${n})`,
+    enlarge: "enlarge",
     about: "What it does",
     facts: "Product details",
     developer: "Developer",
@@ -224,6 +229,7 @@ const shot = firstScreen?.src;
 const video = lang === "en" ? data.video?.en : data.video?.tr;
 // Feature story (desktop): a phone stays put while the features pass; each shows its own screen.
 const story = kind === "phone" && data.screenshots.length > 1 && data.features.length > 0;
+const gallery = kind === "phone" && data.screenshots.length > 0;
 const phoneWidth = 260;
 const bezel = Math.round(phoneWidth * 0.034);
 const radius = Math.round(phoneWidth * 0.155);
@@ -303,6 +309,19 @@ const camera = Math.round(phoneWidth * 0.036);
               </ul>
             )
           }
+          {gallery && (
+            <button
+              type="button"
+              data-gallery-open="0"
+              class="inline-flex min-h-12 items-center gap-2 rounded-full border border-outline px-5 text-label font-medium text-primary transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--rv-primary)_6%,transparent)]"
+            >
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+                <path d="M10.5 18.5h3" />
+              </svg>
+              {copy.screens(data.screenshots.length)}
+            </button>
+          )}
           <ShareButton title={data.name} text={productTagline(product, lang)} url={pageUrl} />
         </div>
         {
@@ -330,7 +349,7 @@ const camera = Math.round(phoneWidth * 0.036);
       <div class="hidden justify-center md:col-span-5 md:flex" aria-hidden="true">
         {
           shot && kind === "phone" ? (
-            <div class="pd-phone">
+            <div class="pd-phone cursor-zoom-in" data-gallery-open="0">
               <PhoneFrame src={shot} darkSrc={firstScreen?.dark} video={video} alt="" width={290} fluid loading="eager" fetchpriority="high" />
             </div>
           ) : shot ? (
@@ -365,7 +384,9 @@ const camera = Math.round(phoneWidth * 0.036);
                 return (
                   <li class:list={["shrink-0", repeatsHero && "md:hidden"]}>
                     {kind === "phone" ? (
-                      <PhoneFrame src={image} darkSrc={screen.dark} alt={alt} width={216} class="phone-compact" />
+                      <button type="button" data-gallery-open={i} class="block cursor-zoom-in rounded-[34px]" aria-label={`${alt} (${copy.enlarge})`}>
+                        <PhoneFrame src={image} darkSrc={screen.dark} alt="" width={216} class="phone-compact" />
+                      </button>
                     ) : (
                       <Image src={image} alt={alt} height={400} class="h-[300px] w-auto rounded-lg border border-outline md:h-[400px]" />
                     )}
@@ -386,7 +407,7 @@ const camera = Math.round(phoneWidth * 0.036);
         <div class:list={["mt-10", story && "md:mt-6 md:grid md:grid-cols-12 md:gap-6"]} data-story={story ? "" : undefined}>
           {story && (
             <div class="hidden md:col-span-5 md:block" aria-hidden="true">
-              <div class="story-stage sticky flex h-[620px] items-center justify-center">
+              <div class="story-stage sticky flex h-[620px] cursor-zoom-in items-center justify-center" data-gallery-open="0">
                 <div class="phone" style={`width:${phoneWidth}px;padding:${bezel}px;border-radius:${radius}px`}>
                   <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
                     {data.screenshots.map((screenshot, i) => {
@@ -596,6 +617,7 @@ const camera = Math.round(phoneWidth * 0.036);
       </div>
     )
   }
+  {gallery && <ScreenGallery product={product} lang={lang} />}
 </article>
 
 <script>

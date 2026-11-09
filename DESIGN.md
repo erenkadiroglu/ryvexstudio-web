@@ -521,6 +521,11 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
   fare altında hafifçe aydınlanır. Yalnızca geniş, sakin zeminlerde (kapanış bandı, sayfa açılışları).
 - **Zaman çizelgesi:** Ortada ince bir çizgi; okundukça vişne rengiyle dolar, duraklar sırayla
   belirir. Geniş ekranda iki yana dönüşümlü, telefonda tek sütun.
+- **Ekran galerisi:** Koyu sahne (#0D0A0B), ortada telefon oranında büyük ekran, iki yanda yuvarlak
+  oklar, altında küçük resim şeridi ve açıklama. Üstte hap biçiminde Aydınlık/Karanlık ve
+  Türkçe/English seçimi; seçili olan açık zemin alır.
+- **Sayfa açılışları:** Liste sayfaları (Ürünler, Günlük, Yardım, Yol haritası) ortalanmış başlıkla,
+  marka dokusu üzerinde açılır. Hukuki metinler okunabilirlik için 64 karakterlik ortalanmış sütundadır.
 - **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
   uzakta. Karanlık temada `tertiary-dark`. Hiçbir zaman kaldırılmaz.
 

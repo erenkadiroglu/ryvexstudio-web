@@ -65,6 +65,9 @@ export interface WallItem {
   tagline?: string;
   /** Optimised URL of the first real screenshot; shown on product cards. */
   shotSrc?: string;
+  /** AVIF versions of the icon and screenshot, offered first to browsers that support AVIF. */
+  iconAvif?: string;
+  shotAvif?: string;
   /** "Yeni" label for a product released in the last 30 days; the page shows it only while true. */
   newLabel?: string;
 }
@@ -106,14 +109,18 @@ export async function toWallItems(products: Product[], lang: Lang, shotWidth?: n
   return Promise.all(
     products.map(async (product) => {
       const icon = await getImage({ src: product.data.icon, width: 320, format: "webp" });
+      const iconAvif = await getImage({ src: product.data.icon, width: 320, format: "avif" });
       const firstShot = product.data.screenshots[0];
       const first = firstShot ? screenFor(firstShot, lang).src : undefined;
       const shot = shotWidth && first ? await getImage({ src: first, width: shotWidth, format: "webp" }) : undefined;
+      const shotAvif = shotWidth && first ? await getImage({ src: first, width: shotWidth, format: "avif" }) : undefined;
       return {
         ...toWallItem(product, lang),
         iconSrc: icon.src,
+        iconAvif: iconAvif.src,
         tagline: productTagline(product, lang),
         shotSrc: shot?.src,
+        shotAvif: shotAvif?.src,
       };
     }),
   );

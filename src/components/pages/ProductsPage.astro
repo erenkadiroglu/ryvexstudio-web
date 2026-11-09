@@ -1,4 +1,5 @@
 ---
+import PageIntro from "@/components/PageIntro.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
 import ProductWall from "@/components/ProductWall";
 import { type Lang } from "@/i18n/ui";
@@ -46,11 +47,9 @@ const filters = [
 ];
 ---
 
-<section class="container-page pt-20 pb-section-mobile md:pt-28 md:pb-section">
-  <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
-    {copy.title}
-  </h1>
-  <p class="mt-5 mb-12 max-w-[48ch] text-body-lg text-secondary">{copy.lede}</p>
+<PageIntro title={copy.title} lede={copy.lede} />
+
+<section class="products-list container-page pb-section-mobile md:pb-section">
   <ProductWall
     client:load
     variant="cards"

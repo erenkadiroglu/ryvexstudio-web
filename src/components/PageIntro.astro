@@ -1,4 +1,10 @@
 ---
+/**
+ * The opening of a listing page (products, journal): centred, on the studio's woven texture,
+ * like the help centre and roadmap openings.
+ */
+import BrandPattern from "@/components/BrandPattern.astro";
+
 interface Props {
   title: string;
   lede?: string;
@@ -7,9 +13,12 @@ interface Props {
 const { title, lede } = Astro.props;
 ---
 
-<header class="container-page pt-20 md:pt-28">
-  <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
-    {title}
-  </h1>
-  {lede && <p class="mt-5 max-w-[48ch] text-body-lg text-secondary">{lede}</p>}
+<header class="relative isolate overflow-hidden" data-pattern-light>
+  <BrandPattern color="var(--rv-tertiary)" opacity={0.08} class="-z-10" />
+  <div class="container-page py-20 text-center md:py-28">
+    <h1 class="text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+      {title}
+    </h1>
+    {lede && <p class="mx-auto mt-5 max-w-[48ch] text-body-lg text-secondary">{lede}</p>}
+  </div>
 </header>

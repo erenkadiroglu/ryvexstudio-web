@@ -123,19 +123,26 @@ export default function ProductWall({
               className={animate ? "wall-item" : undefined}
               style={animate ? { animationDelay: `${index * 80}ms` } : undefined}
             >
-              <a href={item.href} className="wall-link group block" data-color={item.color} data-flood={item.color}>
+              <a
+                href={item.href}
+                className="wall-link group block"
+                data-color={item.color}
+                data-flood={item.color}
+              >
                 <div className="wall-figure relative isolate max-w-[160px]">
-                  {item.shotSrc && <PeekPhone src={item.shotSrc} />}
-                  <img
-                    src={item.iconSrc}
-                    alt=""
-                    width={160}
-                    height={160}
-                    loading={index < 6 ? "eager" : "lazy"}
-                    decoding="async"
-                    className="wall-icon shape-icon object-depth aspect-square w-full max-w-[160px]"
-                    style={{ viewTransitionName: iconTransitionName(item.id) }}
-                  />
+                  {item.shotSrc && <PeekPhone src={item.shotSrc} avif={item.shotAvif} />}
+                  <Pic avif={item.iconAvif}>
+                    <img
+                      src={item.iconSrc}
+                      alt=""
+                      width={160}
+                      height={160}
+                      loading={index < 6 ? "eager" : "lazy"}
+                      decoding="async"
+                      className="wall-icon shape-icon object-depth aspect-square w-full max-w-[160px]"
+                      style={{ viewTransitionName: iconTransitionName(item.id) }}
+                    />
+                  </Pic>
                 </div>
                 <span className="mt-5 block text-title font-semibold decoration-1 underline-offset-[3px] group-hover:underline">
                   {item.name}
@@ -164,7 +171,12 @@ function ProductCard({ item, eager }: { item: WallItem; eager: boolean }) {
   const radius = Math.round(width * 0.155);
   const camera = Math.round(width * 0.036);
   return (
-    <a href={item.href} className="wall-link group block" data-color={item.color} data-flood={item.color}>
+    <a
+      href={item.href}
+      className="wall-link group block"
+      data-color={item.color}
+      data-flood={item.color}
+    >
       <div
         className="relative h-[340px] overflow-hidden rounded-2xl"
         style={{ backgroundColor: `color-mix(in srgb, ${item.color} 16%, var(--rv-surface))` }}
@@ -176,39 +188,48 @@ function ProductCard({ item, eager }: { item: WallItem; eager: boolean }) {
             aria-hidden="true"
           >
             <div className="phone-screen" style={{ borderRadius: radius - bezel }}>
-              <img
-                src={item.shotSrc}
-                alt=""
-                width={480}
-                height={1067}
-                loading={eager ? "eager" : "lazy"}
-                decoding="async"
-                className="size-full object-cover object-top"
-              />
+              <Pic avif={item.shotAvif}>
+                <img
+                  src={item.shotSrc}
+                  alt=""
+                  width={480}
+                  height={1067}
+                  loading={eager ? "eager" : "lazy"}
+                  decoding="async"
+                  className="size-full object-cover object-top"
+                />
+              </Pic>
             </div>
-            <span className="phone-camera" style={{ width: camera, height: camera, top: bezel + camera }} />
+            <span
+              className="phone-camera"
+              style={{ width: camera, height: camera, top: bezel + camera }}
+            />
           </div>
         ) : (
-          <img
-            src={item.iconSrc}
-            alt=""
-            width={128}
-            height={128}
-            className="shape-icon object-depth absolute top-1/2 left-1/2 size-32 -translate-x-1/2 -translate-y-1/2"
-          />
+          <Pic avif={item.iconAvif}>
+            <img
+              src={item.iconSrc}
+              alt=""
+              width={128}
+              height={128}
+              className="shape-icon object-depth absolute top-1/2 left-1/2 size-32 -translate-x-1/2 -translate-y-1/2"
+            />
+          </Pic>
         )}
       </div>
       <div className="mt-6 flex items-center gap-4">
-        <img
-          src={item.iconSrc}
-          alt=""
-          width={48}
-          height={48}
-          loading={eager ? "eager" : "lazy"}
-          decoding="async"
-          className="shape-icon size-12 shrink-0"
-          style={{ viewTransitionName: iconTransitionName(item.id) }}
-        />
+        <Pic avif={item.iconAvif}>
+          <img
+            src={item.iconSrc}
+            alt=""
+            width={48}
+            height={48}
+            loading={eager ? "eager" : "lazy"}
+            decoding="async"
+            className="shape-icon size-12 shrink-0"
+            style={{ viewTransitionName: iconTransitionName(item.id) }}
+          />
+        </Pic>
         <span className="min-w-0 flex-1">
           <span className="block text-title font-semibold decoration-1 underline-offset-[3px] group-hover:underline">
             {item.name}
@@ -222,7 +243,9 @@ function ProductCard({ item, eager }: { item: WallItem; eager: boolean }) {
         )}
         {item.newLabel && <NewChip id={item.id} label={item.newLabel} className="shrink-0" />}
       </div>
-      {item.tagline && <span className="mt-4 block max-w-[44ch] text-body-md text-secondary">{item.tagline}</span>}
+      {item.tagline && (
+        <span className="mt-4 block max-w-[44ch] text-body-md text-secondary">{item.tagline}</span>
+      )}
     </a>
   );
 }
@@ -240,19 +263,46 @@ function NewChip({ id, label, className }: { id: string; label: string; classNam
 }
 
 /** On the wall, a small phone with the product's real screen rises from behind its icon on hover. */
-function PeekPhone({ src }: { src: string }) {
+function PeekPhone({ src, avif }: { src: string; avif?: string }) {
   const width = 108;
   const bezel = Math.round(width * 0.034);
   const radius = Math.round(width * 0.155);
   const camera = Math.max(4, Math.round(width * 0.036));
   return (
-    <div className="wall-peek pointer-events-none absolute bottom-[45%] left-1/2 -z-10 hidden md:block" aria-hidden="true">
+    <div
+      className="wall-peek pointer-events-none absolute bottom-[45%] left-1/2 -z-10 hidden md:block"
+      aria-hidden="true"
+    >
       <div className="phone phone-compact" style={{ width, padding: bezel, borderRadius: radius }}>
         <div className="phone-screen" style={{ borderRadius: radius - bezel }}>
-          <img src={src} alt="" width={240} height={533} loading="lazy" decoding="async" className="size-full object-cover object-top" />
+          <Pic avif={avif}>
+            <img
+              src={src}
+              alt=""
+              width={240}
+              height={533}
+              loading="lazy"
+              decoding="async"
+              className="size-full object-cover object-top"
+            />
+          </Pic>
         </div>
-        <span className="phone-camera" style={{ width: camera, height: camera, top: bezel + camera }} />
+        <span
+          className="phone-camera"
+          style={{ width: camera, height: camera, top: bezel + camera }}
+        />
       </div>
     </div>
+  );
+}
+
+/** Offers the AVIF version first; the <picture> takes no space, so the <img> styles still apply. */
+function Pic({ avif, children }: { avif?: string; children: React.ReactElement }) {
+  if (!avif) return children;
+  return (
+    <picture style={{ display: "contents" }}>
+      <source type="image/avif" srcSet={avif} />
+      {children}
+    </picture>
   );
 }
