@@ -1,6 +1,7 @@
 import { getImage } from "astro:assets";
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { Lang } from "@/i18n/ui";
+import { newLabel, newUntil } from "@/lib/launch";
 
 export type Product = CollectionEntry<"products">;
 export type ProductType = Product["data"]["type"];
@@ -64,6 +65,8 @@ export interface WallItem {
   tagline?: string;
   /** Optimised URL of the first real screenshot; shown on product cards. */
   shotSrc?: string;
+  /** "Yeni" label for a product released in the last 30 days; the page shows it only while true. */
+  newLabel?: string;
 }
 
 export const comingSoonLabel: Record<Lang, string> = { tr: "Yakında", en: "Coming soon" };
@@ -79,6 +82,7 @@ export function toWallItem(product: Product, lang: Lang): WallItem {
     iconSrc: product.data.icon.src,
     color: product.data.color,
     status: product.data.status === "coming-soon" ? comingSoonLabel[lang] : undefined,
+    newLabel: (newUntil(product) ?? 0) > new Date() ? newLabel[lang] : undefined,
   };
 }
 

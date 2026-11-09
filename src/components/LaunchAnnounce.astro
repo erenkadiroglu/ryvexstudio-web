@@ -1,0 +1,83 @@
+---
+/**
+ * A thin strip above the header for the newest product, for 30 days after its release. It stays
+ * hidden unless the head script confirms the product is still new and the visitor has not closed
+ * it (see BaseLayout); a closed strip stays closed until another product launches.
+ */
+import { getLangFromUrl, route } from "@/i18n/ui";
+import { freshProducts } from "@/lib/launch";
+import { getProducts } from "@/lib/products";
+
+const lang = getLangFromUrl(Astro.url);
+const latest = freshProducts(await getProducts())[0]?.product;
+const copy = {
+  tr: { label: "Duyuru", out: "yayında.", cta: "Hemen indirin", close: "Duyuruyu kapat" },
+  en: {
+    label: "Announcement",
+    out: "is out now.",
+    cta: "Get it now",
+    close: "Close the announcement",
+  },
+}[lang];
+---
+
+{latest && (
+  <aside
+    aria-label={copy.label}
+    class="announce"
+    data-product={latest.id}
+    style={`--announce-color: ${latest.data.color}`}
+  >
+    <div class="container-page flex min-h-11 items-center justify-center gap-3 py-2 text-label">
+      <span class="announce-dot" aria-hidden="true" />
+      <a
+        href={`${route("products", lang)}/${latest.id}`}
+        data-flood={latest.data.color}
+        class="group text-primary"
+      >
+        <strong class="font-semibold">{latest.data.name}</strong> {copy.out}{" "}
+        <span class="text-secondary underline decoration-outline underline-offset-4 group-hover:text-primary">
+          {copy.cta}
+        </span>
+        <span
+          aria-hidden="true"
+          class="ml-0.5 inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+        >
+          →
+        </span>
+      </a>
+      <button
+        type="button"
+        class="announce-close"
+        data-announce-close={latest.id}
+        aria-label={copy.close}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M7 7l10 10M17 7 7 17"></path>
+        </svg>
+      </button>
+    </div>
+  </aside>
+)}
+
+<script>
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLElement>("[data-announce-close]");
+    if (!button) return;
+    try {
+      localStorage.setItem("rv-announce-closed", button.dataset.announceClose ?? "");
+    } catch {
+      /* storage unavailable: closed for this page only */
+    }
+    delete document.documentElement.dataset.announce;
+    // Focus moves on to the header rather than being lost with the strip.
+    document.querySelector<HTMLElement>(".site-header a")?.focus({ preventScroll: true });
+  });
+</script>

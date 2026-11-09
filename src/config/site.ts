@@ -27,11 +27,15 @@ export const site = {
    * - analyticsToken: Cloudflare Web Analytics site token (cookieless visit counts).
    * - newsletterUser: Buttondown username for the "tell me about new products" form.
    * - androidApps: Play app-signing SHA-256 fingerprints per package, for Android App Links.
+   * - appleTeamId and iosApps: Apple Developer Team ID and each product's iOS bundle ID, for
+   *   Universal Links (a product link opens the installed iPhone app).
    * The security headers and the privacy and cookie texts follow these values at build time.
    */
   integrations: integrations as {
     analyticsToken: string;
     newsletterUser: string;
     androidApps: { package: string; fingerprints: string[] }[];
+    appleTeamId: string;
+    iosApps: { product: string; bundleId: string }[];
   },
 } as const;

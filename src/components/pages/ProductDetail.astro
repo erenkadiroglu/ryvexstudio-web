@@ -5,6 +5,8 @@ import LaunchNotify from "@/components/LaunchNotify.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
+import qrcode from "qrcode-generator";
+import { launchDateNote, newLabel, newUntil } from "@/lib/launch";
 import { iconTransitionName } from "@/lib/transitions";
 import { route, type Lang } from "@/i18n/ui";
 import {
@@ -50,6 +52,13 @@ const copy = {
     latest: "Son sürüm",
     status: "Durum",
     soonNote: (stores: string) => `Yakında ${stores} üzerinden indirilebilecek.`,
+    planned: "Çıkış tarihi",
+    share: "Paylaş",
+    shareCopied: "Bağlantı kopyalandı",
+    qrTitle: "Telefonunuzla açın",
+    qrText: "Kameranızla okutun; indirme sayfası telefonunuzda açılsın.",
+    barFree: "Ücretsiz",
+    barGet: "İndir",
     related: "Ailenin diğer üyeleri",
     next: "Sıradaki ürün",
   },
@@ -76,6 +85,13 @@ const copy = {
     latest: "Latest",
     status: "Status",
     soonNote: (stores: string) => `Coming soon to ${stores}.`,
+    planned: "Launch date",
+    share: "Share",
+    shareCopied: "Link copied",
+    qrTitle: "Open it on your phone",
+    qrText: "Scan with your camera to open the download page on your phone.",
+    barFree: "Free",
+    barGet: "Get",
     related: "More from the family",
     next: "Next product",
   },
@@ -107,10 +123,28 @@ const storeList =
 const badgeFile = (store: string) =>
   ["svg", "png"].map((ext) => `badges/${store}-${lang}.${ext}`).find((f) => existsSync(`public/${f}`));
 const stores = soon ? [] : [
-  data.links.appStore && { href: data.links.appStore, label: copy.appStore, badge: badgeFile("app-store") },
-  data.links.googlePlay && { href: data.links.googlePlay, label: copy.googlePlay, badge: badgeFile("google-play") },
-  data.links.web && { href: data.links.web, label: copy.web },
-].filter(Boolean) as { href: string; label: string; badge?: string }[];
+  data.links.appStore && { store: "app-store", href: data.links.appStore, label: copy.appStore, badge: badgeFile("app-store") },
+  data.links.googlePlay && { store: "google-play", href: data.links.googlePlay, label: copy.googlePlay, badge: badgeFile("google-play") },
+  data.links.web && { store: "web", href: data.links.web, label: copy.web },
+].filter(Boolean) as { store: string; href: string; label: string; badge?: string }[];
+const appStores = stores.filter((s) => s.store !== "web");
+
+// A planned launch date replaces "coming soon" while it is ahead; the page checks it again in the
+// browser, so a passed date falls back to the plain note even before the next build.
+const launchDate = soon && data.releaseDate && data.releaseDate > new Date() ? data.releaseDate : undefined;
+const isNew = (newUntil(product) ?? 0) > new Date();
+
+// Desktop visitors can carry the page to their phone: a QR code of this page, made at build time.
+const pageUrl = new URL(`${route("products", lang)}/${product.id}`, site.url).href;
+const qr = (() => {
+  const code = qrcode(0, "M");
+  code.addData(pageUrl);
+  code.make();
+  const n = code.getModuleCount();
+  let path = "";
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (code.isDark(y, x)) path += `M${x} ${y}h1v1h-1z`;
+  return { n, path };
+})();
 
 // Privacy at a glance, read from the same record as the full policy.
 const serverData = data.privacy.dataCollected.filter((d) => d.storage === "server").length;
@@ -136,7 +170,7 @@ const facts = [
   { label: copy.platform, value: data.platforms.map((p) => platformLabels[lang][p]).join(", ") },
   soon && { label: copy.status, value: comingSoonLabel[lang] },
   data.version && { label: copy.version, value: data.version, mono: true },
-  data.releaseDate && { label: copy.released, value: dateFormat.format(data.releaseDate) },
+  data.releaseDate && { label: soon ? copy.planned : copy.released, value: dateFormat.format(data.releaseDate) },
 ].filter(Boolean) as { label: string; value: string; mono?: boolean }[];
 
 // The opening: the product's colour as a soft light behind the phone, over a light tint of it.
@@ -196,6 +230,7 @@ const camera = Math.round(phoneWidth * 0.036);
                   {comingSoonLabel[lang]}
                 </span>
               )}
+              {isNew && <span class="new-chip hidden" data-new-chip={product.id}>{newLabel[lang]}</span>}
             </p>
             <h1 class="mt-1 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
               {data.name}
@@ -203,29 +238,77 @@ const camera = Math.round(phoneWidth * 0.036);
           </div>
         </div>
         <p class="mt-8 max-w-[40ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
-        {soon && storeList && <p class="mt-8 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>}
-        {soon && <LaunchNotify lang={lang} productId={product.id} productName={data.name} />}
         {
-          stores.length > 0 && (
-            <ul class="mt-10 flex flex-wrap gap-3">
-              {stores.map((store) => (
-                <li>
-                  {store.badge ? (
-                    <a href={store.href} rel="noopener" class="inline-block transition-opacity duration-150 hover:opacity-85">
-                      <img src={`/${store.badge}`} alt={store.label} height="48" class="h-12 w-auto" />
-                    </a>
-                  ) : (
-                    <a
-                      href={store.href}
-                      rel="noopener"
-                      class="inline-flex rounded-full bg-primary px-[22px] py-[14px] text-label font-medium text-surface transition-opacity duration-150 hover:opacity-85"
-                    >
-                      {store.label}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
+          soon && launchDate ? (
+            <p
+              class="mt-8 text-body-md font-medium text-primary"
+              data-launch-date={launchDate.toISOString()}
+              data-fallback={storeList ? copy.soonNote(storeList) : comingSoonLabel[lang]}
+            >
+              {launchDateNote(launchDate, storeList, lang)}
+            </p>
+          ) : (
+            soon && storeList && <p class="mt-8 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>
+          )
+        }
+        {soon && <LaunchNotify lang={lang} productId={product.id} productName={data.name} />}
+        <!-- Stores (the visitor's own first) and sharing, side by side. -->
+        <div class:list={["flex flex-wrap items-center gap-3", stores.length > 0 ? "mt-10" : "mt-6"]}>
+          {
+            stores.length > 0 && (
+              <ul class="pd-stores flex flex-wrap gap-3">
+                {stores.map((store) => (
+                  <li data-store={store.store}>
+                    {store.badge ? (
+                      <a href={store.href} rel="noopener" class="inline-block transition-opacity duration-150 hover:opacity-85">
+                        <img src={`/${store.badge}`} alt={store.label} height="48" class="h-12 w-auto" />
+                      </a>
+                    ) : (
+                      <a
+                        href={store.href}
+                        rel="noopener"
+                        class="inline-flex rounded-full bg-primary px-[22px] py-[14px] text-label font-medium text-surface transition-opacity duration-150 hover:opacity-85"
+                      >
+                        {store.label}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          <button
+            type="button"
+            class="pd-share inline-flex min-h-12 items-center gap-2 rounded-full border border-outline px-5 text-label font-medium text-primary transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--rv-primary)_6%,transparent)]"
+            data-share-title={data.name}
+            data-share-text={productTagline(product, lang)}
+            data-share-url={pageUrl}
+            data-copied={copy.shareCopied}
+          >
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 15V3.5M7.5 8 12 3.5 16.5 8M5 12.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-6.5"></path>
+            </svg>
+            <span class="pd-share-label">{copy.share}</span>
+          </button>
+          <span class="sr-only" role="status" data-share-status></span>
+        </div>
+        {
+          appStores.length > 0 && (
+            <div class="pd-qr mt-6 hidden max-w-[27rem] items-center gap-5 rounded-2xl border border-outline p-2.5 pr-6 md:flex">
+              <svg
+                class="pd-qr-code size-[84px] shrink-0 rounded-xl"
+                viewBox={`-2 -2 ${qr.n + 4} ${qr.n + 4}`}
+                shape-rendering="crispEdges"
+                aria-hidden="true"
+              >
+                <rect x="-2" y="-2" width={qr.n + 4} height={qr.n + 4} fill="#FFFFFF" />
+                <path d={qr.path} fill="#1C1418" />
+              </svg>
+              <p class="text-body-sm text-secondary">
+                <strong class="block text-label font-semibold text-primary">{copy.qrTitle}</strong>
+                {copy.qrText}
+              </p>
+            </div>
           )
         }
       </div>
@@ -481,6 +564,78 @@ const camera = Math.round(phoneWidth * 0.036);
       </a>
     )
   }
+  {
+    /* Phones: once the store buttons scroll away, the right store stays one tap away at the bottom. */
+    appStores.length > 0 && (
+      <div class="download-bar md:hidden" data-download-bar data-apple-banner={appStores.some((s) => s.store === "app-store") ? "" : undefined}>
+        {appStores.map((store) => (
+          <a href={store.href} rel="noopener" class="download-bar-link" data-bar-store={store.store}>
+            <Image src={data.icon} alt="" width={44} height={44} class="shape-icon size-11 shrink-0" />
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-label font-semibold text-primary">{data.name}</span>
+              <span class="block truncate text-[0.8125rem] text-secondary">
+                {typeLabels[lang][data.type]} · {store.store === "app-store" ? "App Store" : "Google Play"}
+              </span>
+            </span>
+            <span class="download-bar-get">{copy.barGet}</span>
+          </a>
+        ))}
+      </div>
+    )
+  }
 </article>
+
+<script>
+  let storesWatch: IntersectionObserver | null = null;
+
+  document.addEventListener("astro:page-load", () => {
+    storesWatch?.disconnect();
+    storesWatch = null;
+
+    // Share: the phone's own share sheet where there is one, otherwise the link is copied.
+    document.querySelectorAll<HTMLButtonElement>(".pd-share").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const { shareTitle: title, shareText: text, shareUrl: url = location.href, copied = "" } = button.dataset;
+        const share = { title, text, url };
+        if (navigator.share && (!navigator.canShare || navigator.canShare(share))) {
+          try {
+            await navigator.share(share);
+          } catch {
+            /* the visitor closed the share sheet */
+          }
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch {
+          return;
+        }
+        const label = button.querySelector(".pd-share-label");
+        const status = button.parentElement?.querySelector("[data-share-status]");
+        const before = label?.textContent ?? "";
+        if (label) label.textContent = copied;
+        if (status) status.textContent = copied;
+        window.setTimeout(() => {
+          if (label) label.textContent = before;
+          if (status) status.textContent = "";
+        }, 2200);
+      });
+    });
+
+    // A planned launch date that has passed falls back to the plain "coming soon" note.
+    document.querySelectorAll<HTMLElement>("[data-launch-date]").forEach((note) => {
+      if (Date.parse(note.dataset.launchDate ?? "") <= Date.now()) note.textContent = note.dataset.fallback ?? "";
+    });
+
+    const bar = document.querySelector<HTMLElement>("[data-download-bar]");
+    const stores = document.querySelector(".pd-stores");
+    if (bar && stores) {
+      storesWatch = new IntersectionObserver(([entry]) => {
+        bar.classList.toggle("is-shown", !entry.isIntersecting && entry.boundingClientRect.top < 0);
+      });
+      storesWatch.observe(stores);
+    }
+  });
+</script>
 
 <ClosingBand lang={lang} />

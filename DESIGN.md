@@ -508,6 +508,15 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
 - **Çıkınca haber ver:** "Yakında" ürünlerin açılışında, mağaza notunun altında tek bir hap:
   solda e-posta alanı, sağda vişne "Çıkınca haber ver" düğmesi; altında tek satırlık söz ve
   aydınlatma metni bağlantısı. Bülten bağlantısı kurulmadan görünmez.
+- **Ürün eylemleri:** Mağaza düğmeleri ve yanında ikincil "Paylaş" hapı tek satırda; ziyaretçinin
+  kendi mağazası önde. Altında, yalnızca masaüstünde, beyaz zemin üzerinde mürekkep renkli QR kod
+  ve "Telefonunuzla açın" notu taşıyan ince kenarlı kart.
+- **İndirme barı (telefon):** Ekranın altında, kenarlardan 12px içeride, 20px köşeli, yarı saydam
+  ve bulanık `surface` zemin; solda 44px ikon, ortada ad ve "Tür · Mağaza", sağda vişne "İndir".
+  Mağaza düğmeleri görünürken saklanır, kaybolunca aşağıdan kayarak gelir.
+- **"Yeni" rozeti:** Vişne zemin, beyaz yazı, tam yuvarlak; yayından sonraki 30 gün.
+- **Duyuru şeridi:** Header'ın üstünde, ürün renginin %10'luk tonu; ortada renkli nokta, "Ürün
+  yayında. Hemen indirin →" ve kapatma düğmesi. Kapatılınca o ürün için bir daha görünmez.
 - **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
   uzakta. Karanlık temada `tertiary-dark`. Hiçbir zaman kaldırılmaz.
 

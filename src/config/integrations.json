@@ -2,8 +2,32 @@
   "analyticsToken": "",
   "newsletterUser": "",
   "androidApps": [
-    { "package": "com.erenkadiroglu.fileconvert", "fingerprints": [] },
-    { "package": "com.erenkadiroglu.pathwords", "fingerprints": [] },
-    { "package": "com.eren_kdroglu.persayar", "fingerprints": [] }
+    {
+      "package": "com.erenkadiroglu.fileconvert",
+      "fingerprints": []
+    },
+    {
+      "package": "com.erenkadiroglu.pathwords",
+      "fingerprints": []
+    },
+    {
+      "package": "com.eren_kdroglu.persayar",
+      "fingerprints": []
+    }
+  ],
+  "appleTeamId": "",
+  "iosApps": [
+    {
+      "product": "fileconvert",
+      "bundleId": ""
+    },
+    {
+      "product": "pathwords",
+      "bundleId": ""
+    },
+    {
+      "product": "persayar",
+      "bundleId": ""
+    }
   ]
 }

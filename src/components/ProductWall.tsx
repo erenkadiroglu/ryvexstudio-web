@@ -146,6 +146,7 @@ export default function ProductWall({
                     {item.status}
                   </span>
                 )}
+                {item.newLabel && <NewChip id={item.id} label={item.newLabel} className="mt-2" />}
               </a>
             </li>
           ))}
@@ -219,9 +220,22 @@ function ProductCard({ item, eager }: { item: WallItem; eager: boolean }) {
             {item.status}
           </span>
         )}
+        {item.newLabel && <NewChip id={item.id} label={item.newLabel} className="shrink-0" />}
       </div>
       {item.tagline && <span className="mt-4 block max-w-[44ch] text-body-md text-secondary">{item.tagline}</span>}
     </a>
+  );
+}
+
+/**
+ * "Yeni" for 30 days after a release. Hidden by default; a rule written by the page head shows it
+ * only while the product is still new, so the mark ends on time without a rebuild.
+ */
+function NewChip({ id, label, className }: { id: string; label: string; className: string }) {
+  return (
+    <span data-new-chip={id} className={`new-chip hidden ${className}`}>
+      {label}
+    </span>
   );
 }
 
