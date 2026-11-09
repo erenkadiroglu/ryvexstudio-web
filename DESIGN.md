@@ -89,7 +89,7 @@ spacing:
   xl: 40px
   2xl: 64px
   3xl: 96px
-  section: 160px
+  section: 128px
   section-mobile: 96px
   gutter: 24px
   margin-mobile: 20px
@@ -340,7 +340,7 @@ boşlukları mobilde 20px, tablette 40px, masaüstünde 64px. Kırılma noktalar
 Hizalama soldandır. Ortalanmış metin yalnızca 404 sayfası gibi tek mesajlı
 ekranlarda kullanılır.
 
-Bölümler arasında masaüstünde 160px, mobilde 96px boşluk vardır. Hiyerarşi önce
+Bölümler arasında masaüstünde 128px, mobilde 96px boşluk vardır. Hiyerarşi önce
 boşlukla kurulur.
 
 ### Ana sayfa
@@ -361,9 +361,11 @@ Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Ne yapıyoruz
-┌ ikonlar ┐    ┌ ikonlar ┐    ┌ ikonlar ┐        ← 3 sütun, 4:3 panelde o türün ikonları
-Uygulamalar    Oyunlar        Web
-link           link           link               ← filtreli ürün listesi
+┌──────────────────────────┐ ┌───────┐ ┌───────┐  ← üç uzun panel, her biri türün
+│ 2 ürün        [telefonlar]│ │1 ürün │ │Yakında│    renginin koyu tonunda; açık
+│ Uygulamalar               │ │       │ │       │    panel genişler: açıklama,
+│ açıklama, ikonlar, link   │ │Oyunlar│ │ Web   │    ikonlar, link ve gerçek ekranlar
+└──────────────────────────┘ └───────┘ └───────┘
 
 █████████████████ koyu vitrin bandı (kenardan kenara) █████████████████
 █  Öne çıkanlar                                                       █
@@ -381,9 +383,10 @@ Stüdyo hakkında tek cümle
 Footer
 ```
 
-Ana sayfa sırası: hero, sergi duvarı, tek cümlelik manifesto, Ne yapıyoruz
-(türün ürün ikonları ve ad; açıklama yok), koyu vitrin bandı, Günlükten ve
-vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
+Ana sayfa sırası: hero, sergi duvarı, ortalanmış tek cümlelik manifesto
+("Bir ürünü, adımızı taşımaya hazır olduğunda yayınlıyoruz."), Ne yapıyoruz
+(genişleyen tür panelleri; panel başına tek cümle), koyu
+vitrin bandı, Günlükten ve vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
 bilgi kendi sayfasında durur. Sitede kişi fotoğrafı, stok fotoğraf ve yapay zekâ ile üretilmiş görsel kullanılmaz.
 
 Ana sayfa beyaz bölümlerle koyu vitrin bandı arasında gidip gelir; bant,
@@ -397,8 +400,10 @@ kaydırmalı karusel kullanılmaz.
 
 ### Ürünler sayfası
 
-Başlık, altında tür filtresi (Tümü, Uygulamalar, Oyunlar, Web) ve aynı sergi
-duvarı. Filtre değiştiğinde yalnızca görünen ürünler değişir; sayfa yeniden
+Başlık, altında tür filtresi (Tümü, Uygulamalar, Oyunlar, Web) ve ürün kartları:
+ürün renginde bir panelden yükselen telefonda ilk ekran görüntüsü, altında ikon,
+ad, künye, durum ve tek cümlelik tanıtım (masaüstünde 3, tablette 2, mobilde 1
+sütun). Filtre değiştiğinde yalnızca görünen ürünler değişir; sayfa yeniden
 yüklenmez ve adres çubuğu güncellenir (`/urunler?tur=oyun`).
 
 ### Ürün detay sayfası
@@ -504,6 +509,33 @@ Hareket ürünleri sahneye taşımak için vardır, süs için değil. Hepsi
 `cubic-bezier(0.2, 0.7, 0.2, 1)` eğrisini kullanır ve `prefers-reduced-motion`
 açıksa kapatılır.
 
+- **Açılış:** Oturumdaki ilk ziyarette sayfanın önünde beyaz bir perde durur;
+  vişne kutucuk belirir ve R işaretinin üç çizgisi sırayla çizilir (yaklaşık
+  1,2 saniye). Perde yukarı doğru kalkar, ardından hero başlığı, metin ve
+  ikonlar yerine oturur. Hareket azaltma açıksa açılış hiç oynamaz.
+- **İmleç ışığı:** Masaüstünde hero'da imlecin altında vişnenin yüzde 9'luk,
+  520px'lik yumuşak bir ışığı dolaşır.
+- **Akıcı kaydırma:** Lenis (MIT) yerel kaydırmanın üzerine hafif bir atalet
+  ekler; yapışkan bölümler, bağlantılar ve klavye aynen çalışır. Kendi kaydırması
+  olan alanlar (mobil menü, ekran şeridi) `data-lenis-prevent` ile hariç tutulur.
+  Hareket azaltma açıksa kullanılmaz.
+- **Ne yapıyoruz panelleri:** Masaüstünde üç panel yan yana durur; fareyle
+  üzerine gelinen ya da klavyeyle odaklanılan panel genişler (800ms), açıklama,
+  ikonlar ve gerçek ekranlar belirir; diğerleri yalnızca adlarını gösterir.
+  Mobilde paneller alt alta ve hepsi açıktır.
+- **Özellik hikâyesi (ürün sayfası):** Masaüstünde solda telefon ekranın
+  ortasında sabit durur; sağdaki her özellik telefon yüksekliği kadar yer kaplar
+  ve ortaya geldiğinde telefon o özelliğin gerçek ekranına çapraz geçişle döner.
+  Hangi özelliğin hangi ekranı gösterdiği içerikte `shot` ile belirtilir.
+- **Kapanış ve alt bilgi:** Kapanış bandı görünür olunca başlığın kelimeleri
+  maskeden yükselir, büyük R işareti çizilir ve butonlar belirir. Alt bilginin
+  en altında "Ryvex Studio" adı sayfa ızgarası genişliğinde yazılıdır ve görünür
+  olunca yerine yükselir. Hareket azaltma açıksa hepsi baştan yerindedir.
+- **Stüdyo bandı:** Stüdyo sayfası, ürün renklerinin ışığıyla aydınlanan koyu
+  bir bantla açılır; cümle kelime kelime yükselir, altında kurucu, kapsam ve
+  ürünler yazar.
+- **Hero ışıltısı:** Uçan ikonların arkasında, ilk üç ürünün renklerinden
+  bulanık ve hafif bir ışık durur; koyu temada daha da sönüktür.
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir
   (900ms, satırlar arası 110ms). Ardından giriş metni ve butonlar 12px aşağıdan
   yerine oturur. Sağda ürün ikonları elle yerleştirilmiş bir kompozisyonda
@@ -515,7 +547,9 @@ açıksa kapatılır.
   zemini o ürünün renginin yüzde 6'lık tonuna geçer (500ms). Dokunmatik
   cihazlarda eğim yoktur.
 - **Kaydırmalı vitrin:** Öne çıkan ürünler (`featured`) için. Masaüstünde solda
-  sabit bir cihaz durur; sağdaki metin adımları kaydırıldıkça cihazın ekranı
+  sabit bir cihaz durur. Cihazın sahnesi ve her metin adımı başlığın altındaki
+  ekran yüksekliği kadardır; böylece cihaz ekranın ortasında durur ve metniyle
+  aynı hizada kalır. Kısa ekranlarda cihaz küçülür; sağdaki metin adımları kaydırıldıkça cihazın ekranı
   çapraz geçişle değişir. Web ürünlerinde cihaz telefondan tarayıcı penceresine
   dönüşür (700ms). Aktif olmayan adımların başlığı ikincil renge çekilir; sayfa
   zemini aktif ürünün tonunu alır. Mobilde cihaz her adımın içinde durağandır.

@@ -1,8 +1,9 @@
 ---
 import ClosingBand from "@/components/ClosingBand.astro";
 import ProductWall from "@/components/ProductWall";
+import { getImage } from "astro:assets";
 import { type Lang } from "@/i18n/ui";
-import { getProducts, toWallItem, typePluralLabels, typeSlugs } from "@/lib/products";
+import { getProducts, productTagline, toWallItem, typePluralLabels, typeSlugs } from "@/lib/products";
 
 interface Props {
   lang: Lang;
@@ -10,7 +11,14 @@ interface Props {
 
 const { lang } = Astro.props;
 const products = await getProducts();
-const items = products.map((p) => toWallItem(p, lang));
+// Cards carry the product's first real screenshot, resized once at build time.
+const items = await Promise.all(
+  products.map(async (p) => {
+    const shot = p.data.screenshots[0]?.src;
+    const image = shot ? await getImage({ src: shot, width: 480, format: "webp" }) : undefined;
+    return { ...toWallItem(p, lang), tagline: productTagline(p, lang), shotSrc: image?.src };
+  }),
+);
 
 const copy = {
   tr: {
@@ -52,6 +60,7 @@ const filters = [
   <p class="mt-5 mb-12 max-w-[48ch] text-body-lg text-secondary">{copy.lede}</p>
   <ProductWall
     client:load
+    variant="cards"
     items={items}
     filters={filters}
     filterParam={copy.param}

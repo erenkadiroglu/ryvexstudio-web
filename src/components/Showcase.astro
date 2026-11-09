@@ -47,7 +47,9 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
     <div class="mt-16 md:grid md:grid-cols-12 md:gap-6">
       <!-- Sticky device, desktop only: its screen and shape follow the active step. -->
       <div class="hidden md:col-span-6 md:block" aria-hidden="true">
-        <div class="sticky top-[calc(50vh-290px)] flex h-[580px] items-center justify-center">
+        <!-- The stage is exactly one screen tall below the header, and so is every step, so the
+             device and the text it belongs to share the same centre all the way through. -->
+        <div class="showcase-stage sticky top-[73px] flex h-[calc(100svh-73px)] items-center justify-center">
           <div
             class="showcase-device group relative overflow-hidden border border-outline bg-surface data-[kind=browser]:aspect-[16/10] data-[kind=browser]:w-full data-[kind=browser]:rounded-[20px] data-[kind=phone]:aspect-[270/578] data-[kind=phone]:w-[270px] data-[kind=phone]:rounded-[42px] data-[kind=stage]:aspect-[4/5] data-[kind=stage]:w-[440px] data-[kind=stage]:rounded-[28px]"
             data-kind={kindOf(products[0])}
@@ -89,7 +91,7 @@ const panel = (color: string) => `background-color: color-mix(in srgb, ${color} 
         {
           products.map((product) => (
             <li
-              class="showcase-step flex flex-col justify-center border-t border-outline py-12 md:min-h-[72vh] md:border-t-0 md:py-0"
+              class="showcase-step flex flex-col justify-center border-t border-outline py-12 md:min-h-[calc(100svh-73px)] md:border-t-0 md:py-0"
               data-color={product.data.color}
               data-kind={kindOf(product)}
             >

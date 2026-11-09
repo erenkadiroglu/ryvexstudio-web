@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import PhoneFrame from "@/components/PhoneFrame.astro";
 import { route, type Lang } from "@/i18n/ui";
 import { typeSlugs, type Product, type ProductType } from "@/lib/products";
 
@@ -14,36 +15,44 @@ const copy = {
   tr: {
     heading: "Ne yapıyoruz",
     soon: "Yakında",
+    count: (n: number) => `${n} ürün`,
     items: {
       app: {
         title: "Uygulamalar",
+        text: "Günlük işleri telefonda hızlı ve sade biçimde çözen araçlar.",
         link: "Uygulamaları gör",
       },
       game: {
         title: "Oyunlar",
+        text: "Kısa bir molayı güzelleştiren, oynarken öğreten oyunlar.",
         link: "Oyunları gör",
       },
       web: {
         title: "Web",
-        link: "Web projelerini gör",
+        text: "Kurulum istemeden tarayıcıda çalışan ürünler. Hazırlık aşamasında.",
+        link: "",
       },
     },
   },
   en: {
     heading: "What we make",
     soon: "Coming soon",
+    count: (n: number) => (n === 1 ? "1 product" : `${n} products`),
     items: {
       app: {
         title: "Apps",
+        text: "Tools that handle everyday tasks on your phone, quickly and simply.",
         link: "See the apps",
       },
       game: {
         title: "Games",
+        text: "Games that brighten a short break and teach while you play.",
         link: "See the games",
       },
       web: {
         title: "Web",
-        link: "See the web products",
+        text: "Products that run in the browser with nothing to install. In preparation.",
+        link: "",
       },
     },
   },
@@ -51,50 +60,125 @@ const copy = {
 
 const types: ProductType[] = ["app", "game", "web"];
 const param = lang === "tr" ? "tur" : "type";
+const BRAND = "#8E1B3B";
+const INK = "#160f12";
+
+/** Up to two real screens for a kind: one from each product, or two from a single product. */
+const screensFor = (list: Product[]) => {
+  const firsts = list.flatMap((p) => (p.data.screenshots[0] ? [p.data.screenshots[0].src] : []));
+  if (firsts.length >= 2) return firsts.slice(0, 2);
+  return (list[0]?.data.screenshots ?? []).slice(0, 2).map((s) => s.src);
+};
+
+const kinds = types.map((type) => {
+  const list = products.filter((p) => p.data.type === type);
+  const color = list[0]?.data.color ?? BRAND;
+  const second = list[1]?.data.color ?? color;
+  // A deep ground in the kind's own colour, lit from the corner by its products.
+  const ground = [
+    `radial-gradient(120% 80% at 85% 0%, color-mix(in srgb, ${second} 55%, transparent), transparent 60%)`,
+    `linear-gradient(160deg, color-mix(in srgb, ${color} 62%, ${INK}), color-mix(in srgb, ${color} 30%, ${INK}))`,
+  ].join(", ");
+  return {
+    type,
+    list,
+    screens: screensFor(list),
+    ground,
+    item: copy.items[type],
+    href: list.length > 0 ? `${route("products", lang)}?${param}=${lang === "tr" ? typeSlugs[type] : type}` : undefined,
+  };
+});
 ---
 
-<section aria-labelledby="ne-yapiyoruz" class="container-page pb-section-mobile md:pb-section">
-  <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">
-    {copy.heading}
-  </h2>
+<!--
+  Three tall panels, one per kind, each on a deep ground of its own colour. The panel under the
+  pointer (or keyboard focus) widens to show its line, its products and their real screens; the
+  others narrow to their names. On small screens every panel is open, one under the other.
+-->
+<section aria-labelledby="ne-yapiyoruz" class="container-page py-section-mobile md:py-section">
+  <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.heading}</h2>
 
-  <div class="mt-14 grid gap-x-6 gap-y-14 md:grid-cols-3">
+  <ul class="dpanels mt-12 flex flex-col gap-4 md:mt-14 md:h-[600px] md:flex-row" data-dpanels>
     {
-      types.map((type) => {
-        const item = copy.items[type];
-        const ofType = products.filter((p) => p.data.type === type);
-        const slug = lang === "tr" ? typeSlugs[type] : type;
+      kinds.map(({ type, list, screens, ground, item, href }, i) => {
+        const Tag = href ? "a" : "div";
         return (
-          <article class="group flex flex-col">
-            <!-- The products of this kind, by their own icons; no stock photography. -->
-            <div
-              class:list={[
-                "flex aspect-[16/10] flex-wrap content-center items-center justify-center gap-6 rounded-xl p-8 md:aspect-[4/3]",
-                ofType.length > 0 ? "bg-neutral" : "border border-dashed border-outline",
-              ]}
+          <li class:list={["dpanel", i === 0 && "is-active"]} data-type={type}>
+            <Tag
+              href={href}
+              class="dpanel-inner relative block h-[520px] overflow-hidden rounded-[28px] text-white md:h-full"
+              style={`background:${ground}`}
             >
-              {ofType.map((product) => (
-                <Image
-                  src={product.data.icon}
-                  alt={product.data.name}
-                  title={product.data.name}
-                  widths={[112, 224]}
-                  sizes="112px"
-                  class="shape-icon object-depth size-24 transition-transform duration-700 ease-[var(--ease-settle)] group-hover:-translate-y-1 md:size-28"
-                />
-              ))}
-            </div>
-            <h3 class="mt-6 text-headline-md font-semibold">{item.title}</h3>
-            {ofType.length > 0 ? (
-              <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline mt-5 self-start text-body-md">
-                {item.link}
-              </a>
-            ) : (
-              <p class="mt-5 text-body-md font-medium text-primary">{copy.soon}</p>
-            )}
-          </article>
+              {screens.length > 0 && (
+                <div class="dpanel-phones pointer-events-none absolute top-16 right-6 flex md:top-20 md:right-10" aria-hidden="true">
+                  {screens.map((src) => (
+                    <div class="dpanel-phone">
+                      <PhoneFrame src={src} alt="" width={screens.length > 1 ? 158 : 180} />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {screens.length === 0 && (
+                <svg class="dpanel-mark absolute top-10 right-10 size-24" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                  <rect width="64" height="64" rx="14.4" fill="none" stroke="rgb(255 255 255 / 0.35)" stroke-width="1.5" />
+                  <g fill="none" stroke="rgb(255 255 255 / 0.85)" stroke-width="6">
+                    <path d="M24 16V48" />
+                    <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round" />
+                    <path d="M31 34L52 55" />
+                  </g>
+                </svg>
+              )}
+
+              <div class="dpanel-shade absolute inset-x-0 bottom-0 h-2/3" aria-hidden="true" />
+
+              <p class="absolute top-8 left-8 text-body-md text-white/80">
+                {list.length > 0 ? copy.count(list.length) : copy.soon}
+              </p>
+
+              <div class="absolute right-8 bottom-8 left-8 md:right-auto md:max-w-[21rem]">
+                <h3 class="text-[2.25rem] leading-none font-semibold tracking-[-0.03em] md:text-[2.75rem]">{item.title}</h3>
+                <div class="dpanel-detail">
+                  <p class="mt-4 text-body-lg text-white/85">{item.text}</p>
+                  {list.length > 0 && (
+                    <div class="mt-6 flex items-center gap-4">
+                      <span class="flex gap-2">
+                        {list.map((product) => (
+                          <Image
+                            src={product.data.icon}
+                            alt={product.data.name}
+                            widths={[40, 80]}
+                            sizes="40px"
+                            class="shape-icon size-10 ring-1 ring-white/20"
+                          />
+                        ))}
+                      </span>
+                      <span class="dpanel-link text-label font-medium underline decoration-white/50 underline-offset-4">
+                        {item.link}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Tag>
+          </li>
         );
       })
     }
-  </div>
+  </ul>
 </section>
+
+<script>
+  // The panel under the pointer or keyboard focus opens; the others narrow.
+  const bind = () => {
+    const root = document.querySelector<HTMLElement>("[data-dpanels]");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "true";
+    const panels = [...root.querySelectorAll<HTMLElement>(".dpanel")];
+    const open = (panel: HTMLElement) => panels.forEach((p) => p.classList.toggle("is-active", p === panel));
+    for (const panel of panels) {
+      panel.addEventListener("pointerenter", () => open(panel));
+      panel.addEventListener("focusin", () => open(panel));
+    }
+  };
+  document.addEventListener("astro:page-load", bind);
+</script>

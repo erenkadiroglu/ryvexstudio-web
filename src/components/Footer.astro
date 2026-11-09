@@ -82,5 +82,22 @@ const columns = [
   </div>
   <div class="container-page">
     <p class="border-t border-outline py-6">© {year} {site.name}. {t("footer.rights")}</p>
+    <!-- The studio's name, set across the full width of the page, rises into place at the very end. -->
+    <div class="footer-word overflow-hidden pb-2" data-reveal-on-view aria-hidden="true">
+      <svg class="block w-full text-primary" viewBox="0 0 1000 172" focusable="false">
+        <text
+          x="0"
+          y="142"
+          textLength="1000"
+          lengthAdjust="spacingAndGlyphs"
+          fill="currentColor"
+          font-size="190"
+          font-weight="600"
+          letter-spacing="-8"
+        >
+          {site.name}
+        </text>
+      </svg>
+    </div>
   </div>
 </footer>

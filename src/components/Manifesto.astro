@@ -7,20 +7,34 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const text = {
-  tr: "Az ürün yapıyoruz. Her birini, kendimiz kullanmak isteyeceğimiz hâle gelene kadar işliyoruz.",
-  en: "We make few products, and refine each one until we would want to use it ourselves.",
+const copy = {
+  tr: {
+    label: "Yaklaşımımız",
+    text: "Bir ürünü, adımızı taşımaya hazır olduğunda yayınlıyoruz.",
+  },
+  en: {
+    label: "Our approach",
+    text: "We release a product only when it is ready to carry our name.",
+  },
 }[lang];
 
-const words = text.split(" ");
+const words = copy.text.split(" ");
 ---
 
-<section
-  class="manifesto container-page py-section-mobile md:py-section"
-  aria-label={lang === "tr" ? "Manifesto" : "Manifesto"}
->
+<!-- One statement, centred, set large; its words fill with ink as it is read. -->
+<section class="manifesto container-page py-section-mobile text-center md:py-section" aria-label={copy.label}>
+  <!-- The studio's mark signs the statement. -->
+  <svg class="mx-auto size-10" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <clipPath id="rv-manifesto-mark"><rect width="64" height="64" rx="14.4"></rect></clipPath>
+    <rect width="64" height="64" rx="14.4" fill="#8E1B3B"></rect>
+    <g clip-path="url(#rv-manifesto-mark)" fill="none" stroke="#FFFFFF" stroke-width="8">
+      <path d="M24 16V48"></path>
+      <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"></path>
+      <path d="M31 34L64 67"></path>
+    </g>
+  </svg>
   <p
-    class="max-w-[20ch] text-[2.25rem] leading-[1.15] font-semibold tracking-[-0.03em] md:text-[4.5rem] md:leading-[1.02]"
+    class="mx-auto mt-10 max-w-[22ch] text-[2.25rem] leading-[1.12] font-semibold tracking-[-0.035em] text-balance md:text-[3.75rem] md:leading-[1.06]"
   >
     {
       words.map((word, i) => (
@@ -31,5 +45,4 @@ const words = text.split(" ");
       ))
     }
   </p>
-  <p class="mt-10 text-title font-semibold text-tertiary">Ryvex Studio</p>
-</section>
+  </section>

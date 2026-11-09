@@ -48,16 +48,22 @@ aboutEn: |
 features:
   - title: { tr: "Patika bulmacası", en: "Path puzzles" }
     text: { tr: "Harfleri düz çizgilerle değil, kıvrılan patikalarla birleştirin.", en: "Join letters with winding paths instead of straight lines." }
+    shot: 0
   - title: { tr: "Türkçe anlam ve telaffuz", en: "Turkish meanings and pronunciation" }
     text: { tr: "Her kelimenin Türkçe karşılığını, türünü ve örnek cümlesini görün, telaffuzunu dinleyin.", en: "See each word's Turkish meaning, word type and example sentence, and hear how it is pronounced." }
+    shot: 3
   - title: { tr: "Beş dünya", en: "Five worlds" }
     text: { tr: "Zümrüt Vadi'den Buzul Tepeleri'ne, her biri kendi atmosferiyle beş dünya.", en: "From Emerald Valley to Glacier Peaks, five worlds each with its own atmosphere." }
+    shot: 1
   - title: { tr: "Sonsuz bölüm", en: "Endless levels" }
     text: { tr: "Hazırlanmış bölümler bitince oyun yeni bulmacalar üretmeye devam eder.", en: "When the handcrafted levels run out, the game keeps generating new puzzles." }
+    shot: 2
   - title: { tr: "Günlük görevler", en: "Daily tasks" }
     text: { tr: "Her gün yenilenen görevler ve ödüller.", en: "Tasks and rewards that refresh every day." }
+    shot: 1
   - title: { tr: "Çevrimdışı oynanır", en: "Plays offline" }
     text: { tr: "Metroda, uçakta, internetin olmadığı her yerde.", en: "On the metro, on a plane, anywhere without a connection." }
+    shot: 0
 featured: true
 order: 20
 ---

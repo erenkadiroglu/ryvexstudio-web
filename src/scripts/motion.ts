@@ -3,9 +3,25 @@
  * Everything here is skipped for visitors who prefer reduced motion.
  */
 
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+
 const root = document.documentElement;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+/* ---------- Smooth scrolling ---------- */
+
+// A light, inertial scroll on top of the native one; sticky, anchors and keyboard keep working.
+// Rebuilt after every client-side navigation, because the swap replaces <html>'s classes.
+let lenis: Lenis | null = null;
+
+function startSmoothScroll() {
+  lenis?.destroy();
+  lenis = null;
+  if (reducedMotion.matches) return;
+  lenis = new Lenis({ autoRaf: true, anchors: true, lerp: 0.1 });
+}
 
 /* ---------- Page tint ---------- */
 
@@ -160,6 +176,47 @@ function runShowcase() {
   observers.push(stepObserver, sectionObserver);
 }
 
+/* ---------- Reveal on view: closing band and footer name, once each ---------- */
+
+function revealOnView() {
+  root.classList.toggle("motion-ok", !reducedMotion.matches);
+  const targets = document.querySelectorAll<HTMLElement>("[data-reveal-on-view]");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("is-in");
+        observer.unobserve(entry.target);
+      }
+    },
+    { rootMargin: "0px 0px -20% 0px" },
+  );
+  targets.forEach((t) => observer.observe(t));
+  observers.push(observer);
+}
+
+/* ---------- Feature story: the step in the middle of the screen sets the phone's screen ---------- */
+
+function runStory() {
+  const story = document.querySelector<HTMLElement>("[data-story]");
+  if (!story) return;
+  const steps = [...story.querySelectorAll<HTMLElement>(".story-step")];
+  const screens = [...story.querySelectorAll<HTMLElement>(".story-screen")];
+  if (!steps.length || !screens.length) return;
+  const activate = (step: HTMLElement) => {
+    steps.forEach((s) => s.classList.toggle("is-active", s === step));
+    screens.forEach((img) => img.classList.toggle("is-active", img.dataset.shot === step.dataset.shot));
+  };
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) if (entry.isIntersecting) activate(entry.target as HTMLElement);
+    },
+    { rootMargin: "-45% 0px -45% 0px" },
+  );
+  steps.forEach((s) => observer.observe(s));
+  observers.push(observer);
+}
+
 /* ---------- Hero: depth parallax, then the icons land on the wall ---------- */
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
@@ -236,12 +293,19 @@ function runHero() {
   const { signal } = pageListeners;
   window.addEventListener("scroll", schedule, { passive: true, signal });
   window.addEventListener("resize", () => { measure(); schedule(); }, { signal });
+  const spot = document.querySelector<HTMLElement>(".hero-spot");
   if (finePointer.matches) {
     window.addEventListener(
       "pointermove",
       (event) => {
         pointer.tx = event.clientX / window.innerWidth - 0.5;
         pointer.ty = event.clientY / window.innerHeight - 0.5;
+        // The light under the pointer, in the hero's own coordinates.
+        if (spot) {
+          const r = spot.getBoundingClientRect();
+          spot.style.setProperty("--mx", `${event.clientX - r.left}px`);
+          spot.style.setProperty("--my", `${event.clientY - r.top}px`);
+        }
         schedule();
       },
       { passive: true, signal },
@@ -287,11 +351,14 @@ function runManifesto() {
 }
 
 document.addEventListener("astro:page-load", () => {
+  startSmoothScroll();
   setTint(undefined);
   setBandTint(undefined);
   runHero();
   revealWalls();
   runShowcase();
+  runStory();
+  revealOnView();
   runManifesto();
 });
 

@@ -124,6 +124,12 @@ const related = [
 const kind = data.type === "web" ? "browser" : "phone";
 // Only real material is shown: a screenshot in a device, or else the product's own icon.
 const shot = data.screenshots[0]?.src;
+// Feature story (desktop): a phone stays put while the features pass; each shows its own screen.
+const story = kind === "phone" && data.screenshots.length > 1 && data.features.length > 0;
+const phoneWidth = 260;
+const bezel = Math.round(phoneWidth * 0.034);
+const radius = Math.round(phoneWidth * 0.155);
+const camera = Math.round(phoneWidth * 0.036);
 ---
 
 <article>
@@ -131,7 +137,10 @@ const shot = data.screenshots[0]?.src;
   <div style={tint(data.color, 7)}>
     <header class="container-page grid items-center gap-12 pt-14 pb-16 md:grid-cols-12 md:pt-20 md:pb-20">
       <div class="md:col-span-7">
-        <a href={base} class="text-label font-medium text-secondary hover:text-primary">{copy.back}</a>
+        <a href={base} class="group inline-flex items-center gap-2 text-label font-medium text-secondary hover:text-primary">
+          <span aria-hidden="true" class="transition-transform duration-300 ease-[var(--ease-settle)] group-hover:-translate-x-1">←</span>
+          {copy.back}
+        </a>
         <div class="mt-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10">
           <Image
             src={data.icon}
@@ -201,16 +210,18 @@ const shot = data.screenshots[0]?.src;
 
     {
       data.screenshots.length > 0 && (
-        <div class="container-page pb-16 md:pb-20">
-          <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots}>
-            <ul class="flex gap-6 pt-1 pb-12 md:gap-8">
-              {data.screenshots.map((screenshot) => {
+        <div class:list={["container-page pb-16 md:pb-20", story && "md:hidden"]}>
+          <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots} data-lenis-prevent>
+            <ul class="flex gap-6 pt-1 pb-12">
+              {data.screenshots.map((screenshot, i) => {
                 const image = screenshot.src;
                 const alt = `${data.name}: ${screenshot.alt[lang]}`;
+                // On desktop the first screen is already in the large phone above.
+                const repeatsHero = i === 0 && kind === "phone" && data.screenshots.length > 1;
                 return (
-                  <li class="shrink-0">
+                  <li class:list={["shrink-0", repeatsHero && "md:hidden"]}>
                     {kind === "phone" ? (
-                      <PhoneFrame src={image} alt={alt} width={232} class="phone-compact" />
+                      <PhoneFrame src={image} alt={alt} width={216} class="phone-compact" />
                     ) : (
                       <Image src={image} alt={alt} height={400} class="h-[300px] w-auto rounded-lg border border-outline md:h-[400px]" />
                     )}
@@ -228,15 +239,43 @@ const shot = data.screenshots[0]?.src;
     data.features.length > 0 && (
       <section aria-labelledby="ozellikler" class="container-page pt-section-mobile md:pt-section">
         <h2 id="ozellikler" class="text-headline-lg font-semibold">{copy.features}</h2>
-        <ul class="mt-10 grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3">
-          {data.features.map((feature) => (
-            <li>
-              <span class="shape-icon block size-3" style={`background-color:${data.color}`} aria-hidden="true" />
-              <h3 class="mt-4 text-title font-semibold">{feature.title[lang]}</h3>
-              <p class="mt-2 max-w-[40ch] text-body-md text-secondary">{feature.text[lang]}</p>
-            </li>
-          ))}
-        </ul>
+        <div class:list={["mt-10", story && "md:mt-6 md:grid md:grid-cols-12 md:gap-6"]} data-story={story ? "" : undefined}>
+          {story && (
+            <div class="hidden md:col-span-5 md:block" aria-hidden="true">
+              <div class="story-stage sticky flex h-[620px] items-center justify-center">
+                <div class="phone" style={`width:${phoneWidth}px;padding:${bezel}px;border-radius:${radius}px`}>
+                  <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
+                    {data.screenshots.map((screenshot, i) => (
+                      <Image
+                        src={screenshot.src}
+                        alt=""
+                        widths={[phoneWidth, phoneWidth * 2]}
+                        sizes={`${phoneWidth}px`}
+                        class:list={["story-screen absolute inset-0 size-full object-cover object-top", i === (data.features[0].shot ?? 0) && "is-active"]}
+                        data-shot={i}
+                      />
+                    ))}
+                  </div>
+                  <span class="phone-camera" style={`width:${camera}px;height:${camera}px;top:${bezel + camera}px`} />
+                </div>
+              </div>
+            </div>
+          )}
+          <ul class:list={[story ? "md:col-span-6 md:col-start-7" : "grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3"]}>
+            {data.features.map((feature, i) => (
+              <li
+                class:list={[story && "story-step flex flex-col justify-center border-t border-outline py-10 md:min-h-[620px] md:border-t-0 md:py-0", story && i === 0 && "is-active"]}
+                data-shot={feature.shot ?? 0}
+              >
+                <span class="block h-1 w-10 rounded-full" style={`background-color:${data.color}`} aria-hidden="true" />
+                <h3 class:list={["mt-5 font-semibold", story ? "text-[1.75rem] leading-tight tracking-[-0.02em] md:text-[2.5rem]" : "text-title"]}>
+                  {feature.title[lang]}
+                </h3>
+                <p class:list={["mt-3 max-w-[40ch] text-secondary", story ? "text-body-lg" : "text-body-md"]}>{feature.text[lang]}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     )
   }
@@ -301,7 +340,8 @@ const shot = data.screenshots[0]?.src;
   </div>
 
   {
-    related.length > 0 && (
+    // A single card next to the "next product" band only repeats it, so the row needs two or more.
+    related.length > 1 && (
       <section aria-labelledby="aile" class="container-page pb-section-mobile md:pb-section">
         <h2 id="aile" class="text-headline-md font-semibold">{copy.related}</h2>
         <ul class="mt-8 grid gap-6 sm:grid-cols-3">

@@ -22,7 +22,8 @@ const copy = {
 
 <!-- Full-bleed brand band. Colors are fixed brand values, so it reads the same in both themes. -->
 <section
-  class="relative overflow-hidden bg-[#8E1B3B] text-[#FFFFFF] [&_a:focus-visible]:outline-[#FFFFFF]"
+  data-reveal-on-view
+  class="closing relative overflow-hidden bg-[#8E1B3B] text-[#FFFFFF] [&_a:focus-visible]:outline-[#FFFFFF]"
   aria-labelledby="kapanis"
 >
   <svg
@@ -32,20 +33,30 @@ const copy = {
     focusable="false"
   >
     <g fill="none" stroke="#FFFFFF" stroke-width="8">
-      <path d="M24 16V48"></path>
-      <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"></path>
-      <path d="M31 34L64 67"></path>
+      <path class="closing-stroke" pathLength="1" d="M24 16V48"></path>
+      <path class="closing-stroke" pathLength="1" d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"></path>
+      <path class="closing-stroke" pathLength="1" d="M31 34L64 67"></path>
     </g>
   </svg>
 
   <div class="container-page relative py-24 md:py-36">
     <h2
       id="kapanis"
-      class="max-w-[12ch] text-[3rem] leading-[1] font-semibold tracking-[-0.04em] md:text-[5.5rem]"
+      class="reveal-words max-w-[12ch] text-[3rem] leading-[1] font-semibold tracking-[-0.04em] md:text-[5.5rem]"
+      aria-label={copy.heading}
     >
-      {copy.heading}
+      {
+        copy.heading.split(" ").map((word, i, all) => (
+          <>
+            <span class="w" aria-hidden="true">
+              <span style={`--i:${i}`}>{word}</span>
+            </span>
+            {i < all.length - 1 && " "}
+          </>
+        ))
+      }
     </h2>
-    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+    <div class="reveal-fade mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
       <a
         href={route("contact", lang)}
         data-magnetic
