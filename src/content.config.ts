@@ -26,10 +26,28 @@ const products = defineCollection({
           web: z.url().optional(),
         })
         .default({}),
-      /** Real screenshots from a phone or emulator, in the order they are shown. */
+      /**
+       * Real screenshots from a phone or emulator, in the order they are shown. `src` is the
+       * Turkish screen in the light theme; the optional variants are the same screen in English
+       * (`en`) and in the app's dark theme (`dark`, `darkEn`). A missing variant falls back to
+       * `src`, so a product never shows an empty frame.
+       */
       screenshots: z
-        .array(z.object({ src: image(), alt: z.object({ tr: z.string(), en: z.string() }) }))
+        .array(
+          z.object({
+            src: image(),
+            en: image().optional(),
+            dark: image().optional(),
+            darkEn: image().optional(),
+            alt: z.object({ tr: z.string(), en: z.string() }),
+          }),
+        )
         .default([]),
+      /**
+       * A short, silent screen recording that loops in the product page's phone, by language.
+       * Files live in public/videos/<id>/ (MP4, H.264); the first screenshot is its poster.
+       */
+      video: z.object({ tr: z.string(), en: z.string().optional() }).optional(),
       version: z.string().optional(),
       releaseDate: z.coerce.date().optional(),
       supportEmail: z.email().optional(),

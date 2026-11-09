@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import { route, type Lang } from "@/i18n/ui";
-import { typeSlugs, type Product, type ProductType } from "@/lib/products";
+import { screenFor, typeSlugs, type Product, type ProductType } from "@/lib/products";
 
 interface Props {
   products: Product[];
@@ -65,9 +65,9 @@ const INK = "#160f12";
 
 /** Up to two real screens for a kind: one from each product, or two from a single product. */
 const screensFor = (list: Product[]) => {
-  const firsts = list.flatMap((p) => (p.data.screenshots[0] ? [p.data.screenshots[0].src] : []));
+  const firsts = list.flatMap((p) => (p.data.screenshots[0] ? [screenFor(p.data.screenshots[0], lang)] : []));
   if (firsts.length >= 2) return firsts.slice(0, 2);
-  return (list[0]?.data.screenshots ?? []).slice(0, 2).map((s) => s.src);
+  return (list[0]?.data.screenshots ?? []).slice(0, 2).map((s) => screenFor(s, lang));
 };
 
 const kinds = types.map((type) => {
@@ -111,9 +111,9 @@ const kinds = types.map((type) => {
             >
               {screens.length > 0 && (
                 <div class="dpanel-phones pointer-events-none absolute top-16 right-6 flex md:top-20 md:right-10" aria-hidden="true">
-                  {screens.map((src) => (
+                  {screens.map((screen) => (
                     <div class="dpanel-phone">
-                      <PhoneFrame src={src} alt="" width={screens.length > 1 ? 158 : 180} />
+                      <PhoneFrame src={screen.src} darkSrc={screen.dark} alt="" width={screens.length > 1 ? 158 : 180} />
                     </div>
                   ))}
                 </div>

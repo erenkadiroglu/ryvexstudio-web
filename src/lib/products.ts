@@ -82,6 +82,17 @@ export function toWallItem(product: Product, lang: Lang): WallItem {
   };
 }
 
+type Screenshot = Product["data"]["screenshots"][number];
+
+/**
+ * The image to show for a screenshot in a given language, and its dark-theme twin if there is
+ * one in the same language. English pages never fall back to a Turkish dark screen.
+ */
+export function screenFor(shot: Screenshot, lang: Lang) {
+  if (lang === "en") return { src: shot.en ?? shot.src, dark: shot.darkEn ?? (shot.en ? undefined : shot.dark) };
+  return { src: shot.src, dark: shot.dark };
+}
+
 /**
  * Wall items with build-time optimised images: the icon at 320px (twice its largest size on the
  * wall) and, when asked, the first real screenshot at the given width. Sending the original files
@@ -91,7 +102,8 @@ export async function toWallItems(products: Product[], lang: Lang, shotWidth?: n
   return Promise.all(
     products.map(async (product) => {
       const icon = await getImage({ src: product.data.icon, width: 320, format: "webp" });
-      const first = product.data.screenshots[0]?.src;
+      const firstShot = product.data.screenshots[0];
+      const first = firstShot ? screenFor(firstShot, lang).src : undefined;
       const shot = shotWidth && first ? await getImage({ src: first, width: shotWidth, format: "webp" }) : undefined;
       return {
         ...toWallItem(product, lang),

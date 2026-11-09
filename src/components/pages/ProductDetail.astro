@@ -11,6 +11,7 @@ import {
   platformLabels,
   productCaption,
   productTagline,
+  screenFor,
   typeLabels,
   type Product,
 } from "@/lib/products";
@@ -127,7 +128,10 @@ const related = [
 ].slice(0, 3);
 const kind = data.type === "web" ? "browser" : "phone";
 // Only real material is shown: a screenshot in a device, or else the product's own icon.
-const shot = data.screenshots[0]?.src;
+const firstScreen = data.screenshots[0] ? screenFor(data.screenshots[0], lang) : undefined;
+const shot = firstScreen?.src;
+// A screen recording, when there is one in this page's language, plays in the opening phone.
+const video = lang === "en" ? data.video?.en : data.video?.tr;
 // Feature story (desktop): a phone stays put while the features pass; each shows its own screen.
 const story = kind === "phone" && data.screenshots.length > 1 && data.features.length > 0;
 const phoneWidth = 260;
@@ -194,7 +198,7 @@ const camera = Math.round(phoneWidth * 0.036);
         {
           shot && kind === "phone" ? (
             <div class="pd-phone">
-              <PhoneFrame src={shot} alt="" width={290} fluid loading="eager" fetchpriority="high" />
+              <PhoneFrame src={shot} darkSrc={firstScreen?.dark} video={video} alt="" width={290} fluid loading="eager" fetchpriority="high" />
             </div>
           ) : shot ? (
             <div class="object-depth relative aspect-[16/10] w-full overflow-hidden rounded-[20px] border border-outline bg-surface">
@@ -220,14 +224,15 @@ const camera = Math.round(phoneWidth * 0.036);
           <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots} data-lenis-prevent>
             <ul class="flex gap-6 pt-1 pb-12">
               {data.screenshots.map((screenshot, i) => {
-                const image = screenshot.src;
+                const screen = screenFor(screenshot, lang);
+                const image = screen.src;
                 const alt = `${data.name}: ${screenshot.alt[lang]}`;
                 // On desktop the first screen is already in the large phone above.
                 const repeatsHero = i === 0 && kind === "phone" && data.screenshots.length > 1;
                 return (
                   <li class:list={["shrink-0", repeatsHero && "md:hidden"]}>
                     {kind === "phone" ? (
-                      <PhoneFrame src={image} alt={alt} width={216} class="phone-compact" />
+                      <PhoneFrame src={image} darkSrc={screen.dark} alt={alt} width={216} class="phone-compact" />
                     ) : (
                       <Image src={image} alt={alt} height={400} class="h-[300px] w-auto rounded-lg border border-outline md:h-[400px]" />
                     )}
@@ -251,16 +256,32 @@ const camera = Math.round(phoneWidth * 0.036);
               <div class="story-stage sticky flex h-[620px] items-center justify-center">
                 <div class="phone" style={`width:${phoneWidth}px;padding:${bezel}px;border-radius:${radius}px`}>
                   <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
-                    {data.screenshots.map((screenshot, i) => (
-                      <Image
-                        src={screenshot.src}
-                        alt=""
-                        widths={[phoneWidth, phoneWidth * 2]}
-                        sizes={`${phoneWidth}px`}
-                        class:list={["story-screen absolute inset-0 size-full object-cover object-top", i === (data.features[0].shot ?? 0) && "is-active"]}
-                        data-shot={i}
-                      />
-                    ))}
+                    {data.screenshots.map((screenshot, i) => {
+                      const screen = screenFor(screenshot, lang);
+                      return (
+                        <div
+                          class:list={["story-screen absolute inset-0", i === (data.features[0].shot ?? 0) && "is-active"]}
+                          data-shot={i}
+                        >
+                          <Image
+                            src={screen.src}
+                            alt=""
+                            widths={[phoneWidth, phoneWidth * 2]}
+                            sizes={`${phoneWidth}px`}
+                            class:list={["size-full object-cover object-top", screen.dark && "shot-light"]}
+                          />
+                          {screen.dark && (
+                            <Image
+                              src={screen.dark}
+                              alt=""
+                              widths={[phoneWidth, phoneWidth * 2]}
+                              sizes={`${phoneWidth}px`}
+                              class="shot-dark size-full object-cover object-top"
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                   <span class="phone-camera" style={`width:${camera}px;height:${camera}px;top:${bezel + camera}px`} />
                 </div>

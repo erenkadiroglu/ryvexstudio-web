@@ -258,6 +258,22 @@ function revealOnView() {
   reveal("0px 0px -5% 0px", targets.filter((t) => t.dataset.revealOnView === "end"));
 }
 
+/* ---------- Screen recordings: play only while on screen, never under reduced motion ---------- */
+
+function runVideos() {
+  const videos = [...document.querySelectorAll<HTMLVideoElement>("video[data-autoplay]")];
+  if (!videos.length || reducedMotion.matches) return;
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const video = entry.target as HTMLVideoElement;
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    }
+  });
+  videos.forEach((v) => observer.observe(v));
+  observers.push(observer);
+}
+
 /* ---------- Product page opening: as you scroll, the phone turns and steps back ---------- */
 
 function runProductHero() {
@@ -446,6 +462,7 @@ document.addEventListener("astro:page-load", () => {
   runShowcase();
   runStory();
   runProductHero();
+  runVideos();
   revealOnView();
   runManifesto();
 });
