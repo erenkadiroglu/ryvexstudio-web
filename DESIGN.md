@@ -500,6 +500,14 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
   kaydırmalı. Görüntüler cihaz oranında, 20px köşeli.
 - **Footer:** `neutral` zemin. Solda logo ve slogan; sağda üç kolon: Ürünler,
   Stüdyo, Yasal. En altta "© 2026 Ryvex Studio" ve dil seçici.
+- **Arama paleti:** Ctrl+K / ⌘K ya da `/` ile açılan, ekranın ortasında 640px genişliğinde,
+  24px köşeli `surface` panel; arkası bulanık ve koyulaşır. Üstte büyük arama alanı, altta
+  gruplar (Ürünler, Sitede, Sayfalar, Eylemler). Seçili satır `neutral` zemin ve solunda ürünün
+  rengiyle 3px çizgi alır; eşleşen kelimeler kalın ve altı vişne çizgili. Ürüne gidiş renk
+  taşmasıyla, seçilen satırdan başlar. Header'da masaüstünde "Ara ⌘K" hapı, mobilde yalnızca ikon.
+- **Çıkınca haber ver:** "Yakında" ürünlerin açılışında, mağaza notunun altında tek bir hap:
+  solda e-posta alanı, sağda vişne "Çıkınca haber ver" düğmesi; altında tek satırlık söz ve
+  aydınlatma metni bağlantısı. Bülten bağlantısı kurulmadan görünmez.
 - **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
   uzakta. Karanlık temada `tertiary-dark`. Hiçbir zaman kaldırılmaz.
 

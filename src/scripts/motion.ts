@@ -24,6 +24,16 @@ function startSmoothScroll() {
   lenis = new Lenis({ autoRaf: true, anchors: true, lerp: 0.1 });
 }
 
+// Dialogs over the page (the search palette) hold the page still while they are open.
+document.addEventListener("rv:scroll-lock", () => {
+  lenis?.stop();
+  root.classList.add("scroll-locked");
+});
+document.addEventListener("rv:scroll-unlock", () => {
+  lenis?.start();
+  root.classList.remove("scroll-locked");
+});
+
 /* ---------- Colour flood: a product's colour spreads from the click, its page opens out of it ---------- */
 
 const FLOOD_IN = 560;

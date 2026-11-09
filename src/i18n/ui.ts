@@ -30,6 +30,7 @@ export const ui = {
     "footer.rights": "Tüm hakları saklıdır.",
     "footer.follow": "Takip edin",
     "skip.content": "İçeriğe geç",
+    "search.short": "Ara",
   },
   en: {
     "nav.products": "Products",
@@ -53,6 +54,7 @@ export const ui = {
     "footer.rights": "All rights reserved.",
     "footer.follow": "Follow us",
     "skip.content": "Skip to content",
+    "search.short": "Search",
   },
 } as const;
 

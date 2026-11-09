@@ -32,6 +32,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
               <a
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
+                data-instant
                 class="rounded-full px-3.5 py-2 text-label font-medium text-primary transition-colors duration-150 hover:bg-neutral aria-[current=page]:bg-neutral"
               >
                 {item.label}
@@ -40,6 +41,20 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
           ))
         }
       </ul>
+      <button
+        type="button"
+        data-search-open
+        aria-keyshortcuts="Control+K Meta+K"
+        aria-haspopup="dialog"
+        class="search-open group inline-flex h-10 items-center gap-2 rounded-full text-primary transition-colors duration-150 hover:bg-neutral max-lg:w-10 max-lg:justify-center lg:ml-1 lg:border lg:border-outline lg:pr-1.5 lg:pl-3.5 lg:text-secondary lg:hover:text-primary"
+      >
+        <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="m16 16 4.5 4.5"></path>
+        </svg>
+        <span class="text-label max-lg:sr-only">{t("search.short")}</span>
+        <kbd data-search-key class="hidden min-w-[3.25rem] rounded-full bg-neutral px-2 py-1 text-center font-mono text-[0.6875rem] text-secondary lg:inline" aria-hidden="true">Ctrl K</kbd>
+      </button>
       <a
         href={alternatePath(Astro.url, otherLang)}
         hreflang={otherLang}
@@ -86,6 +101,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
             <a
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
+              data-instant
               class="block py-2 text-headline-lg font-semibold aria-[current=page]:text-tertiary"
             >
               {item.label}

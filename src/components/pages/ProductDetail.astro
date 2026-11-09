@@ -1,6 +1,7 @@
 ---
 import { existsSync } from "node:fs";
 import ClosingBand from "@/components/ClosingBand.astro";
+import LaunchNotify from "@/components/LaunchNotify.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
@@ -203,6 +204,7 @@ const camera = Math.round(phoneWidth * 0.036);
         </div>
         <p class="mt-8 max-w-[40ch] text-body-lg text-secondary">{productTagline(product, lang)}</p>
         {soon && storeList && <p class="mt-8 text-body-md font-medium text-primary">{copy.soonNote(storeList)}</p>}
+        {soon && <LaunchNotify lang={lang} productId={product.id} productName={data.name} />}
         {
           stores.length > 0 && (
             <ul class="mt-10 flex flex-wrap gap-3">
