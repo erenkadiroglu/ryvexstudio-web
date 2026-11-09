@@ -67,16 +67,22 @@ aboutEn: |
 features:
   - title: { tr: "Hızlı Dönüştür", en: "Quick Convert" }
     text: { tr: "PDF'i Word, Excel, PowerPoint ya da görsele, bunları da PDF'e çevirin.", en: "Turn PDFs into Word, Excel, PowerPoint or images, and back again." }
+    shot: 1
   - title: { tr: "PDF Birleştir", en: "Merge PDFs" }
     text: { tr: "PDF'leri ve fotoğrafları tek bir dosyada toplayın.", en: "Combine PDFs and photos into a single file." }
+    shot: 2
   - title: { tr: "Sayfaları Düzenle ve Böl", en: "Edit and Split Pages" }
     text: { tr: "Sayfaları sıralayın, döndürün, silin, ayırın ya da bölün.", en: "Reorder, rotate, delete, extract or split pages." }
+    shot: 0
   - title: { tr: "PDF Düzenle ve İmzala", en: "Edit and Sign" }
     text: { tr: "Kalem, vurgulayıcı, metin ve imzayla belgenin üzerinde çalışın.", en: "Work on the document with a pen, highlighter, text and your signature." }
+    shot: 4
   - title: { tr: "PDF Sıkıştır", en: "Compress PDFs" }
     text: { tr: "Taranmış ve görselli PDF'leri küçültün; ne kadar küçüldüğünü görün.", en: "Shrink scanned and image-heavy PDFs and see exactly how much you saved." }
+    shot: 3
   - title: { tr: "Telefonda işlenir", en: "Processed on your phone" }
     text: { tr: "Dosyalarınız cihazınızdan çıkmaz; internet olmadan da çalışır.", en: "Your files never leave your device, and the tools work offline." }
+    shot: 0
 featured: true
 order: 10
 ---

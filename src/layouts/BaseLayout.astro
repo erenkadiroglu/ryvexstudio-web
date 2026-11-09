@@ -95,6 +95,18 @@ const ogImageUrl = new URL(ogImage, Astro.site);
         }
       })();
     </script>
+    <script is:inline>
+      // First visit in a session: play the short opening (the mark draws, then the page settles).
+      // Never for visitors who prefer reduced motion.
+      (function () {
+        try {
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          if (sessionStorage.getItem("rv-intro")) return;
+          sessionStorage.setItem("rv-intro", "1");
+          document.documentElement.classList.add("rv-intro");
+        } catch (e) {}
+      })();
+    </script>
     <ClientRouter fallback="swap" />
   </head>
   <body class="flex min-h-dvh flex-col">
@@ -104,6 +116,17 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     >
       {t("skip.content")}
     </a>
+    <div class="intro" aria-hidden="true">
+      <svg class="intro-mark" viewBox="0 0 64 64" focusable="false">
+        <rect class="intro-tile" width="64" height="64" rx="14.4" fill="#8E1B3B"></rect>
+        <clipPath id="rv-intro-clip"><rect width="64" height="64" rx="14.4"></rect></clipPath>
+        <g clip-path="url(#rv-intro-clip)" fill="none" stroke="#FFFFFF" stroke-width="8">
+          <path class="intro-stroke" pathLength="1" d="M24 16V48"></path>
+          <path class="intro-stroke" pathLength="1" d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round"></path>
+          <path class="intro-stroke" pathLength="1" d="M31 34L64 67"></path>
+        </g>
+      </svg>
+    </div>
     <Header />
     <main id="icerik" class="flex-1">
       <slot />

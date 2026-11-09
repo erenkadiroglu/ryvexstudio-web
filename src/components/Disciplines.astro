@@ -16,7 +16,6 @@ const copy = {
     heading: "Ne yapıyoruz",
     soon: "Yakında",
     count: (n: number) => `${n} ürün`,
-    stageSoon: "Web ürünlerimiz hazırlanıyor.",
     items: {
       app: {
         title: "Uygulamalar",
@@ -31,7 +30,7 @@ const copy = {
       web: {
         title: "Web",
         text: "Kurulum istemeden tarayıcıda çalışan ürünler. Hazırlık aşamasında.",
-        link: "Web ürünlerini gör",
+        link: "",
       },
     },
   },
@@ -39,7 +38,6 @@ const copy = {
     heading: "What we make",
     soon: "Coming soon",
     count: (n: number) => (n === 1 ? "1 product" : `${n} products`),
-    stageSoon: "Our web products are in preparation.",
     items: {
       app: {
         title: "Apps",
@@ -54,7 +52,7 @@ const copy = {
       web: {
         title: "Web",
         text: "Products that run in the browser with nothing to install. In preparation.",
-        link: "See the web products",
+        link: "",
       },
     },
   },
@@ -62,6 +60,8 @@ const copy = {
 
 const types: ProductType[] = ["app", "game", "web"];
 const param = lang === "tr" ? "tur" : "type";
+const BRAND = "#8E1B3B";
+const INK = "#160f12";
 
 /** Up to two real screens for a kind: one from each product, or two from a single product. */
 const screensFor = (list: Product[]) => {
@@ -70,146 +70,114 @@ const screensFor = (list: Product[]) => {
   return (list[0]?.data.screenshots ?? []).slice(0, 2).map((s) => s.src);
 };
 
-// A wash from the first product's colour into the second's (or into the page).
-const wash = (list: Product[]) => {
-  const a = list[0]?.data.color;
-  if (!a) return undefined;
-  const b = list[1]?.data.color ?? a;
-  return `background: linear-gradient(155deg, color-mix(in srgb, ${a} 26%, var(--rv-surface)), color-mix(in srgb, ${b} 16%, var(--rv-surface)));`;
-};
-
-const kinds = types.map((type, i) => {
+const kinds = types.map((type) => {
   const list = products.filter((p) => p.data.type === type);
-  return { type, i, list, screens: screensFor(list), wash: wash(list), item: copy.items[type] };
+  const color = list[0]?.data.color ?? BRAND;
+  const second = list[1]?.data.color ?? color;
+  // A deep ground in the kind's own colour, lit from the corner by its products.
+  const ground = [
+    `radial-gradient(120% 80% at 85% 0%, color-mix(in srgb, ${second} 55%, transparent), transparent 60%)`,
+    `linear-gradient(160deg, color-mix(in srgb, ${color} 62%, ${INK}), color-mix(in srgb, ${color} 30%, ${INK}))`,
+  ].join(", ");
+  return {
+    type,
+    list,
+    screens: screensFor(list),
+    ground,
+    item: copy.items[type],
+    href: list.length > 0 ? `${route("products", lang)}?${param}=${lang === "tr" ? typeSlugs[type] : type}` : undefined,
+  };
 });
 ---
 
 <!--
-  An index of what the studio makes. Each kind is a large typographic row; choosing one opens
-  it and brings its real screens onto the stage beside the list (desktop). The first kind with
-  products starts open.
+  Three tall panels, one per kind, each on a deep ground of its own colour. The panel under the
+  pointer (or keyboard focus) widens to show its line, its products and their real screens; the
+  others narrow to their names. On small screens every panel is open, one under the other.
 -->
-<section aria-labelledby="ne-yapiyoruz" class="disciplines container-page py-section-mobile md:py-section" data-disciplines>
-  <div class="md:grid md:grid-cols-12 md:items-center md:gap-6">
-    <div class="md:col-span-6">
-      <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.heading}</h2>
+<section aria-labelledby="ne-yapiyoruz" class="container-page py-section-mobile md:py-section">
+  <h2 id="ne-yapiyoruz" class="text-headline-xl font-semibold tracking-[-0.035em]">{copy.heading}</h2>
 
-      <ul class="mt-12 border-t border-outline">
-        {
-          kinds.map(({ type, i, list, item }) => {
-            const slug = lang === "tr" ? typeSlugs[type] : type;
-            return (
-              <li class="discipline border-b border-outline" data-type={type} data-open={i === 0 ? "" : undefined}>
-                <h3>
-                  <button
-                    type="button"
-                    class="discipline-trigger group flex w-full items-baseline justify-between gap-6 py-6 text-left md:py-7"
-                    aria-expanded={i === 0 ? "true" : "false"}
-                    aria-controls={`disiplin-${type}`}
-                  >
-                    <span class="discipline-title text-[2rem] leading-none font-semibold tracking-[-0.03em] md:text-[2.75rem]">
-                      {item.title}
-                    </span>
-                    <span class="shrink-0 text-body-md text-secondary">
-                      {list.length > 0 ? copy.count(list.length) : copy.soon}
-                    </span>
-                  </button>
-                </h3>
-                <div id={`disiplin-${type}`} class="discipline-body" role="region" aria-label={item.title}>
-                  <div class="overflow-hidden">
-                    <p class="max-w-[42ch] text-body-lg text-secondary">{item.text}</p>
-                    {list.length > 0 && (
-                      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4 pb-8">
-                        <ul class="flex gap-2" aria-label={item.title}>
-                          {list.map((product) => (
-                            <li>
-                              <Image
-                                src={product.data.icon}
-                                alt={product.data.name}
-                                title={product.data.name}
-                                widths={[40, 80]}
-                                sizes="40px"
-                                class="shape-icon size-10"
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                        <a href={`${route("products", lang)}?${param}=${slug}`} class="link-inline text-body-md">
-                          {item.link}
-                        </a>
-                      </div>
-                    )}
-                    {list.length === 0 && <div class="pb-8" />}
-                  </div>
-                </div>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </div>
-
-    <!-- The stage: the open kind's colours and real screens. Decorative; the list carries the content. -->
-    <div class="hidden md:col-span-5 md:col-start-8 md:block" aria-hidden="true">
-      <div class="discipline-stage relative aspect-[4/5] overflow-hidden rounded-[28px] bg-neutral">
-        {
-          kinds.map(({ type, i, screens, wash: style }) => (
-            <div class:list={["discipline-scene absolute inset-0", i === 0 && "is-active"]} data-type={type} style={style}>
-              {screens.length > 0 ? (
-                <div class="absolute inset-x-0 top-[12%] flex justify-center">
-                  {screens.map((src, n) => (
-                    <div class="discipline-phone" style={`--n:${n};--count:${screens.length}`}>
-                      <PhoneFrame src={src} alt="" width={screens.length > 1 ? 196 : 220} />
+  <ul class="dpanels mt-12 flex flex-col gap-4 md:mt-14 md:h-[600px] md:flex-row" data-dpanels>
+    {
+      kinds.map(({ type, list, screens, ground, item, href }, i) => {
+        const Tag = href ? "a" : "div";
+        return (
+          <li class:list={["dpanel", i === 0 && "is-active"]} data-type={type}>
+            <Tag
+              href={href}
+              class="dpanel-inner relative block h-[520px] overflow-hidden rounded-[28px] text-white md:h-full"
+              style={`background:${ground}`}
+            >
+              {screens.length > 0 && (
+                <div class="dpanel-phones pointer-events-none absolute top-16 right-6 flex md:top-20 md:right-10" aria-hidden="true">
+                  {screens.map((src) => (
+                    <div class="dpanel-phone">
+                      <PhoneFrame src={src} alt="" width={screens.length > 1 ? 158 : 180} />
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div class="flex size-full flex-col items-center justify-center gap-6">
-                  <svg class="size-20 opacity-90" viewBox="0 0 64 64" focusable="false">
-                    <clipPath id={`rv-stage-mark-${type}`}><rect width="64" height="64" rx="14.4" /></clipPath>
-                    <rect width="64" height="64" rx="14.4" fill="#8E1B3B" />
-                    <g clip-path={`url(#rv-stage-mark-${type})`} fill="none" stroke="#FFFFFF" stroke-width="8">
-                      <path d="M24 16V48" />
-                      <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round" />
-                      <path d="M31 34L64 67" />
-                    </g>
-                  </svg>
-                  <p class="text-title font-medium text-secondary">{copy.stageSoon}</p>
-                </div>
               )}
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </div>
+              {screens.length === 0 && (
+                <svg class="dpanel-mark absolute top-10 right-10 size-24" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                  <rect width="64" height="64" rx="14.4" fill="none" stroke="rgb(255 255 255 / 0.35)" stroke-width="1.5" />
+                  <g fill="none" stroke="rgb(255 255 255 / 0.85)" stroke-width="6">
+                    <path d="M24 16V48" />
+                    <path d="M20 20H33A7 7 0 0 1 33 34H24" stroke-linejoin="round" />
+                    <path d="M31 34L52 55" />
+                  </g>
+                </svg>
+              )}
+
+              <div class="dpanel-shade absolute inset-x-0 bottom-0 h-2/3" aria-hidden="true" />
+
+              <p class="absolute top-8 left-8 text-body-md text-white/80">
+                {list.length > 0 ? copy.count(list.length) : copy.soon}
+              </p>
+
+              <div class="absolute right-8 bottom-8 left-8 md:right-auto md:max-w-[21rem]">
+                <h3 class="text-[2.25rem] leading-none font-semibold tracking-[-0.03em] md:text-[2.75rem]">{item.title}</h3>
+                <div class="dpanel-detail">
+                  <p class="mt-4 text-body-lg text-white/85">{item.text}</p>
+                  {list.length > 0 && (
+                    <div class="mt-6 flex items-center gap-4">
+                      <span class="flex gap-2">
+                        {list.map((product) => (
+                          <Image
+                            src={product.data.icon}
+                            alt={product.data.name}
+                            widths={[40, 80]}
+                            sizes="40px"
+                            class="shape-icon size-10 ring-1 ring-white/20"
+                          />
+                        ))}
+                      </span>
+                      <span class="dpanel-link text-label font-medium underline decoration-white/50 underline-offset-4">
+                        {item.link}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Tag>
+          </li>
+        );
+      })
+    }
+  </ul>
 </section>
 
 <script>
-  // One kind open at a time; pointer, click and keyboard all open a row and switch the stage.
+  // The panel under the pointer or keyboard focus opens; the others narrow.
   const bind = () => {
-    const root = document.querySelector<HTMLElement>("[data-disciplines]");
+    const root = document.querySelector<HTMLElement>("[data-dpanels]");
     if (!root || root.dataset.bound) return;
     root.dataset.bound = "true";
-    const rows = [...root.querySelectorAll<HTMLElement>(".discipline")];
-    const scenes = [...root.querySelectorAll<HTMLElement>(".discipline-scene")];
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-
-    const open = (row: HTMLElement) => {
-      for (const r of rows) {
-        const on = r === row;
-        r.toggleAttribute("data-open", on);
-        r.querySelector("button")?.setAttribute("aria-expanded", String(on));
-      }
-      for (const s of scenes) s.classList.toggle("is-active", s.dataset.type === row.dataset.type);
-    };
-
-    for (const row of rows) {
-      const trigger = row.querySelector<HTMLButtonElement>(".discipline-trigger");
-      trigger?.addEventListener("click", () => open(row));
-      row.addEventListener("pointerenter", () => {
-        if (fine.matches) open(row);
-      });
+    const panels = [...root.querySelectorAll<HTMLElement>(".dpanel")];
+    const open = (panel: HTMLElement) => panels.forEach((p) => p.classList.toggle("is-active", p === panel));
+    for (const panel of panels) {
+      panel.addEventListener("pointerenter", () => open(panel));
+      panel.addEventListener("focusin", () => open(panel));
     }
   };
   document.addEventListener("astro:page-load", bind);

@@ -124,6 +124,12 @@ const related = [
 const kind = data.type === "web" ? "browser" : "phone";
 // Only real material is shown: a screenshot in a device, or else the product's own icon.
 const shot = data.screenshots[0]?.src;
+// Feature story (desktop): a phone stays put while the features pass; each shows its own screen.
+const story = kind === "phone" && data.screenshots.length > 1 && data.features.length > 0;
+const phoneWidth = 260;
+const bezel = Math.round(phoneWidth * 0.034);
+const radius = Math.round(phoneWidth * 0.155);
+const camera = Math.round(phoneWidth * 0.036);
 ---
 
 <article>
@@ -204,8 +210,8 @@ const shot = data.screenshots[0]?.src;
 
     {
       data.screenshots.length > 0 && (
-        <div class="container-page pb-16 md:pb-20">
-          <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots}>
+        <div class:list={["container-page pb-16 md:pb-20", story && "md:hidden"]}>
+          <div class="-mx-4 overflow-x-auto px-4" tabindex="0" role="region" aria-label={copy.screenshots} data-lenis-prevent>
             <ul class="flex gap-6 pt-1 pb-12">
               {data.screenshots.map((screenshot, i) => {
                 const image = screenshot.src;
@@ -233,17 +239,43 @@ const shot = data.screenshots[0]?.src;
     data.features.length > 0 && (
       <section aria-labelledby="ozellikler" class="container-page pt-section-mobile md:pt-section">
         <h2 id="ozellikler" class="text-headline-lg font-semibold">{copy.features}</h2>
-        <ul class="mt-10 grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3">
-          {data.features.map((feature, i) => (
-            <li>
-              <span class="font-mono text-mono-sm font-medium" style={`color:color-mix(in srgb, ${data.color} 50%, var(--rv-primary))`} aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 class="mt-3 text-title font-semibold">{feature.title[lang]}</h3>
-              <p class="mt-2 max-w-[40ch] text-body-md text-secondary">{feature.text[lang]}</p>
-            </li>
-          ))}
-        </ul>
+        <div class:list={["mt-10", story && "md:mt-6 md:grid md:grid-cols-12 md:gap-6"]} data-story={story ? "" : undefined}>
+          {story && (
+            <div class="hidden md:col-span-5 md:block" aria-hidden="true">
+              <div class="story-stage sticky flex h-[620px] items-center justify-center">
+                <div class="phone" style={`width:${phoneWidth}px;padding:${bezel}px;border-radius:${radius}px`}>
+                  <div class="phone-screen" style={`border-radius:${radius - bezel}px`}>
+                    {data.screenshots.map((screenshot, i) => (
+                      <Image
+                        src={screenshot.src}
+                        alt=""
+                        widths={[phoneWidth, phoneWidth * 2]}
+                        sizes={`${phoneWidth}px`}
+                        class:list={["story-screen absolute inset-0 size-full object-cover object-top", i === (data.features[0].shot ?? 0) && "is-active"]}
+                        data-shot={i}
+                      />
+                    ))}
+                  </div>
+                  <span class="phone-camera" style={`width:${camera}px;height:${camera}px;top:${bezel + camera}px`} />
+                </div>
+              </div>
+            </div>
+          )}
+          <ul class:list={[story ? "md:col-span-6 md:col-start-7" : "grid gap-x-6 gap-y-10 border-t border-outline pt-10 sm:grid-cols-2 lg:grid-cols-3"]}>
+            {data.features.map((feature, i) => (
+              <li
+                class:list={[story && "story-step flex flex-col justify-center border-t border-outline py-10 md:min-h-[620px] md:border-t-0 md:py-0", story && i === 0 && "is-active"]}
+                data-shot={feature.shot ?? 0}
+              >
+                <span class="block h-1 w-10 rounded-full" style={`background-color:${data.color}`} aria-hidden="true" />
+                <h3 class:list={["mt-5 font-semibold", story ? "text-[1.75rem] leading-tight tracking-[-0.02em] md:text-[2.5rem]" : "text-title"]}>
+                  {feature.title[lang]}
+                </h3>
+                <p class:list={["mt-3 max-w-[40ch] text-secondary", story ? "text-body-lg" : "text-body-md"]}>{feature.text[lang]}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     )
   }

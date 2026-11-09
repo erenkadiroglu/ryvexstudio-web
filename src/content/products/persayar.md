@@ -43,16 +43,22 @@ aboutEn: |
 features:
   - title: { tr: "Akıllı tarama", en: "Smart scan" }
     text: { tr: "Istakayı kamerayla çekin ya da galeriden seçin; taşlar saniyeler içinde tanınır.", en: "Take a photo of your rack or pick one from the gallery; the tiles are recognised in seconds." }
+    shot: 0
   - title: { tr: "Per ve çift denetimi", en: "Sets and pairs" }
     text: { tr: "Seri ve grup perleri ile çiftleri kurallara göre bulur.", en: "Finds runs, groups and pairs according to the rules." }
+    shot: 1
   - title: { tr: "El açabilir mi?", en: "Can you open?" }
     text: { tr: "Elinizin barajı geçip geçmediğini anında gösterir.", en: "Shows at once whether your hand passes the threshold." }
+    shot: 0
   - title: { tr: "Baraj ayarları", en: "Thresholds" }
     text: { tr: "Seri barajını (101 ya da yan) ve çift barajını masaya göre ayarlayın.", en: "Set the run threshold (101 or more) and the pairs threshold for your table." }
+    shot: 2
   - title: { tr: "Okey ve gösterge", en: "Okey and indicator" }
     text: { tr: "Okey taşını seçin; hesaplar ona göre yapılır.", en: "Choose the okey tile and every calculation follows it." }
+    shot: 0
   - title: { tr: "Telefonda çalışır", en: "Runs on your phone" }
     text: { tr: "Tanıma cihazda yapılır; internet ve sunucu gerekmez.", en: "Recognition runs on the device, with no internet or server." }
+    shot: 1
 featured: true
 order: 30
 ---

@@ -361,12 +361,11 @@ Mobil uygulamalar, oyunlar ve web projeleri.   (body-lg, 7 sütun)
  Oyun    Uyg.    Web     Oyun    Uyg.    Uyg.      ← künye: tür, platform
 
 Ne yapıyoruz
-Uygulamalar            2 ürün   ┌──────────────┐  ← solda büyük yazılı tür listesi,
-  açıklama, ikonlar, link       │ ürün renkleri │    açık olan satır açıklamasını
-Oyunlar                1 ürün   │ gerçek ekranlar│    gösterir; sağdaki sahne o türün
-Web                   Yakında   └──────────────┘    renklerine ve ekranlarına geçer
-Uygulamalar    Oyunlar        Web
-link           link           link               ← filtreli ürün listesi
+┌──────────────────────────┐ ┌───────┐ ┌───────┐  ← üç uzun panel, her biri türün
+│ 2 ürün        [telefonlar]│ │1 ürün │ │Yakında│    renginin koyu tonunda; açık
+│ Uygulamalar               │ │       │ │       │    panel genişler: açıklama,
+│ açıklama, ikonlar, link   │ │Oyunlar│ │ Web   │    ikonlar, link ve gerçek ekranlar
+└──────────────────────────┘ └───────┘ └───────┘
 
 █████████████████ koyu vitrin bandı (kenardan kenara) █████████████████
 █  Öne çıkanlar                                                       █
@@ -386,7 +385,7 @@ Footer
 
 Ana sayfa sırası: hero, sergi duvarı, ortalanmış tek cümlelik manifesto
 ("Bir ürünü, adımızı taşımaya hazır olduğunda yayınlıyoruz."), Ne yapıyoruz
-(tür dizini ve gerçek ekranlı sahne; satır başına tek cümle), koyu
+(genişleyen tür panelleri; panel başına tek cümle), koyu
 vitrin bandı, Günlükten ve vişne kapanış bandı. Kural: bir bölüm bir şey söyler; açıklama gerekiyorsa o
 bilgi kendi sayfasında durur. Sitede kişi fotoğrafı, stok fotoğraf ve yapay zekâ ile üretilmiş görsel kullanılmaz.
 
@@ -510,10 +509,31 @@ Hareket ürünleri sahneye taşımak için vardır, süs için değil. Hepsi
 `cubic-bezier(0.2, 0.7, 0.2, 1)` eğrisini kullanır ve `prefers-reduced-motion`
 açıksa kapatılır.
 
-- **Ne yapıyoruz dizini:** Bir seferde tek tür açıktır. Fareyle üzerine gelmek,
-  tıklamak ya da klavyeyle seçmek satırı açar (550ms); kapalı satırların adı
-  ikincil renktedir. Sağdaki sahne çapraz geçişle o türün renk geçişine ve
-  telefonlarına döner; telefonlar 80ms arayla yerine açılır.
+- **Açılış:** Oturumdaki ilk ziyarette sayfanın önünde beyaz bir perde durur;
+  vişne kutucuk belirir ve R işaretinin üç çizgisi sırayla çizilir (yaklaşık
+  1,2 saniye). Perde yukarı doğru kalkar, ardından hero başlığı, metin ve
+  ikonlar yerine oturur. Hareket azaltma açıksa açılış hiç oynamaz.
+- **İmleç ışığı:** Masaüstünde hero'da imlecin altında vişnenin yüzde 9'luk,
+  520px'lik yumuşak bir ışığı dolaşır.
+- **Akıcı kaydırma:** Lenis (MIT) yerel kaydırmanın üzerine hafif bir atalet
+  ekler; yapışkan bölümler, bağlantılar ve klavye aynen çalışır. Kendi kaydırması
+  olan alanlar (mobil menü, ekran şeridi) `data-lenis-prevent` ile hariç tutulur.
+  Hareket azaltma açıksa kullanılmaz.
+- **Ne yapıyoruz panelleri:** Masaüstünde üç panel yan yana durur; fareyle
+  üzerine gelinen ya da klavyeyle odaklanılan panel genişler (800ms), açıklama,
+  ikonlar ve gerçek ekranlar belirir; diğerleri yalnızca adlarını gösterir.
+  Mobilde paneller alt alta ve hepsi açıktır.
+- **Özellik hikâyesi (ürün sayfası):** Masaüstünde solda telefon ekranın
+  ortasında sabit durur; sağdaki her özellik telefon yüksekliği kadar yer kaplar
+  ve ortaya geldiğinde telefon o özelliğin gerçek ekranına çapraz geçişle döner.
+  Hangi özelliğin hangi ekranı gösterdiği içerikte `shot` ile belirtilir.
+- **Kapanış ve alt bilgi:** Kapanış bandı görünür olunca başlığın kelimeleri
+  maskeden yükselir, büyük R işareti çizilir ve butonlar belirir. Alt bilginin
+  en altında "Ryvex Studio" adı sayfa ızgarası genişliğinde yazılıdır ve görünür
+  olunca yerine yükselir. Hareket azaltma açıksa hepsi baştan yerindedir.
+- **Stüdyo bandı:** Stüdyo sayfası, ürün renklerinin ışığıyla aydınlanan koyu
+  bir bantla açılır; cümle kelime kelime yükselir, altında kurucu, kapsam ve
+  ürünler yazar.
 - **Hero ışıltısı:** Uçan ikonların arkasında, ilk üç ürünün renklerinden
   bulanık ve hafif bir ışık durur; koyu temada daha da sönüktür.
 - **Hero açılışı:** Başlığın her satırı kendi maskesinin içinden yükselir

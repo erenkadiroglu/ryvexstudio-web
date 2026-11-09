@@ -443,73 +443,299 @@ html[data-theme="dark"] .showcase-band {
   display: block;
 }
 
-/* What we make: an index of kinds. The open row unfolds; the stage shows its screens. */
-.discipline-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 550ms var(--ease-settle);
+/* What we make: three panels on deep grounds of their own colours; the open one widens. */
+.dpanel {
+  flex: 1 1 0%;
+  min-width: 0;
+  transition: flex-grow 800ms var(--ease-settle);
 }
 
-.discipline-body > div {
-  visibility: hidden;
-  transition: visibility 0s 550ms;
+.dpanel-shade {
+  background: linear-gradient(to top, rgb(22 15 18 / 0.88), rgb(22 15 18 / 0.35) 55%, transparent);
 }
 
-.discipline[data-open] .discipline-body {
-  grid-template-rows: 1fr;
+.dpanel-phone:nth-child(1) {
+  transform: translateX(22px) rotate(-5deg);
 }
 
-.discipline[data-open] .discipline-body > div {
-  visibility: visible;
-  transition-delay: 0s;
+.dpanel-phone:nth-child(2) {
+  transform: translateY(40px) rotate(5deg);
 }
 
-.discipline-title {
-  color: var(--rv-secondary);
-  display: inline-block;
+.dpanel-phones,
+.dpanel-mark {
   transition:
-    color 300ms var(--ease-settle),
-    transform 450ms var(--ease-settle);
+    opacity 700ms var(--ease-settle) 120ms,
+    transform 900ms var(--ease-settle) 120ms;
 }
 
-.discipline[data-open] .discipline-title,
-.discipline-trigger:hover .discipline-title {
-  color: var(--rv-primary);
+.dpanel-detail {
+  transition:
+    max-height 700ms var(--ease-settle),
+    opacity 500ms var(--ease-settle) 150ms,
+    transform 700ms var(--ease-settle) 150ms;
 }
 
-.discipline-trigger:hover .discipline-title {
-  transform: translateX(6px);
+.dpanel h3 {
+  transition: font-size 600ms var(--ease-settle);
 }
 
-.discipline-scene {
+.dpanel-inner:hover .dpanel-link {
+  text-decoration-color: white;
+}
+
+@media (max-width: 767px) {
+  .dpanel-phones {
+    transform: scale(0.78);
+    transform-origin: top right;
+  }
+}
+
+@media (min-width: 768px) {
+  .dpanel.is-active {
+    flex-grow: 2.6;
+  }
+
+  .dpanel:not(.is-active) h3 {
+    font-size: 2rem;
+  }
+
+  .dpanel-detail {
+    min-width: 19rem;
+    max-height: 16rem;
+    overflow: hidden;
+  }
+
+  .dpanel:not(.is-active) .dpanel-detail {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition-delay: 0s;
+  }
+
+  .dpanel:not(.is-active) .dpanel-phones,
+  .dpanel:not(.is-active) .dpanel-mark {
+    opacity: 0;
+    transform: translateY(48px);
+    transition-delay: 0s;
+  }
+}
+
+/* Studio: a deep band lit by the products' colours, drifting slowly. */
+.studio-band {
+  background-color: #160f12;
+}
+
+.studio-glow {
+  position: absolute;
+  inset: -30% -10%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 78% 30%, color-mix(in srgb, var(--c1) 45%, transparent), transparent 70%),
+    radial-gradient(35% 45% at 92% 75%, color-mix(in srgb, var(--c2) 38%, transparent), transparent 70%),
+    radial-gradient(30% 40% at 60% 95%, color-mix(in srgb, var(--c3) 34%, transparent), transparent 70%);
+  filter: blur(40px);
+  animation: glow-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes glow-drift {
+  to {
+    transform: translate3d(-4%, 3%, 0) scale(1.06);
+  }
+}
+
+/* Words that rise once from their own masks. */
+.rise-words .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.rise-words .w > span {
+  display: inline-block;
+  animation: rise 900ms var(--ease-settle) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 120ms);
+}
+
+/* Feature story: the phone holds still in the middle of the screen; each feature lights its screen. */
+.story-stage {
+  top: calc(50svh - 310px + 36px);
+}
+
+.story-screen {
   opacity: 0;
-  transform: translateY(24px) scale(0.98);
+  scale: 1.03;
   transition:
     opacity 600ms var(--ease-settle),
-    transform 800ms var(--ease-settle);
+    scale 900ms var(--ease-settle);
 }
 
-.discipline-scene.is-active {
+.story-screen.is-active {
   opacity: 1;
-  transform: none;
+  scale: 1;
 }
 
-.discipline-phone {
-  transform: translateY(60px);
+@media (min-width: 768px) {
+  .story-step h3 {
+    transition: color 400ms var(--ease-settle);
+  }
+
+  /* Passed and coming features step back to the secondary ink; it keeps 4.5:1. */
+  .story-step:not(.is-active) h3 {
+    color: var(--rv-secondary);
+  }
+}
+
+/* Opening (first visit in a session): the mark is drawn, then the curtain lifts off the page. */
+.intro {
+  display: none;
+}
+
+.rv-intro .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rv-surface);
+  animation: intro-lift 750ms var(--ease-settle) 1150ms forwards;
+}
+
+.intro-mark {
+  width: 72px;
+  height: 72px;
+}
+
+.intro-tile {
+  transform-origin: center;
+  animation: intro-tile 600ms var(--ease-settle) both;
+}
+
+.intro-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: intro-draw 520ms var(--ease-settle) forwards;
+}
+
+.intro-stroke:nth-of-type(1) {
+  animation-delay: 300ms;
+}
+
+.intro-stroke:nth-of-type(2) {
+  animation-delay: 480ms;
+}
+
+.intro-stroke:nth-of-type(3) {
+  animation-delay: 660ms;
+}
+
+@keyframes intro-tile {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes intro-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes intro-lift {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+/* The page settles only after the curtain has lifted. */
+.rv-intro .hero-line > span {
+  animation-delay: calc(var(--i, 0) * 110ms + 1300ms);
+}
+
+.rv-intro .hero-settle {
+  animation-delay: calc(var(--i, 0) * 90ms + 1650ms);
+}
+
+.rv-intro .hero-float {
+  animation-delay:
+    calc(var(--i, 0) * 120ms + 1500ms),
+    calc(var(--i, 0) * -1.3s);
+}
+
+/* Full-bleed layers (the hero light) may reach past the edges; they never cause sideways scroll. */
+main {
+  overflow-x: clip;
+}
+
+/* Hero: a soft light that follows the pointer across the opening screen. */
+.hero-spot {
+  background: radial-gradient(
+    520px circle at var(--mx, 70%) var(--my, 40%),
+    color-mix(in srgb, var(--rv-tertiary) 9%, transparent),
+    transparent 70%
+  );
+  transition: opacity 600ms var(--ease-settle);
+}
+
+/* Reveal on view: only when motion is welcome (motion.ts adds .motion-ok), so content is never hidden otherwise. */
+.motion-ok [data-reveal-on-view]:not(.is-in) .reveal-words .w > span {
+  transform: translateY(105%);
+}
+
+.reveal-words .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.reveal-words .w > span {
+  display: inline-block;
   transition: transform 1000ms var(--ease-settle);
+  transition-delay: calc(var(--i, 0) * 70ms);
 }
 
-.discipline-scene.is-active .discipline-phone:nth-child(1) {
-  transform: translateX(16px) rotate(-6deg);
+.motion-ok [data-reveal-on-view]:not(.is-in) .reveal-fade {
+  opacity: 0;
+  transform: translateY(14px);
 }
 
-.discipline-scene.is-active .discipline-phone:nth-child(2) {
-  transform: translate(-16px, 40px) rotate(6deg);
-  transition-delay: 80ms;
+.reveal-fade {
+  transition:
+    opacity 700ms var(--ease-settle) 350ms,
+    transform 900ms var(--ease-settle) 350ms;
 }
 
-.discipline-scene.is-active .discipline-phone:only-child {
-  transform: none;
+.closing-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1400ms var(--ease-settle);
+}
+
+.closing-stroke:nth-of-type(2) {
+  transition-delay: 200ms;
+}
+
+.closing-stroke:nth-of-type(3) {
+  transition-delay: 400ms;
+}
+
+.motion-ok [data-reveal-on-view]:not(.is-in) .closing-stroke {
+  stroke-dashoffset: 1;
+}
+
+.footer-word svg {
+  transition: transform 1200ms var(--ease-settle);
+}
+
+.motion-ok .footer-word[data-reveal-on-view]:not(.is-in) svg {
+  transform: translateY(70%);
 }
 
 /* Hero: soft light in the products' own colours behind the floating icons. */

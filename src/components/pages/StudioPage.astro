@@ -1,11 +1,10 @@
 ---
 import ClosingBand from "@/components/ClosingBand.astro";
 import { Image } from "astro:assets";
-import PageIntro from "@/components/PageIntro.astro";
 import Process from "@/components/Process.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
-import { getProducts, productCaption } from "@/lib/products";
+import { getProducts, platformLabels, productCaption } from "@/lib/products";
 import { studioFaq } from "@/data/studio-faq";
 
 interface Props {
@@ -15,11 +14,14 @@ interface Props {
 const { lang } = Astro.props;
 const products = await getProducts();
 const productBase = route("products", lang);
+// Facts beside the statement come from the products themselves.
+const platformOrder = ["android", "ios", "web"] as const;
+const platforms = platformOrder.filter((pl) => products.some((p) => p.data.platforms.includes(pl)));
+const glow = products.slice(0, 3).map((p) => p.data.color);
 
 const copy = {
   tr: {
     title: "Stüdyo",
-    lede: "Bağımsız bir dijital ürün stüdyosu.",
     statement: "Mobil uygulamalar, oyunlar ve web ürünleri tasarlıyor, geliştiriyor ve yayınlıyoruz.",
     detail: `Ryvex Studio, ${site.founder} tarafından kuruldu. Tasarım, geliştirme, yayın ve destek aynı çatı altında yürür; her ürün aynı kalite standardından geçer ve arkasında adı bilinen bir sorumlu bulunur.`,
     principlesTitle: "Neye önem veriyoruz",
@@ -31,11 +33,18 @@ const copy = {
       ["Keyif", "Kullanması insanı mutlu etmeli."],
     ],
     familyTitle: "Ryvex ailesi",
+    facts: {
+      founder: "Kurucu",
+      scope: "Kapsam",
+      scopeValue: "Tasarım, geliştirme, yayın ve destek",
+      products: "Ürünler",
+      productsValue: (n: number, pl: string) => `${n} ürün; ${pl}`,
+      and: " ve ",
+    },
     faqTitle: "Sık sorulan sorular",
   },
   en: {
     title: "Studio",
-    lede: "An independent digital product studio.",
     statement: "We design, build and publish mobile apps, games and web products.",
     detail: `Ryvex Studio was founded by ${site.founder}. Design, development, publishing and support happen under one roof; every product meets the same quality standard and has a named person behind it.`,
     principlesTitle: "What we care about",
@@ -47,21 +56,67 @@ const copy = {
       ["Delight", "Using it should feel good."],
     ],
     familyTitle: "The Ryvex family",
+    facts: {
+      founder: "Founder",
+      scope: "Scope",
+      scopeValue: "Design, development, publishing and support",
+      products: "Products",
+      productsValue: (n: number, pl: string) => `${n} products; ${pl}`,
+      and: " and ",
+    },
     faqTitle: "Frequently asked questions",
   },
 }[lang];
 ---
 
-<PageIntro title={copy.title} lede={copy.lede} />
-
-<section class="container-page grid gap-10 pt-14 pb-section-mobile md:grid-cols-12 md:gap-6 md:pt-20 md:pb-section">
-  <p class="text-[2rem] leading-[1.12] font-semibold tracking-[-0.03em] text-balance md:col-span-8 md:text-[3.25rem] md:leading-[1.06]">
-    {copy.statement}
-  </p>
-  <p class="max-w-[40ch] self-end text-body-lg text-secondary md:col-span-4">{copy.detail}</p>
+<!--
+  The studio introduces itself on a deep ground lit by its products' colours. The statement rises
+  word by word once; the facts below it are the plain record.
+-->
+<section class="studio-band relative isolate overflow-hidden text-primary" data-theme="dark">
+  <div
+    class="studio-glow"
+    style={`--c1:${glow[0] ?? "#8E1B3B"};--c2:${glow[1] ?? "#8E1B3B"};--c3:${glow[2] ?? "#8E1B3B"}`}
+    aria-hidden="true"
+  ></div>
+  <div class="container-page pt-20 pb-16 md:pt-28 md:pb-24">
+    <h1 class="hero-settle text-body-lg text-secondary" style="--i:0">{copy.title}</h1>
+    <p
+      class="rise-words mt-6 max-w-[19ch] text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.04em] md:text-[4.5rem] md:leading-[1.02]"
+    >
+      <span class="sr-only">{copy.statement}</span>
+      {
+        copy.statement.split(" ").map((word, i, all) => (
+          <>
+            <span class="w" aria-hidden="true">
+              <span style={`--i:${i}`}>{word}</span>
+            </span>
+            {i < all.length - 1 && " "}
+          </>
+        ))
+      }
+    </p>
+    <p class="hero-settle mt-8 max-w-[56ch] text-body-lg text-secondary" style="--i:2">{copy.detail}</p>
+    <dl class="hero-settle mt-14 grid gap-8 border-t border-outline pt-8 sm:grid-cols-3" style="--i:3">
+      <div>
+        <dt class="text-body-sm text-secondary">{copy.facts.founder}</dt>
+        <dd class="mt-2 text-title font-semibold">{site.founder}</dd>
+      </div>
+      <div>
+        <dt class="text-body-sm text-secondary">{copy.facts.scope}</dt>
+        <dd class="mt-2 text-title font-semibold">{copy.facts.scopeValue}</dd>
+      </div>
+      <div>
+        <dt class="text-body-sm text-secondary">{copy.facts.products}</dt>
+        <dd class="mt-2 text-title font-semibold">
+          {copy.facts.productsValue(products.length, platforms.map((pl) => platformLabels[lang][pl]).join(copy.facts.and))}
+        </dd>
+      </div>
+    </dl>
+  </div>
 </section>
 
-<section aria-labelledby="aile" class="container-page pb-section-mobile md:pb-section">
+<section aria-labelledby="aile" class="container-page py-section-mobile md:py-section">
   <h2 id="aile" class="text-headline-lg font-semibold">{copy.familyTitle}</h2>
   <ul class="mt-10 flex flex-wrap gap-x-12 gap-y-10">
     {

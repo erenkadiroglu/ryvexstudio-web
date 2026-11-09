@@ -87,6 +87,8 @@ const products = defineCollection({
           z.object({
             title: z.object({ tr: z.string(), en: z.string() }),
             text: z.object({ tr: z.string(), en: z.string() }),
+            /** Index of the screenshot that shows this feature, for the feature story. */
+            shot: z.number().int().min(0).optional(),
           }),
         )
         .default([]),
