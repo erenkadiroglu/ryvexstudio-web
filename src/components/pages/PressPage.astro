@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import PageIntro from "@/components/PageIntro.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, productCaption } from "@/lib/products";
@@ -12,6 +11,7 @@ interface Props {
 const { lang } = Astro.props;
 const products = await getProducts();
 const productBase = route("products", lang);
+const glow = products.slice(0, 3).map((p) => p.data.color);
 
 const colors = [
   { name: lang === "tr" ? "Vişne" : "Vişne (cherry)", hex: "#8E1B3B", text: "#FFFFFF" },
@@ -49,6 +49,8 @@ const copy = {
     productsTitle: "Ürünler",
     contactTitle: "Basın iletişimi",
     contactText: "Röportaj, görsel ya da bilgi talepleriniz için yazın.",
+    getLogo: "Logoyu indir",
+    writePress: "Basın iletişimi",
   },
   en: {
     title: "Press kit",
@@ -79,6 +81,8 @@ const copy = {
     productsTitle: "Products",
     contactTitle: "Press contact",
     contactText: "Write to us for interviews, images or information.",
+    getLogo: "Download the logo",
+    writePress: "Press contact",
   },
 }[lang];
 
@@ -93,9 +97,53 @@ const h2 = "text-headline-md font-semibold";
 const block = "border-t border-outline py-12 md:grid md:grid-cols-12 md:gap-6";
 ---
 
-<PageIntro title={copy.title} lede={copy.lede} />
+<!-- The press kit opens like the studio and contact pages: a deep band lit by the products' colours. -->
+<section
+  class="studio-band relative isolate flex flex-col justify-center overflow-hidden text-primary md:min-h-[calc(100svh-73px)]"
+  data-theme="dark"
+>
+  <div
+    class="studio-glow"
+    style={`--c1:${glow[0] ?? "#8E1B3B"};--c2:${glow[1] ?? "#8E1B3B"};--c3:${glow[2] ?? "#8E1B3B"}`}
+    aria-hidden="true"
+  ></div>
+  <div class="container-page w-full pt-20 pb-16 md:py-16">
+    <h1 class="hero-settle text-body-lg text-secondary" style="--i:0">{copy.title}</h1>
+    <p
+      class="rise-words mt-6 max-w-[20ch] text-[2.25rem] leading-[1.06] font-semibold tracking-[-0.04em] md:text-[4rem] md:leading-[1.02]"
+    >
+      <span class="sr-only">{copy.lede}</span>
+      {
+        copy.lede.split(" ").map((word, i, all) => (
+          <>
+            <span class="w" aria-hidden="true">
+              <span style={`--i:${i}`}>{word}</span>
+            </span>
+            {i < all.length - 1 && " "}
+          </>
+        ))
+      }
+    </p>
+    <div class="hero-settle mt-12 flex flex-wrap gap-3" style="--i:3">
+      <a
+        href="/brand/ryvex-studio-logo.svg"
+        download
+        data-magnetic
+        class="inline-flex rounded-full bg-[#FFFFFF] px-[24px] py-[15px] text-label font-medium text-[#1C1418] transition-opacity duration-150 hover:opacity-90"
+      >
+        {copy.getLogo}
+      </a>
+      <a
+        href={`mailto:${site.contactEmail}`}
+        class="inline-flex rounded-full border border-outline px-[23px] py-[14px] text-label font-medium transition-colors duration-150 hover:bg-neutral"
+      >
+        {copy.writePress}
+      </a>
+    </div>
+  </div>
+</section>
 
-<div class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
+<div class="container-page py-section-mobile md:py-section">
   <section aria-labelledby="hakkimizda" class={block}>
     <h2 id="hakkimizda" class:list={[h2, "md:col-span-4"]}>{copy.aboutTitle}</h2>
     <div class="mt-6 space-y-8 md:col-span-8 md:mt-0">

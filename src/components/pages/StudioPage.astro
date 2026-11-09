@@ -33,6 +33,12 @@ const copy = {
       ["Keyif", "Kullanması insanı mutlu etmeli."],
     ],
     familyTitle: "Ryvex ailesi",
+    noteTitle: "Kurucudan",
+    note: [
+      "Ryvex Studio'yu, yaptığım her ürünün aynı özenle hazırlanması ve tek bir adla anılması için kurdum. Bir uygulamayı ya da oyunu yayınlamak işin yarısı; diğer yarısı, onu kullanan kişinin sorusunu cevaplamak, verisine saygı göstermek ve ürünü zamanla daha iyi hâle getirmek.",
+      "Burada gördüğünüz her ürünün arkasında duruyorum. Bir sorun, bir öneri ya da bir fikir varsa doğrudan bana yazabilirsiniz.",
+    ],
+    noteRole: "Kurucu",
     facts: {
       founder: "Kurucu",
       scope: "Kapsam",
@@ -56,6 +62,12 @@ const copy = {
       ["Delight", "Using it should feel good."],
     ],
     familyTitle: "The Ryvex family",
+    noteTitle: "From the founder",
+    note: [
+      "I founded Ryvex Studio so that every product I make is built with the same care and known by one name. Publishing an app or a game is half the work; the other half is answering the people who use it, respecting their data and making the product better over time.",
+      "I stand behind every product you see here. If you have a problem, a suggestion or an idea, you can write to me directly.",
+    ],
+    noteRole: "Founder",
     facts: {
       founder: "Founder",
       scope: "Scope",
@@ -113,6 +125,18 @@ const copy = {
         </dd>
       </div>
     </dl>
+  </div>
+</section>
+
+<section aria-labelledby="kurucudan" class="container-page pt-section-mobile md:pt-section">
+  <div class="mx-auto max-w-[44rem] border-l-2 border-tertiary pl-8 md:pl-12">
+    <h2 id="kurucudan" class="text-body-lg text-secondary">{copy.noteTitle}</h2>
+    {copy.note.map((paragraph, i) => (
+      <p class:list={["text-[1.375rem] leading-[1.5] tracking-[-0.01em] md:text-[1.625rem]", i === 0 ? "mt-6" : "mt-5"]}>{paragraph}</p>
+    ))}
+    <p class="mt-8 text-title font-semibold">{site.founder}</p>
+    <p class="text-body-sm text-secondary">{copy.noteRole}, {site.name}</p>
+    <a href={`mailto:${site.contactEmail}`} class="link-inline mt-3 inline-block text-body-md">{site.contactEmail}</a>
   </div>
 </section>
 

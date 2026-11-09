@@ -10,7 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const products = await getProducts();
 const email = site.contactEmail;
-const updated = new Date("2026-11-08");
+const updated = new Date("2026-11-09");
 const dateText = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
   day: "numeric",
   month: "long",
@@ -32,7 +32,7 @@ const copy = {
       ],
       [
         "Tema tercihi",
-        "Aydınlık ya da karanlık temayı seçtiğinizde bu tercih yalnızca tarayıcınızın yerel depolama alanında saklanır. Bize gönderilmez ve tarayıcı verilerinizi temizlediğinizde silinir.",
+        "Aydınlık ya da karanlık temayı seçtiğinizde bu tercih yalnızca tarayıcınızın yerel depolama alanında saklanır; açılış animasyonunun aynı ziyarette tekrar oynamaması için de oturum depolamasında küçük bir işaret tutulur. İkisi de bize gönderilmez; ayrıntılar Çerez Politikası'nda.",
       ],
       [
         "Sunucu kayıtları",
@@ -72,7 +72,7 @@ const copy = {
       ],
       [
         "Theme preference",
-        "When you choose the light or dark theme, the choice is stored only in your browser's local storage. It is never sent to us and is removed when you clear your browser data.",
+        "When you choose the light or dark theme, the choice is stored only in your browser's local storage, and a small marker in session storage keeps the opening animation from playing twice in one visit. Neither is ever sent to us; details are in the Cookie Policy.",
       ],
       [
         "Server logs",
