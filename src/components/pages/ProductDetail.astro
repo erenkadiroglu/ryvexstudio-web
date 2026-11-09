@@ -4,7 +4,6 @@ import ClosingBand from "@/components/ClosingBand.astro";
 import LaunchNotify from "@/components/LaunchNotify.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
 import ShareButton from "@/components/ShareButton.astro";
-import ProductDemo from "@/components/ProductDemo.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
 import qrcode from "qrcode-generator";
@@ -440,8 +439,6 @@ const camera = Math.round(phoneWidth * 0.036);
       </section>
     )
   }
-
-  <ProductDemo product={product.id} color={data.color} lang={lang} />
 
   <div class="container-page py-section-mobile md:py-section">
     <section aria-labelledby="gizlilik-ozeti" class="mb-16 md:mb-20">

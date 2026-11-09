@@ -519,8 +519,6 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
   yayında. Hemen indirin →" ve kapatma düğmesi. Kapatılınca o ürün için bir daha görünmez.
 - **Marka deseni:** R'nin kavisinden türeyen çeyrek yaylarla örülmüş ince doku; kenarlarda söner,
   fare altında hafifçe aydınlanır. Yalnızca geniş, sakin zeminlerde (kapanış bandı, sayfa açılışları).
-- **Demo sahnesi:** Ürünün kendi arayüzü kendi renkleriyle, 28px köşeli bir kartta, ürün renginin
-  hafif ışığı üzerinde ortalanır; altında "deneme" notu.
 - **Zaman çizelgesi:** Ortada ince bir çizgi; okundukça vişne rengiyle dolar, duraklar sırayla
   belirir. Geniş ekranda iki yana dönüşümlü, telefonda tek sütun.
 - **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
