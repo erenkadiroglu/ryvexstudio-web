@@ -1,7 +1,5 @@
 ---
 import { render } from "astro:content";
-import JournalCover from "@/components/JournalCover.astro";
-import { getProducts } from "@/lib/products";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { readingMinutes, type Post } from "@/lib/journal";
@@ -24,7 +22,6 @@ const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
   month: "long",
   year: "numeric",
 });
-const coverProducts = (await getProducts()).filter((p) => post.data.products.includes(p.id));
 ---
 
 <article class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
@@ -42,10 +39,7 @@ const coverProducts = (await getProducts()).filter((p) => post.data.products.inc
       <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFormat.format(post.data.date)}</time>
       <span>{copy.minutes(readingMinutes(post))}</span>
     </p>
-  </div>
-  <JournalCover products={coverProducts} class="mx-auto mt-12 aspect-[21/9] max-w-[1000px] rounded-[28px]" />
-  <div class="mx-auto max-w-[68ch]">
-    <div class="prose-journal mt-12">
+    <div class="prose-journal mt-10">
       <Content />
     </div>
   </div>

@@ -169,7 +169,8 @@ function revealWalls() {
         observer.unobserve(entry.target);
       }
     },
-    { rootMargin: "0px 0px -15% 0px" },
+    // Hang the wall once it has risen well into view, not as it peeks in at the bottom.
+    { rootMargin: "0px 0px -35% 0px" },
   );
   walls.forEach((wall) => observer.observe(wall));
   observers.push(observer);
@@ -236,19 +237,25 @@ function runShowcase() {
 
 function revealOnView() {
   root.classList.toggle("motion-ok", !reducedMotion.matches);
-  const targets = document.querySelectorAll<HTMLElement>("[data-reveal-on-view]");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("is-in");
-        observer.unobserve(entry.target);
-      }
-    },
-    { rootMargin: "0px 0px -20% 0px" },
-  );
-  targets.forEach((t) => observer.observe(t));
-  observers.push(observer);
+  const targets = [...document.querySelectorAll<HTMLElement>("[data-reveal-on-view]")];
+  const reveal = (margin: string, list: HTMLElement[]) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: margin },
+    );
+    list.forEach((t) => observer.observe(t));
+    observers.push(observer);
+  };
+  // Most reveals play as the element reaches the middle of the screen; the last thing on the
+  // page ("end") can never get that high, so it plays as soon as it is in view.
+  reveal("0px 0px -42% 0px", targets.filter((t) => t.dataset.revealOnView !== "end"));
+  reveal("0px 0px -5% 0px", targets.filter((t) => t.dataset.revealOnView === "end"));
 }
 
 /* ---------- Product page opening: as you scroll, the phone turns and steps back ---------- */
@@ -270,37 +277,6 @@ function runProductHero() {
   };
   window.addEventListener("scroll", schedule, { passive: true, signal: pageListeners.signal });
   render();
-}
-
-/* ---------- Results: each figure counts up once, from zero to its real value ---------- */
-
-function runCounts() {
-  const counters = [...document.querySelectorAll<HTMLElement>("[data-count]")];
-  if (!counters.length || reducedMotion.matches) return;
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const el = entry.target as HTMLElement;
-        observer.unobserve(el);
-        const target = Number(el.dataset.count);
-        const start = performance.now();
-        const step = (now: number) => {
-          const t = clamp((now - start) / 1600);
-          el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 4))));
-          if (t < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }
-    },
-    { rootMargin: "0px 0px -20% 0px" },
-  );
-  counters.forEach((el) => {
-    // Start from zero only when the figure is still below the fold.
-    if (el.getBoundingClientRect().top > window.innerHeight) el.textContent = "0";
-    observer.observe(el);
-  });
-  observers.push(observer);
 }
 
 /* ---------- Feature story: the step in the middle of the screen sets the phone's screen ---------- */
@@ -444,7 +420,9 @@ function runManifesto() {
     frame = 0;
     const rect = section.getBoundingClientRect();
     const vh = window.innerHeight;
-    const progress = clamp((vh * 0.8 - rect.top) / (rect.height * 0.9));
+    // The words fill while the statement passes through the middle of the screen.
+    const centre = rect.top + rect.height / 2;
+    const progress = clamp((vh * 0.68 - centre) / (vh * 0.26));
     const lit = Math.round(progress * words.length);
     words.forEach((w, i) => w.classList.toggle("is-lit", i < lit));
   };
@@ -468,7 +446,6 @@ document.addEventListener("astro:page-load", () => {
   runShowcase();
   runStory();
   runProductHero();
-  runCounts();
   revealOnView();
   runManifesto();
 });

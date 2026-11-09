@@ -4,7 +4,6 @@ import ProductWall from "@/components/ProductWall";
 import Showcase from "@/components/Showcase.astro";
 import Disciplines from "@/components/Disciplines.astro";
 import Manifesto from "@/components/Manifesto.astro";
-import Results from "@/components/Results.astro";
 import JournalTeaser from "@/components/JournalTeaser.astro";
 import ClosingBand from "@/components/ClosingBand.astro";
 import { site } from "@/config/site";
@@ -68,7 +67,7 @@ const copy = {
 }[lang];
 ---
 
-<section class="hero relative isolate container-page grid items-center gap-10 pt-20 pb-24 md:grid-cols-12 md:pt-28 md:pb-32">
+<section class="hero relative isolate container-page grid content-center items-center gap-10 pt-20 pb-24 md:min-h-[calc(100svh-73px)] md:grid-cols-12 md:py-16">
   <div class="hero-spot pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2" aria-hidden="true"></div>
   <div class="md:col-span-7">
     <h1
@@ -142,8 +141,6 @@ const copy = {
 </section>
 
 <Manifesto lang={lang} />
-
-<Results products={products} lang={lang} />
 
 <Disciplines products={products} lang={lang} />
 
