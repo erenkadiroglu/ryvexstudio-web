@@ -1,0 +1,58 @@
+/*
+ * Ryvex Studio look for the content panel (Sveltia CMS). The panel is themed through its own CSS
+ * variables only, so the layout stays the maintained one and updates do not break it.
+ *
+ * The panel injects its styles after this file, so these rules use repeated :root selectors to
+ * win by specificity rather than by order. Dark rules are more specific than the light ones.
+ */
+
+:root:root:root {
+  /* Warm greys from the site's neutral, the site's type and softer corners. */
+  --sui-base-hue: 340;
+  --sui-font-family-default: "Geist Variable", system-ui, sans-serif;
+  --sui-font-family-monospace: "Geist Mono Variable", ui-monospace, monospace;
+  --sui-heading-font-family: "Geist Variable", system-ui, sans-serif;
+  --sui-control-small-border-radius: 8px;
+  --sui-control-medium-border-radius: 10px;
+  --sui-control-large-border-radius: 12px;
+
+  /* Cherry, the studio's colour, as the accent. */
+  --sui-primary-accent-color: #8e1b3b;
+  --sui-primary-accent-color-light: #a8294d;
+  --sui-primary-accent-color-dark: #74142f;
+  --sui-primary-accent-color-text: #8e1b3b;
+  --sui-primary-accent-color-inverted: #ffffff;
+  --sui-primary-accent-color-translucent: rgb(142 27 59 / 0.6);
+  --sui-primary-accent-color-translucent-light: rgb(142 27 59 / 0.35);
+  --sui-focus-ring-color: #8e1b3b;
+}
+
+:root:root:root[data-theme="dark"] {
+  --sui-primary-accent-color: #c0446a;
+  --sui-primary-accent-color-light: #d9567a;
+  --sui-primary-accent-color-dark: #a33a5a;
+  --sui-primary-accent-color-text: #e57a97;
+  --sui-primary-accent-color-inverted: #160f12;
+  --sui-primary-accent-color-translucent: rgb(217 86 122 / 0.6);
+  --sui-primary-accent-color-translucent-light: rgb(217 86 122 / 0.35);
+  --sui-focus-ring-color: #d9567a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:root:root:not([data-theme]) {
+    --sui-primary-accent-color: #c0446a;
+    --sui-primary-accent-color-light: #d9567a;
+    --sui-primary-accent-color-dark: #a33a5a;
+    --sui-primary-accent-color-text: #e57a97;
+    --sui-primary-accent-color-inverted: #160f12;
+    --sui-primary-accent-color-translucent: rgb(217 86 122 / 0.6);
+    --sui-primary-accent-color-translucent-light: rgb(217 86 122 / 0.35);
+    --sui-focus-ring-color: #d9567a;
+  }
+}
+
+/* Type with the site's tighter headings. */
+:root:root:root h1,
+:root:root:root h2 {
+  letter-spacing: -0.02em;
+}
