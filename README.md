@@ -106,8 +106,10 @@ yapmadan şunlar devreye girer (`src/lib/launch.ts`):
   CI üretir ve karşılaştırma yalnızca CI'da çalışır. Bilerek yapılan bir tasarım değişikliğinden sonra
   `tests/visual.spec.ts-snapshots/` altındaki ilgili dosyalar silinir; CI yenilerini üretip "visual"
   adlı çıktıda verir, bunlar depoya eklenir.
-- **Bağımlılık güncellemeleri** (`.github/dependabot.yml`): Haftalık; küçük güncellemeler tek PR'da
-  toplanır, güvenlik düzeltmeleri hemen gelir. Testlerden geçen PR birleştirilir.
+- **Bağımlılık denetimi** (`.github/workflows/dependencies.yml`): Her pazartesi güncellenebilecek
+  paketleri listeler; bir bağımlılıkta yüksek ya da kritik güvenlik açığı varsa kırmızıya döner ve
+  e-posta gelir. Güncellemeler elle, normal bir PR'la yapılır. Dependabot bilerek kullanılmaz: açtığı
+  PR'lar ve commit'ler sahibin dışında bir ad taşır.
 - **Görseller:** Bütün görseller AVIF olarak sunulur, AVIF desteklemeyen tarayıcılara WebP verilir
   (`src/components/Img.astro`).
 - **security.txt:** `/.well-known/security.txt`, güvenlik bildirimi için iletişim adresini verir;
