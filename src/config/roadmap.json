@@ -1,0 +1,77 @@
+{
+  "updated": "2026-11-09",
+  "items": [
+    {
+      "product": "fileconvert",
+      "status": "now",
+      "title": {
+        "tr": "Word, Excel ve PowerPoint belgelerini açan görüntüleyici",
+        "en": "A viewer that opens Word, Excel and PowerPoint documents"
+      }
+    },
+    {
+      "product": "fileconvert",
+      "status": "next",
+      "title": {
+        "tr": "Google Play'de yayın",
+        "en": "Launch on Google Play"
+      }
+    },
+    {
+      "product": "fileconvert",
+      "status": "next",
+      "title": {
+        "tr": "iPhone sürümü",
+        "en": "iPhone version"
+      }
+    },
+    {
+      "product": "fileconvert",
+      "status": "done",
+      "title": {
+        "tr": "Beş araç: Hızlı Dönüştür, PDF Birleştir, Sayfaları Düzenle ve Böl, PDF Düzenle, PDF Sıkıştır",
+        "en": "Five tools: Quick Convert, Merge PDF, Edit and Split Pages, Edit PDF, Compress PDF"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "next",
+      "title": {
+        "tr": "App Store ve Google Play'de yayın",
+        "en": "Launch on the App Store and Google Play"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Sonsuz bölümler, kelime defteri ve sesli telaffuz",
+        "en": "Endless levels, a word notebook and spoken pronunciation"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Günlük bulmaca ve başarımlar",
+        "en": "Daily puzzle and achievements"
+      }
+    },
+    {
+      "product": "persayar",
+      "status": "next",
+      "title": {
+        "tr": "Google Play'de yayın",
+        "en": "Launch on Google Play"
+      }
+    },
+    {
+      "product": "persayar",
+      "status": "done",
+      "title": {
+        "tr": "Kamerayla, cihaz içinde taş tanıma",
+        "en": "On-device tile recognition with the camera"
+      }
+    }
+  ]
+}

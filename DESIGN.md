@@ -517,6 +517,10 @@ Köşe yarıçapı hiyerarşiyi taşır; her şeye aynı yarıçap verilmez.
 - **"Yeni" rozeti:** Vişne zemin, beyaz yazı, tam yuvarlak; yayından sonraki 30 gün.
 - **Duyuru şeridi:** Header'ın üstünde, ürün renginin %10'luk tonu; ortada renkli nokta, "Ürün
   yayında. Hemen indirin →" ve kapatma düğmesi. Kapatılınca o ürün için bir daha görünmez.
+- **Marka deseni:** R'nin kavisinden türeyen çeyrek yaylarla örülmüş ince doku; kenarlarda söner,
+  fare altında hafifçe aydınlanır. Yalnızca geniş, sakin zeminlerde (kapanış bandı, sayfa açılışları).
+- **Zaman çizelgesi:** Ortada ince bir çizgi; okundukça vişne rengiyle dolar, duraklar sırayla
+  belirir. Geniş ekranda iki yana dönüşümlü, telefonda tek sütun.
 - **Odak halkası:** Tüm etkileşimli öğelerde 2px Vişne halka, öğeden 2px
   uzakta. Karanlık temada `tertiary-dark`. Hiçbir zaman kaldırılmaz.
 

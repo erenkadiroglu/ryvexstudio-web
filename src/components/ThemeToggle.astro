@@ -33,6 +33,13 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     );
   }
 
+  // The device switched theme and the page followed it: the buttons follow too.
+  document.addEventListener("rv:theme-sync", () => {
+    document
+      .querySelectorAll<HTMLButtonElement>(".theme-toggle")
+      .forEach((b) => sync(b, document.documentElement.dataset.theme ?? "light"));
+  });
+
   // Runs on the first load and after every client-side navigation.
   document.addEventListener("astro:page-load", () => {
     document.querySelectorAll<HTMLButtonElement>(".theme-toggle").forEach((button) => {

@@ -333,6 +333,358 @@
     calc(var(--i, 0) * -1.3s);
 }
 
+/* Hero tiles: a slight 3D turn toward the pointer and a soft sheen where the light falls. */
+.hero-tilt {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-tilt img {
+  display: block;
+}
+
+.hero-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--sx, 30%) var(--sy, 20%),
+    rgb(255 255 255 / 0.34),
+    rgb(255 255 255 / 0.06) 38%,
+    transparent 62%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-settle);
+}
+
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero-sheen {
+    opacity: 1;
+  }
+}
+
+/* Brand pattern: the R strokes as a quiet texture that lights up under the pointer. */
+.brand-pattern {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 100%);
+}
+
+.brand-pattern-lines {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bp-color);
+  opacity: var(--bp-opacity);
+  -webkit-mask-image: var(--bp-mask);
+  mask-image: var(--bp-mask);
+  -webkit-mask-size: var(--bp-size) var(--bp-size);
+  mask-size: var(--bp-size) var(--bp-size);
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* A second copy shows only near the pointer (set by the parent's --mx / --my). */
+.brand-pattern-lit {
+  opacity: calc(var(--bp-opacity) * 3.2);
+  -webkit-mask-image: var(--bp-mask), radial-gradient(circle 220px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  mask-image: var(--bp-mask), radial-gradient(circle 220px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  -webkit-mask-size: var(--bp-size) var(--bp-size), 100% 100%;
+  mask-size: var(--bp-size) var(--bp-size), 100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-position: center, 0 0;
+  mask-position: center, 0 0;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Journal post: centred text, contents to the right on wide screens, a reading line on top. */
+@media (min-width: 1280px) {
+  .journal-grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 68ch) 1fr;
+    column-gap: 56px;
+  }
+
+  .journal-main {
+    grid-column: 2;
+  }
+
+  .journal-toc {
+    grid-column: 3;
+    grid-row: 1;
+    position: sticky;
+    top: 120px;
+    align-self: start;
+    max-width: 240px;
+    margin-top: 220px;
+  }
+}
+
+.journal-toc-link {
+  display: block;
+  margin-left: -1px;
+  padding: 6px 0 6px 14px;
+  border-left: 2px solid transparent;
+  font-size: var(--text-body-sm);
+  line-height: 1.4;
+  color: var(--rv-secondary);
+  transition: color 150ms, border-color 150ms;
+}
+
+.journal-toc-link:hover,
+.journal-toc-link[aria-current] {
+  color: var(--rv-primary);
+}
+
+.journal-toc-link[aria-current] {
+  border-left-color: var(--rv-tertiary);
+}
+
+.journal-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 45;
+  height: 2px;
+  pointer-events: none;
+}
+
+.journal-progress span {
+  display: block;
+  height: 100%;
+  background: var(--rv-tertiary);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.prose-journal h2 {
+  scroll-margin-top: 100px;
+}
+
+/* Roadmap: three columns of cards, each marked with its product's colour. */
+.roadmap-column {
+  border-radius: var(--radius-xl);
+  background: var(--rv-neutral);
+  padding: 22px 18px 18px;
+}
+
+.roadmap-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--rv-secondary);
+}
+
+.roadmap-column[data-status="now"] .roadmap-dot {
+  background: var(--rv-tertiary);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--rv-tertiary) 45%, transparent);
+  animation: roadmap-pulse 2.4s var(--ease-settle) infinite;
+}
+
+.roadmap-column[data-status="done"] .roadmap-dot {
+  background: #2f8f5b;
+}
+
+@keyframes roadmap-pulse {
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+.roadmap-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--rv-outline);
+  border-radius: var(--radius-lg);
+  background: var(--rv-surface);
+  padding: 16px 18px 18px 20px;
+  transition: transform 300ms var(--ease-settle), box-shadow 300ms var(--ease-settle);
+}
+
+.roadmap-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--rm-color);
+}
+
+.roadmap-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -20px rgb(28 20 24 / 0.35);
+}
+
+.roadmap-column[data-status="done"] .roadmap-card {
+  background: color-mix(in srgb, var(--rv-surface) 60%, transparent);
+}
+
+/* Help centre: one big search field and topic chips. */
+.help-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 22px;
+  border: 1px solid var(--rv-outline);
+  border-radius: 999px;
+  background: var(--rv-surface);
+  box-shadow: 0 18px 40px -26px rgb(28 20 24 / 0.4);
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.help-search:focus-within {
+  border-color: var(--rv-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rv-tertiary) 16%, transparent);
+}
+
+.help-search input {
+  min-width: 0;
+  flex: 1;
+  height: 60px;
+  background: transparent;
+  font-size: var(--text-body-lg);
+  color: var(--rv-primary);
+  outline: none;
+}
+
+.help-search input::placeholder {
+  color: var(--rv-secondary);
+}
+
+.help-chip {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--rv-outline);
+  border-radius: 999px;
+  background: var(--rv-surface);
+  font-size: var(--text-label);
+  font-weight: 500;
+  color: var(--rv-primary);
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+}
+
+.help-chip:hover {
+  background: var(--rv-neutral);
+}
+
+.help-chip[aria-pressed="true"] {
+  border-color: var(--rv-primary);
+  background: var(--rv-primary);
+  color: var(--rv-surface);
+}
+
+/* Studio timeline: a line that fills as the page is read; stops alternate sides on wide screens. */
+.timeline {
+  position: relative;
+  max-width: 920px;
+  margin-inline: auto;
+  padding-left: 36px;
+}
+
+.timeline::before,
+.timeline::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 11px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--rv-outline);
+}
+
+.timeline::after {
+  background: var(--rv-tertiary);
+  transform: scaleY(var(--tl, 1));
+  transform-origin: top;
+}
+
+.timeline-stop {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.timeline-stop:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 4px;
+  left: -31px;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--rv-tertiary);
+  border-radius: 999px;
+  background: var(--rv-surface);
+  transition: background-color 400ms var(--ease-settle), transform 400ms var(--ease-settle);
+}
+
+.timeline-stop.is-reached .timeline-dot {
+  background: var(--rv-tertiary);
+}
+
+.timeline-stop[data-upcoming] .timeline-dot {
+  border-style: dashed;
+  background: var(--rv-surface);
+}
+
+.timeline.is-animated .timeline-card {
+  opacity: 0.25;
+  transform: translateY(10px);
+  transition: opacity 600ms var(--ease-settle), transform 600ms var(--ease-settle);
+}
+
+.timeline.is-animated .is-reached .timeline-card {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 960px) {
+  .timeline {
+    padding-left: 0;
+  }
+
+  .timeline::before,
+  .timeline::after {
+    left: calc(50% - 1px);
+  }
+
+  .timeline-stop {
+    display: grid;
+    grid-template-columns: 1fr 64px 1fr;
+    padding-bottom: 56px;
+  }
+
+  .timeline-dot {
+    position: relative;
+    top: 4px;
+    left: auto;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .timeline-card {
+    grid-row: 1;
+  }
+
+  .timeline-stop[data-side="left"] .timeline-card {
+    grid-column: 1;
+    text-align: right;
+  }
+
+  .timeline-stop[data-side="right"] .timeline-card {
+    grid-column: 3;
+  }
+}
+
 /* Product wall: items are hung on the wall once, when the wall scrolls into view. */
 @keyframes wall-hang {
   from {
@@ -758,7 +1110,8 @@ html[data-theme="dark"] .shot-light {
   display: none;
 }
 
-.rv-intro .intro {
+.rv-intro .intro,
+.rv-egg .intro {
   position: fixed;
   inset: 0;
   z-index: 60;
@@ -772,6 +1125,36 @@ html[data-theme="dark"] .shot-light {
 .intro-mark {
   width: 72px;
   height: 72px;
+}
+
+/* The hidden greeting (type "ryvex"): the same opening, with the studio's line under the mark. */
+.intro {
+  flex-direction: column;
+  gap: 20px;
+}
+
+.intro-caption {
+  display: none;
+}
+
+.rv-egg .intro {
+  animation-delay: 2000ms;
+}
+
+.rv-egg .intro-caption {
+  display: block;
+  font-size: var(--text-title);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--rv-primary);
+  animation: intro-caption 600ms var(--ease-settle) 820ms both;
+}
+
+@keyframes intro-caption {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .intro-tile {

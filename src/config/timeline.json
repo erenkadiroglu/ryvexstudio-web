@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "date": "2026-10",
+      "title": {
+        "tr": "FileConvert ve PathWords'ün geliştirilmesi başladı.",
+        "en": "Work began on FileConvert and PathWords."
+      }
+    },
+    {
+      "date": "2026-11",
+      "title": {
+        "tr": "Ürünler Ryvex Studio adı altında bir araya geldi.",
+        "en": "The products came together as Ryvex Studio."
+      }
+    },
+    {
+      "date": "2026-11",
+      "title": {
+        "tr": "PerSayar aileye katıldı.",
+        "en": "PerSayar joined the family."
+      }
+    },
+    {
+      "title": {
+        "tr": "İlk ürünün mağazalarda yayını.",
+        "en": "The first product reaches the stores."
+      }
+    }
+  ]
+}

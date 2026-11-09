@@ -251,6 +251,30 @@ const productFields: AnyField[] = [
   },
   { name: "version", label: "Güncel sürüm", widget: "string", required: false },
   {
+    name: "specs",
+    label: "Teknik bilgiler",
+    widget: "object",
+    collapsed: true,
+    hint: "Ürün sayfasındaki künyede görünür; boş bırakılan satır gösterilmez.",
+    fields: [
+      { name: "minAndroid", label: "En düşük Android sürümü", widget: "string", required: false, hint: "Ör. 8.0" },
+      { name: "minIos", label: "En düşük iOS sürümü", widget: "string", required: false, hint: "Ör. 16" },
+      { name: "size", label: "İndirme boyutu", widget: "string", required: false, hint: "Mağazadaki değer, ör. 32 MB" },
+      {
+        name: "languages",
+        label: "Uygulamanın dilleri",
+        widget: "select",
+        multiple: true,
+        required: false,
+        options: [
+          { label: "Türkçe", value: "tr" },
+          { label: "İngilizce", value: "en" },
+        ],
+      },
+      { name: "offline", label: "İnternetsiz çalışır", widget: "boolean", default: false },
+    ],
+  },
+  {
     ...date("releaseDate", "Yayın tarihi", false),
     hint: "Yakında ise planlanan çıkış tarihi; sayfada \"12 Aralık'ta çıkıyor\" olarak görünür. Yayında ise ilk yayın tarihi; ürün bu tarihten sonraki 30 gün \"Yeni\" rozeti ve sitenin üstünde duyuru alır.",
   },
@@ -369,6 +393,62 @@ const config = {
               fields: [
                 { name: "name", label: "Ad", widget: "string" },
                 { name: "url", label: "Adres", widget: "string" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "roadmap",
+          label: "Yol haritası",
+          file: "src/config/roadmap.json",
+          format: "json",
+          fields: [
+            date("updated", "Son güncelleme"),
+            {
+              name: "items",
+              label: "Maddeler",
+              label_singular: "Madde",
+              widget: "list",
+              summary: "{{fields.product}} · {{fields.status}} · {{fields.title.tr}}",
+              fields: [
+                { name: "product", label: "Ürün kimliği", widget: "string", hint: "Ürün dosyasının adı, ör. fileconvert." },
+                {
+                  name: "status",
+                  label: "Durum",
+                  widget: "select",
+                  options: [
+                    { label: "Üzerinde çalışılıyor", value: "now" },
+                    { label: "Sırada", value: "next" },
+                    { label: "Tamamlandı", value: "done" },
+                  ],
+                },
+                pair("title", "Madde"),
+              ],
+            },
+          ],
+        },
+        {
+          name: "timeline",
+          label: "Stüdyonun hikâyesi (zaman çizelgesi)",
+          file: "src/config/timeline.json",
+          format: "json",
+          fields: [
+            {
+              name: "items",
+              label: "Duraklar",
+              label_singular: "Durak",
+              widget: "list",
+              summary: "{{fields.date}} · {{fields.title.tr}}",
+              fields: [
+                {
+                  name: "date",
+                  label: "Tarih (yıl-ay)",
+                  widget: "string",
+                  required: false,
+                  pattern: ["^\\d{4}-\\d{2}$", "YYYY-AA biçiminde, ör. 2026-10"],
+                  hint: "Boşsa durak \"Yakında\" olarak gösterilir.",
+                },
+                pair("title", "Durak"),
               ],
             },
           ],

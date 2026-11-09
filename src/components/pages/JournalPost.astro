@@ -1,8 +1,9 @@
 ---
 import { render } from "astro:content";
+import ShareButton from "@/components/ShareButton.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
-import { readingMinutes, type Post } from "@/lib/journal";
+import { getPosts, postSlug, readingMinutes, type Post } from "@/lib/journal";
 
 interface Props {
   post: Post;
@@ -10,11 +11,25 @@ interface Props {
 }
 
 const { post, lang } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const copy = {
-  tr: { back: "Tüm yazılar", by: "Yazan", minutes: (n: number) => `${n} dakikalık okuma` },
-  en: { back: "All posts", by: "By", minutes: (n: number) => `${n} min read` },
+  tr: {
+    back: "Tüm yazılar",
+    by: "Yazan",
+    minutes: (n: number) => `${n} dakikalık okuma`,
+    contents: "İçindekiler",
+    related: "Günlükten başka yazılar",
+    progress: "Okuma ilerlemesi",
+  },
+  en: {
+    back: "All posts",
+    by: "By",
+    minutes: (n: number) => `${n} min read`,
+    contents: "Contents",
+    related: "More from the journal",
+    progress: "Reading progress",
+  },
 }[lang];
 
 const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
@@ -22,25 +37,180 @@ const dateFormat = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
   month: "long",
   year: "numeric",
 });
+
+// A contents list is worth it from three sections up.
+const sections = headings.filter((h) => h.depth === 2);
+const toc = sections.length >= 3 ? sections : [];
+
+// Two other posts: those sharing a tag first, then the newest.
+const others = (await getPosts(lang)).filter((p) => p.id !== post.id);
+const shared = (p: Post) => p.data.tags.filter((t) => post.data.tags.includes(t)).length;
+const related = [...others].sort((a, b) => shared(b) - shared(a)).slice(0, 2);
+const base = route("journal", lang);
+const url = new URL(`${base}/${postSlug(post)}`, site.url).href;
 ---
 
-<article class="container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
-  <div class="mx-auto max-w-[68ch]">
-    <a href={route("journal", lang)} class="group inline-flex items-center gap-2 text-label font-medium text-secondary hover:text-primary">
-      <span aria-hidden="true" class="transition-transform duration-300 ease-[var(--ease-settle)] group-hover:-translate-x-1">←</span>
-      {copy.back}
-    </a>
-    <h1 class="mt-10 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
-      {post.data.title}
-    </h1>
-    <p class="mt-5 text-body-lg text-secondary">{post.data.description}</p>
-    <p class="mt-8 flex flex-wrap gap-x-4 gap-y-1 border-y border-outline py-4 text-body-sm text-secondary">
-      <span>{copy.by} {site.founder}</span>
-      <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFormat.format(post.data.date)}</time>
-      <span>{copy.minutes(readingMinutes(post))}</span>
-    </p>
-    <div class="prose-journal mt-10">
-      <Content />
+<div class="journal-progress" aria-hidden="true">
+  <span></span>
+</div>
+
+<article class="journal-post container-page pt-14 pb-section-mobile md:pt-20 md:pb-section">
+  <div class="journal-grid">
+    <div class="journal-main mx-auto w-full max-w-[68ch]">
+      <a
+        href={base}
+        class="group inline-flex items-center gap-2 text-label font-medium text-secondary hover:text-primary"
+      >
+        <span
+          aria-hidden="true"
+          class="transition-transform duration-300 ease-[var(--ease-settle)] group-hover:-translate-x-1"
+        >
+          ←
+        </span>
+        {copy.back}
+      </a>
+      <h1 class="mt-10 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+        {post.data.title}
+      </h1>
+      <p class="mt-5 text-body-lg text-secondary">{post.data.description}</p>
+      <p class="mt-8 flex flex-wrap gap-x-4 gap-y-1 border-y border-outline py-4 text-body-sm text-secondary">
+        <span>
+          {copy.by} {site.founder}
+        </span>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>
+          {dateFormat.format(post.data.date)}
+        </time>
+        <span>{copy.minutes(readingMinutes(post))}</span>
+      </p>
+      {toc.length > 0 && (
+        <details class="journal-toc-mobile mt-8 rounded-xl border border-outline px-5 py-4 lg:hidden">
+          <summary class="cursor-pointer text-label font-medium text-primary">
+            {copy.contents}
+          </summary>
+          <ol class="mt-3 space-y-2 text-body-sm">
+            {toc.map((h) => (
+              <li>
+                <a href={`#${h.slug}`} class="text-secondary hover:text-primary">
+                  {h.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
+      <div class="prose-journal mt-10" data-journal-body>
+        <Content />
+      </div>
+      <div class="mt-12 flex items-center justify-between gap-4 border-t border-outline pt-6">
+        <span class="text-body-sm text-secondary">{site.name}</span>
+        <ShareButton title={post.data.title} text={post.data.description} url={url} />
+      </div>
     </div>
+
+    {toc.length > 0 && (
+      <nav class="journal-toc hidden lg:block" aria-label={copy.contents}>
+        <p class="text-label font-medium text-primary">{copy.contents}</p>
+        <ol class="mt-4 space-y-1 border-l border-outline">
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`} data-toc={h.slug} class="journal-toc-link">
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
   </div>
+
+  {related.length > 0 && (
+    <section aria-labelledby="ilgili" class="mx-auto mt-section-mobile max-w-[68ch] md:mt-24">
+      <h2 id="ilgili" class="text-headline-md font-semibold">
+        {copy.related}
+      </h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+        {related.map((p) => (
+          <li>
+            <a
+              href={`${base}/${postSlug(p)}`}
+              class="group block h-full rounded-2xl border border-outline p-6 transition-colors duration-150 hover:bg-neutral"
+            >
+              <time
+                datetime={p.data.date.toISOString().slice(0, 10)}
+                class="text-body-sm text-secondary"
+              >
+                {dateFormat.format(p.data.date)}
+              </time>
+              <span class="mt-2 block text-title font-semibold decoration-1 underline-offset-[3px] group-hover:underline">
+                {p.data.title}
+              </span>
+              <span class="mt-2 block text-body-sm text-secondary">{p.data.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </article>
+
+<script>
+  let tocWatch: IntersectionObserver | null = null;
+  let stopProgress: (() => void) | null = null;
+
+  document.addEventListener("astro:page-load", () => {
+    tocWatch?.disconnect();
+    tocWatch = null;
+    stopProgress?.();
+    stopProgress = null;
+
+    const body = document.querySelector<HTMLElement>("[data-journal-body]");
+    const bar = document.querySelector<HTMLElement>(".journal-progress span");
+    if (!body || !bar) return;
+
+    // Reading progress: how much of the post's text has passed the top of the screen.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const r = body.getBoundingClientRect();
+      const total = r.height - window.innerHeight * 0.6;
+      const done = Math.min(
+        1,
+        Math.max(0, (window.innerHeight * 0.4 - r.top) / Math.max(1, total)),
+      );
+      bar.style.transform = `scaleX(${done.toFixed(4)})`;
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    stopProgress = () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+    update();
+
+    // Contents: the section being read is marked.
+    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc]")];
+    if (!links.length) return;
+    const mark = (slug: string) =>
+      links.forEach((l) =>
+        l.dataset.toc === slug
+          ? l.setAttribute("aria-current", "location")
+          : l.removeAttribute("aria-current"),
+      );
+    tocWatch = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) mark((visible[0].target as HTMLElement).id);
+      },
+      { rootMargin: "-20% 0px -70% 0px" },
+    );
+    links.forEach((l) => {
+      const heading = document.getElementById(l.dataset.toc ?? "");
+      if (heading) tocWatch?.observe(heading);
+    });
+  });
+</script>

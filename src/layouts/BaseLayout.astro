@@ -7,6 +7,7 @@ import SearchPalette from "@/components/SearchPalette.astro";
 import LaunchAnnounce from "@/components/LaunchAnnounce.astro";
 import { freshProducts } from "@/lib/launch";
 import { getProducts } from "@/lib/products";
+import { breadcrumbSchema } from "@/lib/schema";
 import { site } from "@/config/site";
 import { alternatePath, getLangFromUrl, useTranslations } from "@/i18n/ui";
 
@@ -42,6 +43,7 @@ const alternates = isNotFound
       { hreflang: "x-default", href: new URL(alternatePath(Astro.url, "tr"), Astro.site) },
     ];
 const ogImageUrl = new URL(ogImage, Astro.site);
+const crumbs = isNotFound ? undefined : await breadcrumbSchema(Astro.url, title, lang);
 // Products released in the last 30 days. Whether they are still new is decided again in the browser.
 const fresh = freshProducts(await getProducts()).map((f) => ({ id: f.product.id, until: f.until.getTime() }));
 const freshStyle = fresh
@@ -87,20 +89,22 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImageUrl} />
     {
-      jsonLd.map((data) => (
+      [...jsonLd, ...(crumbs ? [crumbs] : [])].map((data) => (
         <script type="application/ld+json" set:html={JSON.stringify(data)} />
       ))
     }
 
     <script is:inline>
-      // Apply the saved theme before first paint, and again after every client-side navigation.
-      // Light is the default.
+      // Apply the theme before first paint, and again after every client-side navigation: the
+      // visitor's own choice if they made one, otherwise their device's light or dark setting.
       (function () {
+        var system = window.matchMedia("(prefers-color-scheme: dark)");
         function applyTheme(doc) {
-          var theme = "light";
+          var saved = null;
           try {
-            if (localStorage.getItem("rv-theme") === "dark") theme = "dark";
+            saved = localStorage.getItem("rv-theme");
           } catch (e) {}
+          var theme = saved === "dark" || saved === "light" ? saved : system.matches ? "dark" : "light";
           doc.documentElement.dataset.theme = theme;
         }
         applyTheme(document);
@@ -108,6 +112,11 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
           window.__rvThemeBound = true;
           document.addEventListener("astro:before-swap", function (e) {
             applyTheme(e.newDocument);
+          });
+          // Follows the device when it switches (e.g. at sunset), unless a choice was made here.
+          system.addEventListener("change", function () {
+            applyTheme(document);
+            document.dispatchEvent(new CustomEvent("rv:theme-sync"));
           });
         }
       })();
@@ -182,6 +191,7 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
           <path class="intro-stroke" pathLength="1" d="M31 34L64 67"></path>
         </g>
       </svg>
+      <p class="intro-caption">{site.tagline[lang]}</p>
     </div>
     <LaunchAnnounce />
     <Header />

@@ -27,6 +27,8 @@ export const ui = {
     "footer.kvkk": "KVKK Aydınlatma Metni",
     "footer.cookies": "Çerez Politikası",
     "footer.accessibility": "Erişilebilirlik",
+    "footer.roadmap": "Yol haritası",
+    "footer.help": "Yardım merkezi",
     "footer.rights": "Tüm hakları saklıdır.",
     "footer.follow": "Takip edin",
     "skip.content": "İçeriğe geç",
@@ -51,6 +53,8 @@ export const ui = {
     "footer.kvkk": "Personal Data Notice",
     "footer.cookies": "Cookie Policy",
     "footer.accessibility": "Accessibility",
+    "footer.roadmap": "Roadmap",
+    "footer.help": "Help centre",
     "footer.rights": "All rights reserved.",
     "footer.follow": "Follow us",
     "skip.content": "Skip to content",
@@ -82,6 +86,8 @@ export const routes = {
   kvkk: { tr: "/kvkk", en: "/en/personal-data" },
   cookies: { tr: "/cerez-politikasi", en: "/en/cookies" },
   accessibility: { tr: "/erisilebilirlik", en: "/en/accessibility" },
+  roadmap: { tr: "/yol-haritasi", en: "/en/roadmap" },
+  help: { tr: "/destek", en: "/en/support" },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 export type RouteName = keyof typeof routes;

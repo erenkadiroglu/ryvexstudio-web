@@ -6,6 +6,7 @@ import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 import { getProducts, platformLabels, productCaption } from "@/lib/products";
 import { studioFaq } from "@/data/studio-faq";
+import { monthLabel, text, timeline } from "@/lib/studio";
 
 interface Props {
   lang: Lang;
@@ -48,6 +49,8 @@ const copy = {
       and: " ve ",
     },
     faqTitle: "Sık sorulan sorular",
+    storyTitle: "Hikâyemiz",
+    upcoming: "Yakında",
   },
   en: {
     title: "Studio",
@@ -77,6 +80,8 @@ const copy = {
       and: " and ",
     },
     faqTitle: "Frequently asked questions",
+    storyTitle: "Our story",
+    upcoming: "Coming soon",
   },
 }[lang];
 ---
@@ -163,6 +168,26 @@ const copy = {
   </ul>
 </section>
 
+<!-- The studio so far, from the panel (Ayarlar › Stüdyonun hikâyesi). The line fills as you read. -->
+<section aria-labelledby="hikaye" class="container-page pb-section-mobile md:pb-section">
+  <h2 id="hikaye" class="text-center text-headline-lg font-semibold">{copy.storyTitle}</h2>
+  <ol class="timeline mt-12" data-timeline>
+    {
+      timeline.items.map((item, i) => (
+        <li class="timeline-stop" data-side={i % 2 ? "right" : "left"} data-upcoming={item.date ? undefined : ""}>
+          <span class="timeline-dot" aria-hidden="true" />
+          <div class="timeline-card">
+            <p class="font-mono text-mono-sm text-secondary">
+              {item.date ? <time datetime={item.date}>{monthLabel(item.date, lang)}</time> : copy.upcoming}
+            </p>
+            <p class="mt-2 text-title font-semibold">{text(item.title, lang)}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
 <section aria-labelledby="ilkeler" class="container-page pb-section-mobile md:pb-section">
   <h2 id="ilkeler" class="text-headline-lg font-semibold">{copy.principlesTitle}</h2>
   <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -207,3 +232,39 @@ const copy = {
 </section>
 
 <ClosingBand lang={lang} />
+
+<script>
+  let stopTimeline: (() => void) | null = null;
+
+  document.addEventListener("astro:page-load", () => {
+    stopTimeline?.();
+    stopTimeline = null;
+    const list = document.querySelector<HTMLElement>("[data-timeline]");
+    if (!list) return;
+    const stops = [...list.querySelectorAll<HTMLElement>(".timeline-stop")];
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      list.style.setProperty("--tl", "1");
+      stops.forEach((s) => s.classList.add("is-reached"));
+      return;
+    }
+    list.classList.add("is-animated");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const mark = window.innerHeight * 0.62;
+      const r = list.getBoundingClientRect();
+      list.style.setProperty("--tl", Math.min(1, Math.max(0, (mark - r.top) / r.height)).toFixed(4));
+      stops.forEach((s) => s.classList.toggle("is-reached", s.getBoundingClientRect().top < mark));
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    stopTimeline = () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+    update();
+  });
+</script>

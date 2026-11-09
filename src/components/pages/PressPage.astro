@@ -1,4 +1,5 @@
 ---
+import BrandPattern from "@/components/BrandPattern.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
@@ -101,7 +102,9 @@ const block = "border-t border-outline py-12 md:grid md:grid-cols-12 md:gap-6";
 <section
   class="studio-band relative isolate flex flex-col justify-center overflow-hidden text-primary md:min-h-[calc(100svh-73px)]"
   data-theme="dark"
+  data-pattern-light
 >
+  <BrandPattern color="var(--rv-primary)" opacity={0.06} class="-z-10" />
   <div
     class="studio-glow"
     style={`--c1:${glow[0] ?? "#8E1B3B"};--c2:${glow[1] ?? "#8E1B3B"};--c3:${glow[2] ?? "#8E1B3B"}`}

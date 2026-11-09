@@ -19,6 +19,8 @@ screenshots:
 platforms: [ios, android]
 links:
   googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.pathwords"
+specs:
+  offline: true
 supportEmail: "destek@ryvexstudio.com"
 privacyUpdated: 2026-11-08
 privacy:

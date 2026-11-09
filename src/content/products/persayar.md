@@ -15,6 +15,8 @@ screenshots:
   - src: ../../assets/screenshots/persayar/03-baraj.png
     alt: { tr: "Baraj Ayarları: seri ve çift barajı", en: "Threshold settings for runs and pairs" }
 platforms: [android]
+specs:
+  offline: true
 supportEmail: "destek@ryvexstudio.com"
 privacyUpdated: 2026-11-08
 privacy:
