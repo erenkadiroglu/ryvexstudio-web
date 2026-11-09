@@ -118,15 +118,19 @@ const copy = {
             data-depth={spot.depth}
           >
             <div class="hero-float" style={`--i:${i};--r:${spot.r};--dy:${spot.dy};--d:${spot.d}`}>
-              <Image
-                src={product.data.icon}
-                alt=""
-                width={spot.size}
-                height={spot.size}
-                loading="eager"
-                class="shape-icon object-depth"
-                style={`width:${spot.size}px;height:${spot.size}px`}
-              />
+              {/* Tilts toward the pointer like a glass tile, with a sheen where the light falls. */}
+              <div class="hero-tilt">
+                <Image
+                  src={product.data.icon}
+                  alt=""
+                  width={spot.size}
+                  height={spot.size}
+                  loading="eager"
+                  class="shape-icon object-depth"
+                  style={`width:${spot.size}px;height:${spot.size}px`}
+                />
+                <span class="hero-sheen shape-icon"></span>
+              </div>
             </div>
           </div>
         );

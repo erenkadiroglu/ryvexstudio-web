@@ -1,4 +1,5 @@
 ---
+import BrandPattern from "@/components/BrandPattern.astro";
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getProducts } from "@/lib/products";
@@ -10,22 +11,25 @@ const sizes = [112, 96, 128, 88, 104, 120, 92, 100];
 ---
 
 <BaseLayout title="Sayfa bulunamadı">
-  <section class="container-page pt-20 pb-section-mobile text-center md:pt-28 md:pb-24">
-    <p class="text-body-sm text-secondary">404</p>
-    <h1 class="mt-3 text-headline-xl font-semibold tracking-[-0.035em]">Bu sayfa burada değil.</h1>
-    <p class="mx-auto mt-4 max-w-[44ch] text-body-lg text-secondary">
-      Adres değişmiş ya da yanlış yazılmış olabilir. Bu arada ürünlerimiz de yerlerinden düşmüş gibi.
-    </p>
-    <p class="mx-auto mt-2 max-w-[44ch] text-body-md text-secondary" lang="en">
-      This page isn't here. The address may have changed or been mistyped.
-    </p>
-    <a
-      href="/"
-      data-magnetic
-      class="mt-8 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
-    >
-      Ana sayfaya dön
-    </a>
+  <section class="relative isolate" data-pattern-light>
+    <BrandPattern color="var(--rv-tertiary)" opacity={0.1} class="-z-10" />
+    <div class="container-page pt-20 pb-section-mobile text-center md:pt-28 md:pb-24">
+      <p class="text-body-sm text-secondary">404</p>
+      <h1 class="mt-3 text-headline-xl font-semibold tracking-[-0.035em]">Bu sayfa burada değil.</h1>
+      <p class="mx-auto mt-4 max-w-[44ch] text-body-lg text-secondary">
+        Adres değişmiş ya da yanlış yazılmış olabilir. Bu arada ürünlerimiz de yerlerinden düşmüş gibi.
+      </p>
+      <p class="mx-auto mt-2 max-w-[44ch] text-body-md text-secondary" lang="en">
+        This page isn't here. The address may have changed or been mistyped.
+      </p>
+      <a
+        href="/"
+        data-magnetic
+        class="mt-8 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+      >
+        Ana sayfaya dön
+      </a>
+    </div>
   </section>
 
   <div class="container-page pb-section-mobile md:pb-section" aria-hidden="true">

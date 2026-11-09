@@ -1,6 +1,6 @@
 import { site } from "@/config/site";
-import { route, type Lang } from "@/i18n/ui";
-import { productTagline, type Product } from "@/lib/products";
+import { route, routes, type Lang, type RouteName } from "@/i18n/ui";
+import { getProducts, productTagline, type Product } from "@/lib/products";
 
 const organizationId = `${site.url}/#organization`;
 
@@ -73,5 +73,44 @@ export function articleSchema(
     inLanguage: lang === "tr" ? "tr-TR" : "en-US",
     author: { "@type": "Person", name: site.founder },
     publisher: { "@id": organizationId },
+  };
+}
+
+const crumbLabels: Record<Lang, Partial<Record<string, string>>> = {
+  tr: { products: "Ürünler", studio: "Stüdyo", journal: "Günlük", contact: "İletişim", press: "Basın kiti" },
+  en: { products: "Products", studio: "Studio", journal: "Journal", contact: "Contact", press: "Press kit" },
+};
+
+/**
+ * The page's place in the site for search results ("Ryvex Studio › Ürünler › FileConvert"),
+ * read from its address. The home page has none.
+ */
+export async function breadcrumbSchema(url: URL, title: string | undefined, lang: Lang) {
+  const home = route("home", lang);
+  const path = url.pathname.replace(/\/$/, "") || "/";
+  if (path === home || path === "/") return undefined;
+  const products = await getProducts();
+  const parts = path.split("/").filter(Boolean);
+  const items: { name: string; path: string }[] = [{ name: site.name, path: home }];
+  for (let i = lang === "tr" ? 1 : 2; i <= parts.length; i++) {
+    const current = `/${parts.slice(0, i).join("/")}`;
+    const last = i === parts.length;
+    const named = (Object.keys(routes) as RouteName[]).find((r) => routes[r][lang] === current);
+    const product = current.startsWith(`${route("products", lang)}/`) && i === (lang === "tr" ? 2 : 3)
+      ? products.find((p) => p.id === parts[i - 1])
+      : undefined;
+    const name = last ? (title ?? product?.data.name) : (product?.data.name ?? (named && crumbLabels[lang][named]));
+    if (name) items.push({ name, path: current });
+  }
+  if (items.length < 2) return undefined;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, site.url).href,
+    })),
   };
 }

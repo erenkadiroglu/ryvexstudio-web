@@ -1,0 +1,242 @@
+---
+/**
+ * Help centre: every product's questions and the studio's in one place, searchable as you type.
+ * The answers are the same records the product and studio pages show, so they never drift apart.
+ */
+import { getImage } from "astro:assets";
+import BrandPattern from "@/components/BrandPattern.astro";
+import { site } from "@/config/site";
+import { studioFaq } from "@/data/studio-faq";
+import { route, type Lang } from "@/i18n/ui";
+import { getProducts } from "@/lib/products";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = {
+  tr: {
+    eyebrow: "Yardım merkezi",
+    title: "Nasıl yardımcı olabiliriz?",
+    search: "Sorunuzu yazın",
+    placeholder: "Ör. internet, reklam, verilerim",
+    all: "Tümü",
+    studio: "Stüdyo",
+    filters: "Konuya göre süz",
+    count: (n: number) => `${n} soru`,
+    empty: "Bu aramayla eşleşen bir soru yok. Başka bir kelime deneyin ya da bize yazın.",
+    support: "Destek sayfası",
+    askTitle: "Cevabı bulamadınız mı?",
+    askText: "Bize yazın; her e-postayı okuyor ve yanıtlıyoruz.",
+  },
+  en: {
+    eyebrow: "Help centre",
+    title: "How can we help?",
+    search: "Type your question",
+    placeholder: "e.g. internet, ads, my data",
+    all: "All",
+    studio: "Studio",
+    filters: "Filter by topic",
+    count: (n: number) => `${n} questions`,
+    empty: "No questions match this search. Try another word or write to us.",
+    support: "Support page",
+    askTitle: "Didn't find your answer?",
+    askText: "Write to us; we read and answer every email.",
+  },
+}[lang];
+
+const productBase = route("products", lang);
+const products = await getProducts();
+const groups = [
+  ...(await Promise.all(
+    products
+      .filter((p) => p.data.faq.length > 0)
+      .map(async (p) => ({
+        id: p.id,
+        name: p.data.name,
+        icon: (await getImage({ src: p.data.icon, width: 64, format: "webp" })).src,
+        support: `${productBase}/${p.id}/${lang === "tr" ? "destek" : "support"}`,
+        items: p.data.faq.map((f) => ({ q: f.q[lang], a: f.a[lang] })),
+      })),
+  )),
+  {
+    id: "studio",
+    name: copy.studio,
+    icon: undefined,
+    support: route("contact", lang),
+    items: studioFaq[lang],
+  },
+];
+const total = groups.reduce((n, g) => n + g.items.length, 0);
+---
+
+<section class="relative isolate overflow-hidden" data-pattern-light>
+  <BrandPattern color="var(--rv-tertiary)" opacity={0.08} class="-z-10" />
+  <div class="container-page py-20 text-center md:py-28">
+    <p class="text-label font-medium text-secondary">{copy.eyebrow}</p>
+    <h1 class="mt-4 text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.035em] md:text-headline-xl">
+      {copy.title}
+    </h1>
+    <div class="help-search mx-auto mt-10 max-w-[36rem]">
+      <svg
+        class="size-5 shrink-0 text-secondary"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="6.5"></circle>
+        <path d="m16 16 4.5 4.5"></path>
+      </svg>
+      <label class="sr-only" for="help-q">
+        {copy.search}
+      </label>
+      <input
+        id="help-q"
+        type="search"
+        placeholder={copy.placeholder}
+        autocomplete="off"
+        aria-describedby="help-count"
+      />
+    </div>
+    <div class="mt-6 flex flex-wrap justify-center gap-2" role="group" aria-label={copy.filters}>
+      <button type="button" class="help-chip" data-help-filter="" aria-pressed="true">
+        {copy.all}
+      </button>
+      {groups.map((g) => (
+        <button type="button" class="help-chip" data-help-filter={g.id} aria-pressed="false">
+          {g.name}
+        </button>
+      ))}
+    </div>
+    <p
+      id="help-count"
+      class="mt-5 text-body-sm text-secondary"
+      role="status"
+      data-count-template={copy.count(999)}
+    >
+      {copy.count(total)}
+    </p>
+  </div>
+</section>
+
+<div class="container-page pb-section-mobile md:pb-section">
+  <div class="mx-auto max-w-[52rem] space-y-14">
+    {groups.map((g) => (
+      <section aria-labelledby={`help-${g.id}`} data-help-group={g.id}>
+        <div class="flex items-center justify-between gap-4">
+          <h2 id={`help-${g.id}`} class="flex items-center gap-3 text-headline-md font-semibold">
+            {g.icon && (
+              <img
+                src={g.icon}
+                alt=""
+                width="32"
+                height="32"
+                class="shape-icon size-8"
+                loading="lazy"
+              />
+            )}
+            {g.name}
+          </h2>
+          {g.id !== "studio" && (
+            <a
+              href={g.support}
+              class="text-label font-medium text-secondary underline decoration-outline underline-offset-4 hover:text-primary"
+            >
+              {copy.support}
+            </a>
+          )}
+        </div>
+        <div class="mt-4 border-t border-outline">
+          {g.items.map((item) => (
+            <details
+              class="help-item group border-b border-outline"
+              data-help-text={`${item.q} ${item.a}`}
+            >
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-body-lg font-medium text-primary [&::-webkit-details-marker]:hidden">
+                {item.q}
+                <svg
+                  class="size-5 shrink-0 text-secondary transition-transform duration-200 group-open:rotate-45"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </summary>
+              <p class="max-w-[62ch] pb-6 text-body-md text-secondary">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    ))}
+    <p class="help-empty hidden py-10 text-center text-body-md text-secondary">{copy.empty}</p>
+
+    <div class="rounded-2xl bg-neutral p-8 text-center md:p-10">
+      <h2 class="text-headline-md font-semibold">{copy.askTitle}</h2>
+      <p class="mt-2 text-body-md text-secondary">{copy.askText}</p>
+      <a
+        href={`mailto:${site.supportEmail}`}
+        class="mt-6 inline-flex rounded-full bg-tertiary px-[22px] py-[14px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+      >
+        {site.supportEmail}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fold = (s: string) =>
+    s.toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
+
+  document.addEventListener("astro:page-load", () => {
+    const input = document.querySelector<HTMLInputElement>("#help-q");
+    if (!input) return;
+    const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-help-filter]")];
+    const groups = [...document.querySelectorAll<HTMLElement>("[data-help-group]")];
+    const count = document.querySelector<HTMLElement>("#help-count");
+    const empty = document.querySelector<HTMLElement>(".help-empty");
+    let topic = "";
+
+    const apply = () => {
+      const words = fold(input.value).split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const group of groups) {
+        let inGroup = 0;
+        const topicOk = !topic || group.dataset.helpGroup === topic;
+        group.querySelectorAll<HTMLDetailsElement>(".help-item").forEach((item) => {
+          const hay = fold(item.dataset.helpText ?? "");
+          const ok = topicOk && words.every((w) => hay.includes(w));
+          item.hidden = !ok;
+          // A search opens the matching answers; clearing it closes them again.
+          if (words.length) item.open = ok;
+          if (ok) inGroup++;
+        });
+        group.hidden = inGroup === 0;
+        shown += inGroup;
+      }
+      if (count)
+        count.textContent = (count.dataset.countTemplate ?? "").replace("999", String(shown));
+      empty?.classList.toggle("hidden", shown > 0);
+    };
+
+    input.addEventListener("input", () => {
+      if (!input.value)
+        groups.forEach((g) => g.querySelectorAll("details").forEach((d) => (d.open = false)));
+      apply();
+    });
+    chips.forEach((chip) =>
+      chip.addEventListener("click", () => {
+        topic = chip.dataset.helpFilter ?? "";
+        chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+        apply();
+      }),
+    );
+  });
+</script>

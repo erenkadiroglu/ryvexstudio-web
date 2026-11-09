@@ -50,6 +50,16 @@ const products = defineCollection({
       video: z.object({ tr: z.string(), en: z.string().optional() }).optional(),
       version: z.string().optional(),
       releaseDate: z.coerce.date().optional(),
+      /** What a visitor wants to know before downloading. Empty values are not shown. */
+      specs: z
+        .object({
+          minAndroid: z.string().optional(),
+          minIos: z.string().optional(),
+          size: z.string().optional(),
+          languages: z.array(z.enum(["tr", "en"])).default([]),
+          offline: z.boolean().default(false),
+        })
+        .default({ languages: [], offline: false }),
       supportEmail: z.email().optional(),
       privacyUpdated: z.coerce.date().optional(),
       /** Facts the privacy policy is generated from. Keep them accurate for each product. */

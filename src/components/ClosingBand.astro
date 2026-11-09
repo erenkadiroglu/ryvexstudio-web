@@ -1,4 +1,5 @@
 ---
+import BrandPattern from "@/components/BrandPattern.astro";
 import { site } from "@/config/site";
 import { route, type Lang } from "@/i18n/ui";
 
@@ -25,7 +26,9 @@ const copy = {
   data-reveal-on-view
   class="closing relative overflow-hidden bg-[#8E1B3B] text-[#FFFFFF] [&_a:focus-visible]:outline-[#FFFFFF]"
   aria-labelledby="kapanis"
+  data-pattern-light
 >
+  <BrandPattern color="#FFFFFF" opacity={0.07} />
   <svg
     class="pointer-events-none absolute -right-24 -bottom-40 size-[520px] opacity-[0.09] md:-right-16 md:size-[640px]"
     viewBox="0 0 64 64"

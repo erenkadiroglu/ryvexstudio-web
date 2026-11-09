@@ -341,7 +341,15 @@ function runHero() {
   wall.classList.add("is-landing");
   const items = [...wall.querySelectorAll<HTMLElement>("[data-product]")];
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  let flights: { el: HTMLElement; float: HTMLElement; depth: number; dx: number; dy: number; scale: number }[] = [];
+  let flights: {
+    el: HTMLElement;
+    float: HTMLElement;
+    tilt: HTMLElement | null;
+    depth: number;
+    dx: number;
+    dy: number;
+    scale: number;
+  }[] = [];
   let landAt = 1;
   let frame = 0;
 
@@ -357,6 +365,7 @@ function runHero() {
       return [{
         el,
         float,
+        tilt: el.querySelector<HTMLElement>(".hero-tilt"),
         depth: Number(el.dataset.depth ?? 0.5),
         dx: b.left - a.left,
         dy: b.top + sy - (a.top + sy),
@@ -383,6 +392,13 @@ function runHero() {
       f.el.style.opacity = landed ? "0" : "1";
       // Calm the drift to zero as the icon approaches its place, so it lands straight.
       f.float.style.setProperty("--k", (1 - clamp(e * 2.5)).toFixed(3));
+      // Depth: nearer tiles turn further toward the pointer; the sheen moves with the light.
+      if (f.tilt) {
+        const k = (0.6 + f.depth) * (1 - e);
+        f.tilt.style.transform = `perspective(700px) rotateX(${(-pointer.y * 16 * k).toFixed(2)}deg) rotateY(${(pointer.x * 20 * k).toFixed(2)}deg)`;
+        f.tilt.style.setProperty("--sx", `${(50 + pointer.x * 90).toFixed(1)}%`);
+        f.tilt.style.setProperty("--sy", `${(40 + pointer.y * 90).toFixed(1)}%`);
+      }
     }
 
     for (const li of items) {
@@ -484,3 +500,35 @@ document.addEventListener("astro:before-swap", () => {
   pageListeners.abort();
   pageListeners = new AbortController();
 });
+
+/* ---------- A hidden greeting: typing "ryvex" anywhere outside a field draws the mark again ---------- */
+
+let typed = "";
+document.addEventListener("keydown", (event) => {
+  const target = event.target as HTMLElement | null;
+  if (target?.closest("input, textarea, select, [contenteditable='true']") || event.key.length !== 1) return;
+  typed = (typed + event.key.toLocaleLowerCase("tr")).slice(-5);
+  if (typed !== "ryvex" || reducedMotion.matches || root.classList.contains("rv-egg")) return;
+  typed = "";
+  root.classList.remove("rv-intro");
+  void root.offsetWidth; // restart the opening's animations
+  root.classList.add("rv-egg");
+  window.setTimeout(() => root.classList.remove("rv-egg"), 2900);
+});
+
+/* ---------- Brand pattern light: the R texture brightens around the pointer ---------- */
+
+document.addEventListener(
+  "pointermove",
+  (event) => {
+    if (event.pointerType !== "mouse") return;
+    const host = (event.target as Element | null)?.closest<HTMLElement>("[data-pattern-light]");
+    if (!host) return;
+    const pattern = host.querySelector<HTMLElement>(".brand-pattern");
+    if (!pattern) return;
+    const r = pattern.getBoundingClientRect();
+    pattern.style.setProperty("--mx", `${event.clientX - r.left}px`);
+    pattern.style.setProperty("--my", `${event.clientY - r.top}px`);
+  },
+  { passive: true },
+);

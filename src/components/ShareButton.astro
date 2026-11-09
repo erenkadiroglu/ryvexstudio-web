@@ -1,0 +1,84 @@
+---
+/**
+ * Share: the device's own share sheet where there is one (phones, some desktops), otherwise the
+ * page's link is copied and the button says so.
+ */
+import { getLangFromUrl } from "@/i18n/ui";
+
+interface Props {
+  title: string;
+  text?: string;
+  /** Absolute address to share; defaults to the page's own. */
+  url?: string;
+  class?: string;
+}
+
+const { title, text, url, class: className } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  tr: { share: "Paylaş", copied: "Bağlantı kopyalandı" },
+  en: { share: "Share", copied: "Link copied" },
+}[lang];
+---
+
+<span class="contents">
+  <button
+    type="button"
+    class:list={[
+      "share-button inline-flex min-h-12 items-center gap-2 rounded-full border border-outline px-5 text-label font-medium text-primary transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--rv-primary)_6%,transparent)]",
+      className,
+    ]}
+    data-share-title={title}
+    data-share-text={text}
+    data-share-url={url}
+    data-copied={copy.copied}
+  >
+    <svg
+      class="size-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 15V3.5M7.5 8 12 3.5 16.5 8M5 12.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-6.5"></path>
+    </svg>
+    <span class="share-label">{copy.share}</span>
+  </button>
+  <span class="sr-only" role="status" data-share-status></span>
+</span>
+
+<script>
+  // Registered once for the whole site; works for every share button on any page.
+  document.addEventListener("click", async (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLButtonElement>(".share-button");
+    if (!button) return;
+    const { shareTitle: title, shareText: text, shareUrl, copied = "" } = button.dataset;
+    const url = shareUrl || location.href;
+    const share = { title, text, url };
+    if (navigator.share && (!navigator.canShare || navigator.canShare(share))) {
+      try {
+        await navigator.share(share);
+      } catch {
+        /* the visitor closed the share sheet */
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      return;
+    }
+    const label = button.querySelector(".share-label");
+    const status = button.parentElement?.querySelector("[data-share-status]");
+    const before = label?.textContent ?? "";
+    if (label) label.textContent = copied;
+    if (status) status.textContent = copied;
+    window.setTimeout(() => {
+      if (label) label.textContent = before;
+      if (status) status.textContent = "";
+    }, 2200);
+  });
+</script>

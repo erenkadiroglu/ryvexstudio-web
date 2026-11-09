@@ -3,6 +3,8 @@ import { existsSync } from "node:fs";
 import ClosingBand from "@/components/ClosingBand.astro";
 import LaunchNotify from "@/components/LaunchNotify.astro";
 import PhoneFrame from "@/components/PhoneFrame.astro";
+import ShareButton from "@/components/ShareButton.astro";
+import ProductDemo from "@/components/ProductDemo.astro";
 import { Image } from "astro:assets";
 import { site } from "@/config/site";
 import qrcode from "qrcode-generator";
@@ -53,8 +55,13 @@ const copy = {
     status: "Durum",
     soonNote: (stores: string) => `Yakında ${stores} üzerinden indirilebilecek.`,
     planned: "Çıkış tarihi",
-    share: "Paylaş",
-    shareCopied: "Bağlantı kopyalandı",
+    requires: "Gereksinim",
+    orLater: (v: string) => `${v} ve üzeri`,
+    size: "Boyut",
+    languages: "Diller",
+    languageNames: { tr: "Türkçe", en: "İngilizce" },
+    internet: "İnternet",
+    offline: "Gerekmez",
     qrTitle: "Telefonunuzla açın",
     qrText: "Kameranızla okutun; indirme sayfası telefonunuzda açılsın.",
     barFree: "Ücretsiz",
@@ -86,8 +93,13 @@ const copy = {
     status: "Status",
     soonNote: (stores: string) => `Coming soon to ${stores}.`,
     planned: "Launch date",
-    share: "Share",
-    shareCopied: "Link copied",
+    requires: "Requires",
+    orLater: (v: string) => `${v} or later`,
+    size: "Size",
+    languages: "Languages",
+    languageNames: { tr: "Turkish", en: "English" },
+    internet: "Internet",
+    offline: "Not needed",
     qrTitle: "Open it on your phone",
     qrText: "Scan with your camera to open the download page on your phone.",
     barFree: "Free",
@@ -171,6 +183,21 @@ const facts = [
   soon && { label: copy.status, value: comingSoonLabel[lang] },
   data.version && { label: copy.version, value: data.version, mono: true },
   data.releaseDate && { label: soon ? copy.planned : copy.released, value: dateFormat.format(data.releaseDate) },
+  (data.specs.minAndroid || data.specs.minIos) && {
+    label: copy.requires,
+    value: [
+      data.specs.minAndroid && copy.orLater(`Android ${data.specs.minAndroid}`),
+      data.specs.minIos && copy.orLater(`iOS ${data.specs.minIos}`),
+    ]
+      .filter(Boolean)
+      .join(" · "),
+  },
+  data.specs.size && { label: copy.size, value: data.specs.size },
+  data.specs.languages.length > 0 && {
+    label: copy.languages,
+    value: data.specs.languages.map((l) => copy.languageNames[l]).join(", "),
+  },
+  data.specs.offline && { label: copy.internet, value: copy.offline },
 ].filter(Boolean) as { label: string; value: string; mono?: boolean }[];
 
 // The opening: the product's colour as a soft light behind the phone, over a light tint of it.
@@ -277,20 +304,7 @@ const camera = Math.round(phoneWidth * 0.036);
               </ul>
             )
           }
-          <button
-            type="button"
-            class="pd-share inline-flex min-h-12 items-center gap-2 rounded-full border border-outline px-5 text-label font-medium text-primary transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--rv-primary)_6%,transparent)]"
-            data-share-title={data.name}
-            data-share-text={productTagline(product, lang)}
-            data-share-url={pageUrl}
-            data-copied={copy.shareCopied}
-          >
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 15V3.5M7.5 8 12 3.5 16.5 8M5 12.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-6.5"></path>
-            </svg>
-            <span class="pd-share-label">{copy.share}</span>
-          </button>
-          <span class="sr-only" role="status" data-share-status></span>
+          <ShareButton title={data.name} text={productTagline(product, lang)} url={pageUrl} />
         </div>
         {
           appStores.length > 0 && (
@@ -426,6 +440,8 @@ const camera = Math.round(phoneWidth * 0.036);
       </section>
     )
   }
+
+  <ProductDemo product={product.id} color={data.color} lang={lang} />
 
   <div class="container-page py-section-mobile md:py-section">
     <section aria-labelledby="gizlilik-ozeti" class="mb-16 md:mb-20">
@@ -591,36 +607,6 @@ const camera = Math.round(phoneWidth * 0.036);
   document.addEventListener("astro:page-load", () => {
     storesWatch?.disconnect();
     storesWatch = null;
-
-    // Share: the phone's own share sheet where there is one, otherwise the link is copied.
-    document.querySelectorAll<HTMLButtonElement>(".pd-share").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const { shareTitle: title, shareText: text, shareUrl: url = location.href, copied = "" } = button.dataset;
-        const share = { title, text, url };
-        if (navigator.share && (!navigator.canShare || navigator.canShare(share))) {
-          try {
-            await navigator.share(share);
-          } catch {
-            /* the visitor closed the share sheet */
-          }
-          return;
-        }
-        try {
-          await navigator.clipboard.writeText(url);
-        } catch {
-          return;
-        }
-        const label = button.querySelector(".pd-share-label");
-        const status = button.parentElement?.querySelector("[data-share-status]");
-        const before = label?.textContent ?? "";
-        if (label) label.textContent = copied;
-        if (status) status.textContent = copied;
-        window.setTimeout(() => {
-          if (label) label.textContent = before;
-          if (status) status.textContent = "";
-        }, 2200);
-      });
-    });
 
     // A planned launch date that has passed falls back to the plain "coming soon" note.
     document.querySelectorAll<HTMLElement>("[data-launch-date]").forEach((note) => {

@@ -84,6 +84,21 @@ yapmadan şunlar devreye girer (`src/lib/launch.ts`):
 - **iPhone uygulama bağlantıları:** `appleTeamId` ve ürünün `bundleId`'si girilince
   `/.well-known/apple-app-site-association` ürün sayfalarını yüklü uygulamaya yönlendirir.
 
+## Stüdyo sayfaları ve demolar
+
+- **Yol haritası** (`/yol-haritasi`) ve **stüdyonun hikâyesi** (Stüdyo sayfasındaki zaman çizelgesi)
+  panelde Ayarlar altından düzenlenir (`src/config/roadmap.json`, `src/config/timeline.json`).
+- **Yardım merkezi** (`/destek`): ürünlerin ve stüdyonun sık sorulan soruları tek sayfada, yazdıkça
+  süzülür. Sorular ürün dosyalarındaki ve `src/data/studio-faq.ts`'teki kayıtlardan gelir.
+- **Teknik bilgiler:** Ürün dosyasındaki `specs` (en düşük sürüm, boyut, diller, internetsiz çalışma)
+  ürün künyesinde gösterilir; boş olan satır görünmez.
+- **Demolar** (`src/scripts/demos/`): PathWords'ün 1. bölümü, PerSayar'ın kendi ekranındaki el ve
+  FileConvert'in sayfa düzenleyicisi ürün sayfalarında oynanır. Kodları yalnızca bölüm görünmeye
+  yaklaşınca yüklenir.
+- **Marka deseni** (`BrandPattern.astro`): R'nin kavisinden örülen doku; kapanış bandında, basın ve
+  404 sayfalarında, fareyle aydınlanır.
+- **Gizli selam:** Bir alana yazmıyorken klavyede "ryvex" yazmak açılıştaki logo çizimini yeniden oynatır.
+
 ## Proje yapısı
 
 ```text

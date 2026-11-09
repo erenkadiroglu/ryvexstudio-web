@@ -1,0 +1,44 @@
+---
+/**
+ * The studio's own texture: the curve of the R mark's bowl, woven into flowing lines. Edges fade
+ * out; where the pointer is, the pattern brightens (any ancestor with data-pattern-light passes
+ * the pointer position down). Decorative only.
+ */
+interface Props {
+  /** Line colour; any CSS colour. */
+  color?: string;
+  /** Strength of the pattern away from the pointer. */
+  opacity?: number;
+  /** Tile size in pixels. */
+  size?: number;
+  class?: string;
+}
+
+const { color = "currentColor", opacity = 0.12, size = 128, class: className } = Astro.props;
+
+// One tile: the curve of the R's bowl as quarter arcs, laid in a fixed 4 × 4 arrangement so the
+// lines flow from tile to tile into a quiet, woven texture (no letters, nothing to read).
+const cell = 32;
+const turns = [0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
+const arcs = turns
+  .map((turn, i) => {
+    const x = (i % 4) * cell;
+    const y = Math.floor(i / 4) * cell;
+    const h = cell / 2;
+    return turn
+      ? `M${x + h} ${y}A${h} ${h} 0 0 1 ${x} ${y + h}M${x + cell} ${y + h}A${h} ${h} 0 0 0 ${x + h} ${y + cell}`
+      : `M${x + h} ${y}A${h} ${h} 0 0 0 ${x + cell} ${y + h}M${x} ${y + h}A${h} ${h} 0 0 1 ${x + h} ${y + cell}`;
+  })
+  .join("");
+const tile = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path d="${arcs}" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+const mask = `url("data:image/svg+xml,${encodeURIComponent(tile)}")`;
+---
+
+<div
+  class:list={["brand-pattern", className]}
+  style={`--bp-color:${color};--bp-opacity:${opacity};--bp-size:${size}px;--bp-mask:${mask}`}
+  aria-hidden="true"
+>
+  <div class="brand-pattern-lines"></div>
+  <div class="brand-pattern-lines brand-pattern-lit"></div>
+</div>
