@@ -1,0 +1,551 @@
+---
+/**
+ * Site search and quick actions in one dialog, opened with Ctrl+K / ⌘K, "/" or the header button.
+ * Shortcuts (products, pages, actions) are built here and work everywhere; full-text results come
+ * from the Pagefind index written after the build (astro.config.mjs), so they appear in built pages.
+ */
+import { getImage } from "astro:assets";
+import { site } from "@/config/site";
+import { getLangFromUrl, route, useTranslations } from "@/i18n/ui";
+import { getProducts, productTagline } from "@/lib/products";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const productBase = route("products", lang);
+
+const copy = {
+  tr: {
+    label: "Sitede ara",
+    placeholder: "Ürün, yazı ya da sayfa arayın",
+    products: "Ürünler",
+    pages: "Sayfalar",
+    actions: "Eylemler",
+    results: "Sitede",
+    product: "Ürün",
+    journal: "Günlük",
+    page: "Sayfa",
+    copyEmail: "E-posta adresini kopyala",
+    copied: "E-posta adresi kopyalandı",
+    otherLang: "Switch to English",
+    empty: "Sonuç yok. Başka bir kelime deneyin.",
+    count: "{n} sonuç",
+    move: "gezin",
+    open: "aç",
+    close: "kapat",
+  },
+  en: {
+    label: "Search the site",
+    placeholder: "Search products, posts or pages",
+    products: "Products",
+    pages: "Pages",
+    actions: "Actions",
+    results: "On the site",
+    product: "Product",
+    journal: "Journal",
+    page: "Page",
+    copyEmail: "Copy the email address",
+    copied: "Email address copied",
+    otherLang: "Türkçeye geç",
+    empty: "No results. Try another word.",
+    count: "{n} results",
+    move: "move",
+    open: "open",
+    close: "close",
+  },
+}[lang];
+
+const products = await Promise.all(
+  (await getProducts()).map(async (p) => ({
+    id: p.id,
+    title: p.data.name,
+    sub: productTagline(p, lang),
+    href: `${productBase}/${p.id}`,
+    color: p.data.color,
+    icon: (await getImage({ src: p.data.icon, width: 96, format: "webp" })).src,
+  })),
+);
+
+const pages = [
+  { title: t("nav.products"), href: productBase, keys: "products ürünler uygulama oyun app game" },
+  { title: t("nav.studio"), href: route("studio", lang), keys: "studio stüdyo hakkında about" },
+  { title: t("nav.journal"), href: route("journal", lang), keys: "journal günlük blog yazı post" },
+  { title: t("nav.contact"), href: route("contact", lang), keys: "contact iletişim email e-posta" },
+  { title: t("footer.press"), href: route("press", lang), keys: "press basın logo kit" },
+  { title: t("footer.privacy"), href: route("privacy", lang), keys: "privacy gizlilik kvkk" },
+];
+
+const data = {
+  lang,
+  email: site.contactEmail,
+  productBase,
+  journalBase: route("journal", lang),
+  copy,
+  products,
+  pages,
+  actions: [
+    {
+      id: "theme",
+      title: t("theme.toDark"),
+      titleAlt: t("theme.toLight"),
+      keys: "theme tema dark light karanlık aydınlık gece",
+    },
+    { id: "lang", title: copy.otherLang, keys: "language dil english türkçe" },
+    {
+      id: "email",
+      title: copy.copyEmail,
+      sub: site.contactEmail,
+      keys: "email e-posta mail contact iletişim",
+    },
+  ],
+};
+---
+
+<dialog class="search-palette" aria-label={copy.label} data-lenis-prevent>
+  <div class="sp-panel">
+    <div class="sp-field">
+      <svg
+        class="sp-glass"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="6.5"></circle>
+        <path d="m16 16 4.5 4.5"></path>
+      </svg>
+      <input
+        class="sp-input"
+        type="text"
+        role="combobox"
+        aria-label={copy.label}
+        aria-expanded="true"
+        aria-controls="sp-list"
+        aria-autocomplete="list"
+        autocomplete="off"
+        spellcheck="false"
+        enterkeyhint="go"
+        placeholder={copy.placeholder}
+      />
+      <button type="button" class="sp-esc" data-search-close>
+        <span aria-hidden="true">Esc</span>
+        <span class="sr-only">{copy.close}</span>
+      </button>
+    </div>
+    <div class="sp-list" id="sp-list" role="listbox" aria-label={copy.label}></div>
+    <p class="sp-status sr-only" role="status" aria-live="polite"></p>
+    <div class="sp-foot" aria-hidden="true">
+      <span>
+        <kbd>↑</kbd>
+        <kbd>↓</kbd> {copy.move}
+      </span>
+      <span>
+        <kbd>↵</kbd> {copy.open}
+      </span>
+      <span>
+        <kbd>esc</kbd> {copy.close}
+      </span>
+    </div>
+  </div>
+  <script type="application/json" class="sp-data" set:html={JSON.stringify(data)} />
+</dialog>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  type Item = {
+    kind: "product" | "page" | "journal" | "action";
+    title: string;
+    sub?: string;
+    href?: string;
+    color?: string;
+    icon?: string;
+    action?: string;
+    /** HTML from the search index: page text with the matches in <mark>. */
+    excerpt?: string;
+  };
+  type Data = {
+    lang: string;
+    email: string;
+    productBase: string;
+    journalBase: string;
+    copy: Record<string, string>;
+    products: {
+      id: string;
+      title: string;
+      sub: string;
+      href: string;
+      color: string;
+      icon: string;
+    }[];
+    pages: { title: string; href: string; keys: string }[];
+    actions: { id: string; title: string; titleAlt?: string; sub?: string; keys: string }[];
+  };
+  type PagefindResult = { url: string; excerpt: string; meta: { title?: string } };
+  type Pagefind = {
+    options: (o: Record<string, unknown>) => Promise<void>;
+    init: () => Promise<void>;
+    destroy: () => Promise<void>;
+    debouncedSearch: (
+      q: string,
+      o?: unknown,
+      ms?: number,
+    ) => Promise<{ results: { data: () => Promise<PagefindResult> }[] } | null>;
+  };
+
+  let pagefind: Promise<Pagefind | null> | null = null;
+  let pagefindLang = "";
+  let active = -1;
+  let items: Item[] = [];
+  let query = "";
+
+  const dialog = () => document.querySelector<HTMLDialogElement>(".search-palette");
+  const fold = (s: string) =>
+    s.toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
+
+  function readData(d: HTMLDialogElement): Data {
+    return JSON.parse(d.querySelector(".sp-data")?.textContent ?? "{}");
+  }
+
+  /** The index is fetched only when the palette is first opened, for the page's language. */
+  function loadPagefind(lang: string) {
+    if (pagefind && pagefindLang === lang) return pagefind;
+    const previous = pagefind;
+    pagefindLang = lang;
+    const path = "/pagefind/pagefind.js";
+    pagefind = (async () => {
+      try {
+        const old = await previous;
+        await old?.destroy();
+        const pf = (await import(/* @vite-ignore */ path)) as Pagefind;
+        await pf.options({ excerptLength: 16 });
+        await pf.init();
+        return pf;
+      } catch {
+        // No index (the development server) or it failed to load: shortcuts still work.
+        return null;
+      }
+    })();
+    return pagefind;
+  }
+
+  function kindOf(url: string, data: Data): Item["kind"] {
+    if (url.startsWith(`${data.productBase}/`)) return "product";
+    if (url.startsWith(`${data.journalBase}/`)) return "journal";
+    return "page";
+  }
+
+  function shortcuts(data: Data, q: string): { group: string; items: Item[] }[] {
+    const dark = document.documentElement.dataset.theme === "dark";
+    const match = (text: string) => !q || fold(text).includes(fold(q));
+    const products: Item[] = data.products
+      .filter((p) => match(`${p.title} ${p.sub}`))
+      .map((p) => ({
+        kind: "product",
+        title: p.title,
+        sub: p.sub,
+        href: p.href,
+        color: p.color,
+        icon: p.icon,
+      }));
+    const pages: Item[] = data.pages
+      .filter((p) => match(`${p.title} ${p.keys}`))
+      .map((p) => ({ kind: "page", title: p.title, href: p.href }));
+    const actions: Item[] = data.actions
+      .filter((a) => match(`${a.title} ${a.titleAlt ?? ""} ${a.keys}`))
+      .map((a) => ({
+        kind: "action",
+        action: a.id,
+        title: a.id === "theme" && dark ? (a.titleAlt ?? a.title) : a.title,
+        sub: a.sub,
+      }));
+    return [
+      { group: data.copy.products, items: products },
+      { group: data.copy.pages, items: pages },
+      { group: data.copy.actions, items: actions },
+    ];
+  }
+
+  function icon(item: Item, data: Data): HTMLElement {
+    const lead = document.createElement("span");
+    lead.className = "sp-lead";
+    lead.setAttribute("aria-hidden", "true");
+    const product =
+      item.kind === "product"
+        ? data.products.find((p) => item.href?.startsWith(p.href))
+        : undefined;
+    if (product) {
+      const img = document.createElement("img");
+      img.src = product.icon;
+      img.alt = "";
+      img.width = 32;
+      img.height = 32;
+      lead.append(img);
+      return lead;
+    }
+    const paths: Record<string, string> = {
+      page: "M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20V3.5ZM14 3.5V8h4",
+      journal: "M5 5.5h14M5 10h14M5 14.5h9M5 19h6",
+      theme: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z",
+      lang: "M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5ZM12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Z",
+      email: "M4 6.5h16v11H4zM4.5 7l7.5 6 7.5-6",
+    };
+    lead.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="${paths[item.action ?? item.kind] ?? paths.page}"/></svg>`;
+    return lead;
+  }
+
+  function option(item: Item, index: number, data: Data): HTMLElement {
+    const el = document.createElement(item.href ? "a" : "button");
+    el.className = "sp-option";
+    el.id = `sp-opt-${index}`;
+    el.setAttribute("role", "option");
+    el.setAttribute("aria-selected", "false");
+    el.tabIndex = -1;
+    if (el instanceof HTMLAnchorElement && item.href) {
+      el.href = item.href;
+      if (item.color) el.dataset.flood = item.color;
+    } else {
+      (el as HTMLButtonElement).type = "button";
+      el.dataset.action = item.action ?? "";
+    }
+    if (item.color) el.style.setProperty("--sp-color", item.color);
+    const text = document.createElement("span");
+    text.className = "sp-text";
+    const title = document.createElement("span");
+    title.className = "sp-title";
+    title.textContent = item.title;
+    text.append(title);
+    if (item.excerpt || item.sub) {
+      const sub = document.createElement("span");
+      sub.className = "sp-sub";
+      // Excerpts come from our own pages through the index; Pagefind escapes the text and adds only <mark>.
+      if (item.excerpt) sub.innerHTML = item.excerpt;
+      else {
+        sub.textContent = item.sub ?? "";
+        sub.classList.add("sp-sub-one");
+      }
+      text.append(sub);
+    }
+    const kind = document.createElement("span");
+    kind.className = "sp-kind";
+    // Shortcuts already sit under a heading that names them; only search results carry a label.
+    kind.textContent = item.excerpt === undefined ? "" : (data.copy[item.kind] ?? "");
+    el.append(icon(item, data), text, kind);
+    return el;
+  }
+
+  function render(d: HTMLDialogElement, groups: { group: string; items: Item[] }[]) {
+    const data = readData(d);
+    const list = d.querySelector<HTMLElement>(".sp-list")!;
+    list.replaceChildren();
+    items = [];
+    groups.forEach((g, gi) => {
+      if (!g.items.length) return;
+      const group = document.createElement("div");
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-labelledby", `sp-group-${gi}`);
+      group.className = "sp-group";
+      const heading = document.createElement("div");
+      heading.id = `sp-group-${gi}`;
+      heading.className = "sp-heading";
+      heading.textContent = g.group;
+      group.append(heading);
+      for (const item of g.items) {
+        group.append(option(item, items.length, data));
+        items.push(item);
+      }
+      list.append(group);
+    });
+    if (!items.length) {
+      const empty = document.createElement("p");
+      empty.className = "sp-empty";
+      empty.textContent = data.copy.empty;
+      list.append(empty);
+    }
+    const status = d.querySelector(".sp-status");
+    if (status)
+      status.textContent = query ? data.copy.count.replace("{n}", String(items.length)) : "";
+    setActive(d, items.length ? 0 : -1);
+  }
+
+  function setActive(d: HTMLDialogElement, index: number) {
+    const options = d.querySelectorAll<HTMLElement>(".sp-option");
+    active = index;
+    options.forEach((o, i) => o.setAttribute("aria-selected", String(i === index)));
+    const input = d.querySelector<HTMLInputElement>(".sp-input")!;
+    if (index >= 0 && options[index]) {
+      input.setAttribute("aria-activedescendant", options[index].id);
+      options[index].scrollIntoView({ block: "nearest" });
+    } else input.removeAttribute("aria-activedescendant");
+  }
+
+  async function update(d: HTMLDialogElement) {
+    const data = readData(d);
+    const q = query.trim();
+    const groups = shortcuts(data, q);
+    render(d, groups);
+    if (q.length < 2) return;
+    const pf = await loadPagefind(data.lang);
+    const search = await pf?.debouncedSearch(q, {}, 140);
+    // A newer keystroke has taken over, or there is no index.
+    if (!search || q !== query.trim()) return;
+    const known = new Set(groups.flatMap((g) => g.items.map((i) => i.href)));
+    const found: Item[] = [];
+    for (const r of search.results.slice(0, 8)) {
+      const hit = await r.data();
+      const href = hit.url.replace(/\/$/, "") || "/";
+      if (known.has(href)) continue;
+      found.push({
+        kind: kindOf(href, data),
+        title: hit.meta.title ?? href,
+        excerpt: hit.excerpt,
+        href,
+      });
+      if (found.length === 6) break;
+    }
+    if (q !== query.trim()) return;
+    render(d, [
+      ...groups.slice(0, 1),
+      { group: data.copy.results, items: found },
+      ...groups.slice(1),
+    ]);
+  }
+
+  function lockScroll(lock: boolean) {
+    document.dispatchEvent(new CustomEvent(lock ? "rv:scroll-lock" : "rv:scroll-unlock"));
+  }
+
+  function open() {
+    const d = dialog();
+    if (!d || d.open) return;
+    const input = d.querySelector<HTMLInputElement>(".sp-input")!;
+    query = "";
+    input.value = "";
+    d.showModal();
+    lockScroll(true);
+    input.focus();
+    void update(d);
+    void loadPagefind(readData(d).lang);
+  }
+
+  function run(d: HTMLDialogElement, el: HTMLElement, event?: MouseEvent) {
+    const data = readData(d);
+    if (el instanceof HTMLAnchorElement) {
+      if (event) return; // a real click: the router (and the colour flood) take it from here
+      // Keyboard: a click at the row's centre, so the colour flood starts from the chosen row.
+      const r = el.getBoundingClientRect();
+      el.dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          clientX: r.left + 28,
+          clientY: r.top + r.height / 2,
+        }),
+      );
+      d.close();
+      return;
+    }
+    const action = el.dataset.action;
+    if (action === "theme") {
+      d.close();
+      document.querySelector<HTMLButtonElement>(".theme-toggle")?.click();
+    } else if (action === "lang") {
+      const href = document.querySelector<HTMLAnchorElement>("header a[hreflang]")?.href;
+      d.close();
+      if (href) void navigate(href);
+    } else if (action === "email") {
+      void navigator.clipboard?.writeText(data.email).then(() => {
+        const status = d.querySelector(".sp-status");
+        if (status) status.textContent = data.copy.copied;
+        const sub = el.querySelector(".sp-sub");
+        if (sub) sub.textContent = data.copy.copied;
+      });
+    }
+  }
+
+  // Registered once; the dialog itself is replaced on every page, so it is looked up each time.
+  document.addEventListener("keydown", (event) => {
+    const target = event.target as HTMLElement | null;
+    const typing = target?.closest("input, textarea, select, [contenteditable='true']");
+    if (
+      (event.key === "k" || event.key === "K") &&
+      (event.metaKey || event.ctrlKey) &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      const d = dialog();
+      if (d?.open) d.close();
+      else open();
+    } else if (event.key === "/" && !typing && !event.metaKey && !event.ctrlKey) {
+      event.preventDefault();
+      open();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as Element | null;
+    if (target?.closest("[data-search-open]")) open();
+  });
+
+  document.addEventListener("astro:page-load", () => {
+    const d = dialog();
+    if (!d) return;
+    const input = d.querySelector<HTMLInputElement>(".sp-input")!;
+    const list = d.querySelector<HTMLElement>(".sp-list")!;
+    // Shortcut hint on the header button: ⌘K on Apple devices, Ctrl K elsewhere.
+    const apple = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+    document
+      .querySelectorAll("[data-search-key]")
+      .forEach((k) => (k.textContent = apple ? "⌘K" : "Ctrl K"));
+
+    input.addEventListener("input", () => {
+      query = input.value;
+      void update(d);
+    });
+    input.addEventListener("keydown", (event) => {
+      const count = d.querySelectorAll(".sp-option").length;
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!count) return;
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        setActive(d, (active + step + count) % count);
+      } else if (event.key === "Home" && count && !input.value) {
+        setActive(d, 0);
+      } else if (event.key === "Enter") {
+        const el = d.querySelectorAll<HTMLElement>(".sp-option")[active];
+        if (!el) return;
+        event.preventDefault();
+        run(d, el);
+      }
+    });
+    list.addEventListener("pointermove", (event) => {
+      const el = (event.target as Element).closest<HTMLElement>(".sp-option");
+      if (!el) return;
+      const index = [...d.querySelectorAll(".sp-option")].indexOf(el);
+      if (index !== active) {
+        active = index;
+        d.querySelectorAll<HTMLElement>(".sp-option").forEach((o, i) =>
+          o.setAttribute("aria-selected", String(i === index)),
+        );
+        input.setAttribute("aria-activedescendant", el.id);
+      }
+    });
+    list.addEventListener("click", (event) => {
+      const el = (event.target as Element).closest<HTMLElement>(".sp-option");
+      if (!el) return;
+      if (el instanceof HTMLAnchorElement) {
+        // Close after the router and the flood have seen the click (they listen on the document).
+        queueMicrotask(() => d.close());
+        return;
+      }
+      run(d, el, event);
+    });
+    d.querySelector("[data-search-close]")?.addEventListener("click", () => d.close());
+    // A press on the dimmed backdrop (outside the panel) closes it.
+    d.addEventListener("click", (event) => {
+      if (event.target === d) d.close();
+    });
+    d.addEventListener("close", () => lockScroll(false));
+  });
+</script>

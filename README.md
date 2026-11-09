@@ -48,6 +48,21 @@ MIT lisanslı, sürümü `package.json`'da sabit).
 - **Ayarlar:** İletişim adresleri `src/config/contact.json`, bağlantılar
   `src/config/integrations.json` dosyasındadır; panelden de düzenlenir.
 
+## Arama, anında sayfalar ve çıkış haberi
+
+- **Arama (Ctrl+K / ⌘K, `/` ya da üstteki Ara düğmesi):** Derlemenin sonunda Pagefind (MIT)
+  sayfaların `<main>` içeriğinden dil başına bir dizin üretir (`dist/pagefind/`). Palet ürünleri,
+  sayfaları ve eylemleri (tema, dil, e-posta kopyalama) her yerde gösterir; metin araması yalnızca
+  derlenmiş sitede çalışır (`npm run build` ardından `npm run preview`). Bir öğeyi aramadan
+  çıkarmak için ona `data-pagefind-ignore` eklenir.
+- **Anında sayfalar:** `src/scripts/instant.ts`, ziyaretçi bir bağlantıya yöneldiğinde (fareyle
+  üzerine gelme, odaklanma, basma; dokunmatik ekranda ana bağlantılar göründüğünde) sayfayı önceden
+  alır ve geçişte bu kopyayı kullanır. Astro'nun kendi önden yüklemesi kapalıdır, çünkü onun kopyası
+  Cloudflare'in HTML önbellek ayarıyla yeniden kullanılmıyordu.
+- **Çıkınca haber ver:** "Yakında" durumundaki ürünlerin sayfasında, `newsletterUser` dolduğunda
+  görünen form. Kayıtlar Buttondown'a ürünün kimliğiyle (`fileconvert`, `pathwords`, `persayar`)
+  etiketlenerek gider; ürün çıkınca Buttondown'da o etikete tek bir e-posta gönderilir.
+
 ## Proje yapısı
 
 ```text
