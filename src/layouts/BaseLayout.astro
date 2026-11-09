@@ -4,6 +4,9 @@ import { ClientRouter } from "astro:transitions";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SearchPalette from "@/components/SearchPalette.astro";
+import LaunchAnnounce from "@/components/LaunchAnnounce.astro";
+import { freshProducts } from "@/lib/launch";
+import { getProducts } from "@/lib/products";
 import { site } from "@/config/site";
 import { alternatePath, getLangFromUrl, useTranslations } from "@/i18n/ui";
 
@@ -14,6 +17,8 @@ interface Props {
   ogImage?: string;
   /** Structured data objects rendered as JSON-LD. */
   jsonLd?: Record<string, unknown>[];
+  /** App Store id of the page's product: Safari on iPhone then offers the app in its own banner. */
+  appStoreId?: string;
 }
 
 const lang = getLangFromUrl(Astro.url);
@@ -24,6 +29,7 @@ const {
   description = site.description[lang],
   ogImage = `/og/site-${lang}.png`,
   jsonLd = [],
+  appStoreId,
 } = Astro.props;
 const pageTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline[lang]}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -36,6 +42,11 @@ const alternates = isNotFound
       { hreflang: "x-default", href: new URL(alternatePath(Astro.url, "tr"), Astro.site) },
     ];
 const ogImageUrl = new URL(ogImage, Astro.site);
+// Products released in the last 30 days. Whether they are still new is decided again in the browser.
+const fresh = freshProducts(await getProducts()).map((f) => ({ id: f.product.id, until: f.until.getTime() }));
+const freshStyle = fresh
+  .map((f) => `html[data-new~="${f.id}"] [data-new-chip="${f.id}"]{display:inline-flex}html[data-announce="${f.id}"] .announce[data-product="${f.id}"]{display:block}`)
+  .join("");
 // The text face is preloaded so the first paint already uses it (Latin and Turkish letters).
 import geistLatin from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
 import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2?url";
@@ -113,6 +124,34 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
         } catch (e) {}
       })();
     </script>
+    <script is:inline define:vars={{ rvFresh: fresh }}>
+      // Before first paint, and again for every page the router swaps in: the visitor's platform
+      // (the right store first, the right download link) and which products are still new.
+      (function () {
+        var ua = navigator.userAgent;
+        var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+        var platform = /Android/.test(ua) ? "android" : ios ? "ios" : "other";
+        var safari = ios && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+        function apply(doc) {
+          var root = doc.documentElement;
+          var now = Date.now();
+          var ids = rvFresh.filter(function (f) { return f.until > now; }).map(function (f) { return f.id; });
+          var closed = null;
+          try { closed = localStorage.getItem("rv-announce-closed"); } catch (e) {}
+          root.dataset.platform = platform;
+          if (safari) root.dataset.iosSafari = "";
+          if (ids.length) root.dataset.new = ids.join(" ");
+          if (ids.length && ids[0] !== closed) root.dataset.announce = ids[0];
+        }
+        apply(document);
+        if (!window.__rvLaunchBound) {
+          window.__rvLaunchBound = true;
+          document.addEventListener("astro:before-swap", function (e) { apply(e.newDocument); });
+        }
+      })();
+    </script>
+    {freshStyle && <style is:inline set:html={freshStyle} />}
+    {appStoreId && <meta name="apple-itunes-app" content={`app-id=${appStoreId}`} />}
     <ClientRouter fallback="swap" />
     {
       /* Cookieless visit counts, only once a Cloudflare Web Analytics token is set. */
@@ -144,6 +183,7 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
         </g>
       </svg>
     </div>
+    <LaunchAnnounce />
     <Header />
     {/* Search indexes only the page content, titled as in the browser tab without the site name. */}
     <main

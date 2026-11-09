@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import ProductDetail from "@/components/pages/ProductDetail.astro";
 import { getProducts, productTagline, type Product } from "@/lib/products";
 import { productSchema } from "@/lib/schema";
+import { appStoreId, storeLinks } from "@/lib/launch";
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -17,6 +18,7 @@ const { product } = Astro.props as { product: Product };
   description={productTagline(product, "en")}
   ogImage={`/og/products/${product.id}-en.png`}
   jsonLd={[productSchema(product, "en")]}
+  appStoreId={appStoreId(storeLinks(product).find((l) => l.store === "app-store")?.href)}
 >
   <ProductDetail product={product} lang="en" />
 </BaseLayout>

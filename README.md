@@ -63,6 +63,27 @@ MIT lisanslı, sürümü `package.json`'da sabit).
   görünen form. Kayıtlar Buttondown'a ürünün kimliğiyle (`fileconvert`, `pathwords`, `persayar`)
   etiketlenerek gider; ürün çıkınca Buttondown'da o etikete tek bir e-posta gönderilir.
 
+## Ürün çıkışı
+
+Bir ürünün durumu panelde **Yayında** yapılıp mağaza bağlantısı girildiğinde, ayrıca bir şey
+yapmadan şunlar devreye girer (`src/lib/launch.ts`):
+
+- **Doğru mağaza önde:** Android'den gelene Google Play, iPhone'dan gelene App Store düğmesi önce
+  gösterilir. Cihaz, sayfa çizilmeden önce `BaseLayout`'taki küçük betikle anlaşılır.
+- **Telefonda indirme barı:** Mağaza düğmeleri ekrandan çıkınca altta ürünün ikonu, adı ve
+  "İndir" düğmesiyle ince bir bar belirir. iPhone'da Safari, Apple'ın kendi uygulama bandını
+  (`apple-itunes-app`, App Store bağlantısındaki `id` sayısından) gösterdiği için orada bar çıkmaz.
+- **Masaüstünde QR kod:** Ürün sayfasının adresi derlemede QR koda çevrilir (qrcode-generator, MIT);
+  telefonla okutulunca aynı sayfa açılır.
+- **"Yeni" rozeti ve duyuru şeridi:** Yayın tarihinden sonraki 30 gün ürün kartlarında "Yeni"
+  yazar ve sitenin üstünde kapatılabilir bir duyuru çıkar. Bitiş tarihi tarayıcıda da denetlenir,
+  yani site yeniden derlenmese de süresinde kalkar.
+- **Çıkış tarihi:** "Yakında" bir ürüne ileri bir yayın tarihi girilirse sayfasında
+  "12 Aralık'ta Google Play üzerinden çıkıyor." yazar; tarih geçince yine "Yakında"ya döner.
+- **Paylaş:** Her ürün sayfasında; telefonda paylaşma menüsünü açar, başka yerde bağlantıyı kopyalar.
+- **iPhone uygulama bağlantıları:** `appleTeamId` ve ürünün `bundleId`'si girilince
+  `/.well-known/apple-app-site-association` ürün sayfalarını yüklü uygulamaya yönlendirir.
+
 ## Proje yapısı
 
 ```text

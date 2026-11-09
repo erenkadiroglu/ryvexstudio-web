@@ -18,6 +18,10 @@
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
 
+# Apple reads this file without an extension and expects JSON.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
