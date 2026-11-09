@@ -1,3 +1,5 @@
+import integrations from "./integrations.json";
+
 export const site = {
   name: "Ryvex Studio",
   url: "https://ryvexstudio.com",
@@ -23,4 +25,16 @@ export const site = {
     { name: "YouTube", url: "https://www.youtube.com/@ryvexstudio" },
   ],
   supportEmail: "destek@ryvexstudio.com",
+  /**
+   * Integrations that stay switched off until their value is filled in (src/config/integrations.json):
+   * - analyticsToken: Cloudflare Web Analytics site token (cookieless visit counts).
+   * - newsletterUser: Buttondown username for the "tell me about new products" form.
+   * - androidApps: Play app-signing SHA-256 fingerprints per package, for Android App Links.
+   * The security headers and the privacy and cookie texts follow these values at build time.
+   */
+  integrations: integrations as {
+    analyticsToken: string;
+    newsletterUser: string;
+    androidApps: { package: string; fingerprints: string[] }[];
+  },
 } as const;

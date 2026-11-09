@@ -1,0 +1,64 @@
+---
+import { site } from "@/config/site";
+import type { Lang } from "@/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const user = site.integrations.newsletterUser;
+
+const copy = {
+  tr: {
+    title: "Yeni ürünlerden haberdar olun",
+    text: "Yeni bir ürün çıktığında tek bir e-posta. Reklam yok, takip yok; istediğiniz an ayrılabilirsiniz.",
+    label: "E-posta adresiniz",
+    button: "Haber ver",
+  },
+  en: {
+    title: "Hear about new products",
+    text: "One email when a new product launches. No ads, no tracking; leave whenever you like.",
+    label: "Your email address",
+    button: "Let me know",
+  },
+}[lang];
+---
+
+{
+  /* Shown only once a Buttondown username is set in src/config/integrations.json. */
+  user && (
+    <section aria-labelledby="bulten" class="border-b border-outline">
+      <div class="container-page grid gap-6 py-12 md:grid-cols-12 md:items-end">
+        <div class="md:col-span-6">
+          <h2 id="bulten" class="text-headline-md font-semibold text-primary">{copy.title}</h2>
+          <p class="mt-2 max-w-[48ch] text-body-md">{copy.text}</p>
+        </div>
+        <form
+          class="flex flex-wrap gap-3 md:col-span-6 md:justify-end"
+          action={`https://buttondown.com/api/emails/embed-subscribe/${user}`}
+          method="post"
+          target="_blank"
+        >
+          <label class="sr-only" for="bulten-eposta">{copy.label}</label>
+          <input
+            id="bulten-eposta"
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder={copy.label}
+            class="min-w-0 flex-1 rounded-full border border-outline bg-surface px-5 py-3 text-body-md text-primary md:max-w-[22rem]"
+          />
+          <input type="hidden" name="embed" value="1" />
+          <button
+            type="submit"
+            class="inline-flex rounded-full bg-tertiary px-[22px] py-[13px] text-label font-medium text-on-tertiary transition-colors duration-150 hover:bg-tertiary-hover"
+          >
+            {copy.button}
+          </button>
+        </form>
+      </div>
+    </section>
+  )
+}

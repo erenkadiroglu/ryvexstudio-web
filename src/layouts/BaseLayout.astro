@@ -113,6 +113,17 @@ import geistLatinExt from "@fontsource-variable/geist/files/geist-latin-ext-wght
       })();
     </script>
     <ClientRouter fallback="swap" />
+    {
+      /* Cookieless visit counts, only once a Cloudflare Web Analytics token is set. */
+      site.integrations.analyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: site.integrations.analyticsToken, spa: true })}
+        />
+      )
+    }
   </head>
   <body class="flex min-h-dvh flex-col">
     <a

@@ -10,6 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const products = await getProducts();
 const email = site.contactEmail;
+const { analyticsToken, newsletterUser } = site.integrations;
 const updated = new Date("2026-11-09");
 const dateText = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
   day: "numeric",
@@ -28,7 +29,9 @@ const copy = {
       ],
       [
         "Çerezler ve takip",
-        "Bu site çerez kullanmaz, ziyaretçi istatistiği toplamaz ve reklam ya da pazarlama amaçlı takip araçları içermez. Yazı tipleri sitenin kendi sunucusundan yüklenir; üçüncü taraf yazı tipi servislerine istek gönderilmez.",
+        analyticsToken
+          ? "Bu site çerez kullanmaz ve reklam ya da pazarlama amaçlı takip araçları içermez. Kaç kişinin hangi sayfayı ziyaret ettiğini görmek için Cloudflare Web Analytics kullanılır: çerez yerleştirmez, sizi siteler arasında izlemez ve kimliğinizi belirlemeye yarayan bir bilgi saklamaz. Yazı tipleri sitenin kendi sunucusundan yüklenir."
+          : "Bu site çerez kullanmaz, ziyaretçi istatistiği toplamaz ve reklam ya da pazarlama amaçlı takip araçları içermez. Yazı tipleri sitenin kendi sunucusundan yüklenir; üçüncü taraf yazı tipi servislerine istek gönderilmez.",
       ],
       [
         "Tema tercihi",
@@ -42,6 +45,14 @@ const copy = {
         "Bize yazdığınızda",
         "E-posta ile bize ulaştığınızda adresinizi ve mesajınızı yalnızca size cevap vermek için kullanırız ve kimseyle paylaşmayız.",
       ],
+      ...(newsletterUser
+        ? [
+            [
+              "Bülten",
+              "Yeni ürün bültenine kaydolursanız e-posta adresiniz, bülteni gönderen Buttondown hizmetinde saklanır ve yalnızca yeni ürün duyuruları için kullanılır. Her e-postadaki bağlantıyla istediğiniz an ayrılabilirsiniz; ayrıldığınızda adresiniz listeden çıkarılır.",
+            ],
+          ]
+        : []),
       [
         "Haklarınız",
         `6698 sayılı Kişisel Verilerin Korunması Kanunu'nun 11. maddesi ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında; verilerinizin işlenip işlenmediğini öğrenme, bunlara erişme, düzeltilmesini ya da silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Talepleriniz için ${email} adresine yazabilirsiniz.`,
@@ -68,7 +79,9 @@ const copy = {
       ],
       [
         "Cookies and tracking",
-        "This site uses no cookies, collects no visitor statistics and contains no advertising or marketing trackers. Fonts are served from the site itself; no requests are sent to third-party font services.",
+        analyticsToken
+          ? "This site uses no cookies and contains no advertising or marketing trackers. Cloudflare Web Analytics is used to see how many people visit each page: it sets no cookies, does not follow you across sites and keeps nothing that identifies you. Fonts are served from the site itself."
+          : "This site uses no cookies, collects no visitor statistics and contains no advertising or marketing trackers. Fonts are served from the site itself; no requests are sent to third-party font services.",
       ],
       [
         "Theme preference",
@@ -82,6 +95,14 @@ const copy = {
         "When you write to us",
         "When you contact us by email, we use your address and message only to reply to you and never share them.",
       ],
+      ...(newsletterUser
+        ? [
+            [
+              "Newsletter",
+              "If you sign up for the new product newsletter, your email address is kept by Buttondown, the service that sends it, and used only for new product announcements. You can leave at any time with the link in every email; your address is then removed from the list.",
+            ],
+          ]
+        : []),
       [
         "Your rights",
         `Under Article 11 of the Turkish Personal Data Protection Law No. 6698 and the EU General Data Protection Regulation (GDPR), you have the right to know whether your data is processed, to access it, to ask for it to be corrected or deleted, and to object to its processing. Send requests to ${email}.`,

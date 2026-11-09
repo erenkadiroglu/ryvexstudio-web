@@ -11,6 +11,9 @@ const { lang } = Astro.props;
 const updated = new Date("2026-11-08");
 const email = site.contactEmail;
 
+// The newsletter appears in this notice only once it is switched on (src/config/integrations.json).
+const newsletter = Boolean(site.integrations.newsletterUser);
+
 const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
   tr: {
     title: "KVKK Aydınlatma Metni",
@@ -27,6 +30,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         list: [
           "İletişim bilgileri: Bize e-posta gönderdiğinizde e-posta adresiniz, adınız (paylaşırsanız) ve mesajınızın içeriği.",
           "İşlem güvenliği bilgileri: Siteyi ziyaret ettiğinizde barındırma sağlayıcısının tuttuğu IP adresi, tarayıcı türü ve erişim zamanı gibi sunucu kayıtları.",
+          ...(newsletter ? ["Bülten bilgisi: Yeni ürün bültenine kaydolursanız e-posta adresiniz."] : []),
         ],
       },
       {
@@ -35,6 +39,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
           "Sorularınızı, destek taleplerinizi ve başvurularınızı yanıtlamak.",
           "Web sitesinin güvenliğini sağlamak, hataları tespit etmek ve gidermek.",
           "Hukuki yükümlülüklerimizi yerine getirmek ve yetkili kurumların taleplerini karşılamak.",
+          ...(newsletter ? ["Kaydolduysanız, yeni ürün duyurularını size e-postayla göndermek."] : []),
         ],
       },
       {
@@ -42,6 +47,9 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         paragraphs: [
           "Kişisel verileriniz, bize e-posta ile ulaştığınızda ve siteyi ziyaret ettiğinizde elektronik ortamda, kısmen otomatik yollarla toplanır.",
           "Bu veriler KVKK'nın 5. maddesinin 2. fıkrasında yer alan; bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması (c), hukuki yükümlülüğün yerine getirilmesi (ç) ve temel hak ve özgürlüklerinize zarar vermemek kaydıyla meşru menfaatimiz için zorunlu olması (f) hukuki sebeplerine dayanılarak işlenir.",
+          ...(newsletter
+            ? ["Bülten için e-posta adresiniz yalnızca kaydolurken verdiğiniz açık rızaya (KVKK madde 5/1) dayanılarak işlenir; rızanızı her e-postadaki bağlantıyla istediğiniz an geri alabilirsiniz."]
+            : []),
         ],
       },
       {
@@ -94,6 +102,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         list: [
           "Contact details: when you email us, your email address, your name (if you share it) and the content of your message.",
           "Security information: server logs kept by the hosting provider when you visit the website, such as IP address, browser type and time of access.",
+          ...(newsletter ? ["Newsletter information: your email address, if you sign up for the new product newsletter."] : []),
         ],
       },
       {
@@ -102,6 +111,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
           "Answering your questions, support requests and applications.",
           "Keeping the website secure and finding and fixing errors.",
           "Meeting our legal obligations and responding to requests from competent authorities.",
+          ...(newsletter ? ["If you signed up, emailing you new product announcements."] : []),
         ],
       },
       {
@@ -109,6 +119,9 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         paragraphs: [
           "Your personal data is collected electronically, partly by automated means, when you email us and when you visit the website.",
           "It is processed on the legal bases in Article 5(2) of the KVKK: being directly related to the conclusion or performance of a contract (c), compliance with a legal obligation (ç), and our legitimate interest, provided it does not harm your fundamental rights and freedoms (f).",
+          ...(newsletter
+            ? ["For the newsletter, your email address is processed only on the explicit consent you give when signing up (KVKK Article 5(1)); you can withdraw it at any time with the link in every email."]
+            : []),
         ],
       },
       {

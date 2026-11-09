@@ -38,9 +38,11 @@ const columns = [
     ],
   },
 ];
+import NewsletterForm from "@/components/NewsletterForm.astro";
 ---
 
 <footer class="bg-neutral text-body-sm text-secondary">
+  <NewsletterForm lang={lang} />
   <div class="container-page grid gap-12 py-16 md:grid-cols-12">
     <div class="md:col-span-5">
       <Logo href={route("home", lang)} />
