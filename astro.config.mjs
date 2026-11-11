@@ -70,7 +70,8 @@ const appAds = {
     "astro:build:done": async ({ dir, logger }) => {
       const id = integrationsConfig.admobPublisherId.trim();
       if (!id) return;
-      if (!/^pub-\d{16}$/.test(id)) throw new Error(`app-ads.txt: "${id}" is not an AdMob publisher ID`);
+      if (!/^pub-\d{16}$/.test(id))
+        throw new Error(`app-ads.txt: "${id}" is not an AdMob publisher ID`);
       // f08c47fec0942fa0 is Google's own certification authority ID, the same for every publisher.
       await writeFile(new URL("app-ads.txt", dir), `google.com, ${id}, DIRECT, f08c47fec0942fa0\n`);
       logger.info(`app-ads.txt: ${id}`);
