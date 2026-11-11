@@ -455,7 +455,7 @@ const config = {
         },
         {
           name: "integrations",
-          label: "Bağlantılar (bülten, ölçüm, uygulama bağlantıları)",
+          label: "Bağlantılar (bülten, ölçüm, reklam, uygulama bağlantıları)",
           file: "src/config/integrations.json",
           format: "json",
           fields: [
@@ -472,6 +472,14 @@ const config = {
               widget: "string",
               required: false,
               hint: "Boşsa bülten formu görünmez. Açmadan önce avukata danışın (İYS).",
+            },
+            {
+              name: "admobPublisherId",
+              label: "AdMob yayıncı kimliği",
+              widget: "string",
+              required: false,
+              pattern: ["^pub-\\d{16}$", "pub- ve 16 rakam, ör. pub-1234567890123456"],
+              hint: "AdMob › Ayarlar › Hesap bilgileri. Doluysa site /app-ads.txt dosyasını yayınlar; boşsa dosya hiç oluşmaz.",
             },
             {
               name: "androidApps",

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import integrations from "../src/config/integrations.json" with { type: "json" };
 
 test("help centre narrows questions as you type and by topic", async ({ page }) => {
   await page.goto("/destek");
@@ -91,6 +92,20 @@ test("security.txt names a contact and a future expiry", async ({ request }) => 
   expect(text).toMatch(/^Contact: mailto:\S+@\S+$/m);
   const expires = new Date(text.match(/^Expires: (.+)$/m)?.[1] ?? "");
   expect(expires.getTime()).toBeGreaterThan(Date.now());
+});
+
+test("app-ads.txt authorises Google for the AdMob publisher ID, and only when one is set", async ({
+  request,
+}) => {
+  const response = await request.get("/app-ads.txt");
+  if (!integrations.admobPublisherId) {
+    expect(response.status()).toBe(404);
+    return;
+  }
+  expect(response.ok()).toBe(true);
+  expect(await response.text()).toBe(
+    `google.com, ${integrations.admobPublisherId}, DIRECT, f08c47fec0942fa0\n`,
+  );
 });
 
 test("the footer says the site uses no cookies and links to the policy", async ({ page }) => {

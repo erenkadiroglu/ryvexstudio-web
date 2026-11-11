@@ -1,6 +1,7 @@
 {
   "analyticsToken": "",
   "newsletterUser": "",
+  "admobPublisherId": "pub-4446073582030804",
   "androidApps": [
     {
       "package": "com.erenkadiroglu.fileconvert",
