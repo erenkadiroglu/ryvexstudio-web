@@ -58,6 +58,27 @@ const securityHeaders = {
   },
 };
 
+/**
+ * Writes /app-ads.txt when an AdMob publisher ID is set (src/config/integrations.json). AdMob reads it
+ * from the website in the apps' Play listings to confirm their ads are sold by this studio. With no
+ * ID the file is not written at all: an app-ads.txt with no seller lines would block every ad.
+ */
+/** @type {import("astro").AstroIntegration} */
+const appAds = {
+  name: "ryvex-app-ads",
+  hooks: {
+    "astro:build:done": async ({ dir, logger }) => {
+      const id = integrationsConfig.admobPublisherId.trim();
+      if (!id) return;
+      if (!/^pub-\d{16}$/.test(id))
+        throw new Error(`app-ads.txt: "${id}" is not an AdMob publisher ID`);
+      // f08c47fec0942fa0 is Google's own certification authority ID, the same for every publisher.
+      await writeFile(new URL("app-ads.txt", dir), `google.com, ${id}, DIRECT, f08c47fec0942fa0\n`);
+      logger.info(`app-ads.txt: ${id}`);
+    },
+  },
+};
+
 export default defineConfig({
   site: "https://ryvexstudio.com",
   trailingSlash: "never",
@@ -73,6 +94,7 @@ export default defineConfig({
   integrations: [
     searchIndex,
     securityHeaders,
+    appAds,
     react(),
     sitemap({
       // The content panel is not a page for visitors.

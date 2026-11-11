@@ -114,6 +114,10 @@ yapmadan şunlar devreye girer (`src/lib/launch.ts`):
   (`src/components/Img.astro`).
 - **security.txt:** `/.well-known/security.txt`, güvenlik bildirimi için iletişim adresini verir;
   adres paneldeki iletişim ayarından gelir, her derlemede bir yıl geçerli olacak şekilde yenilenir.
+- **app-ads.txt:** `admobPublisherId` doluysa derleme `/app-ads.txt` dosyasını yazar; AdMob bunu
+  uygulamaların Play kaydındaki web sitesinden (`https://ryvexstudio.com`) okuyarak reklamların
+  stüdyoya ait olduğunu doğrular. Alan boşsa dosya hiç oluşmaz, çünkü satıcı satırı olmayan bir
+  `app-ads.txt` bütün reklamları durdurur.
 
 ## Ziyaretçi için ayrıntılar
 

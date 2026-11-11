@@ -26,6 +26,8 @@ export const site = {
    * Integrations that stay switched off until their value is filled in (src/config/integrations.json):
    * - analyticsToken: Cloudflare Web Analytics site token (cookieless visit counts).
    * - newsletterUser: Buttondown username for the "tell me about new products" form.
+   * - admobPublisherId: AdMob publisher ID (pub-…); with it the build writes /app-ads.txt, which
+   *   AdMob reads to confirm the apps' ads are sold by this studio.
    * - androidApps: Play app-signing SHA-256 fingerprints per package, for Android App Links.
    * - appleTeamId and iosApps: Apple Developer Team ID and each product's iOS bundle ID, for
    *   Universal Links (a product link opens the installed iPhone app).
@@ -34,6 +36,7 @@ export const site = {
   integrations: integrations as {
     analyticsToken: string;
     newsletterUser: string;
+    admobPublisherId: string;
     androidApps: { package: string; fingerprints: string[] }[];
     appleTeamId: string;
     iosApps: { product: string; bundleId: string }[];
