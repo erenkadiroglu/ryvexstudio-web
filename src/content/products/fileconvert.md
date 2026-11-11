@@ -20,7 +20,7 @@ screenshots:
     alt: { tr: "PDF Düzenle: vurgu, kalem ve metin araçları", en: "Edit PDF with highlight, pen and text tools" }
 platforms: [android]
 links:
-  googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.fileconvert"
+  googlePlay: "https://play.google.com/store/apps/details?id=com.ryvexstudio.fileconvert"
 specs:
   languages: [tr, en]
   offline: true

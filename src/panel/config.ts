@@ -519,7 +519,7 @@ const config = {
                   label: "Bundle ID",
                   widget: "string",
                   required: false,
-                  hint: "Xcode ya da App Store Connect'teki paket kimliği, ör. com.erenkadiroglu.fileconvert. Boşsa bu ürün için kapalıdır.",
+                  hint: "Xcode ya da App Store Connect'teki paket kimliği, ör. com.ryvexstudio.fileconvert. Boşsa bu ürün için kapalıdır.",
                 },
               ],
             },
