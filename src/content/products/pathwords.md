@@ -18,7 +18,7 @@ screenshots:
     alt: { tr: "Kelime Defteri: öğrenilen kelimeler, anlamları ve örnek cümleler", en: "Word book with learned words, meanings and example sentences" }
 platforms: [ios, android]
 links:
-  googlePlay: "https://play.google.com/store/apps/details?id=com.erenkadiroglu.pathwords"
+  googlePlay: "https://play.google.com/store/apps/details?id=com.ryvexstudio.pathwords"
 specs:
   offline: true
 supportEmail: "destek@ryvexstudio.com"
