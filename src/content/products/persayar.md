@@ -17,7 +17,7 @@ screenshots:
 platforms: [android]
 specs:
   offline: true
-supportEmail: "destek@ryvexstudio.com"
+supportEmail: "support@ryvexstudio.com"
 privacyUpdated: 2026-11-08
 privacy:
   accountRequired: false

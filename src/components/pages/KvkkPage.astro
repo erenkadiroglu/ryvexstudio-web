@@ -10,7 +10,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const updated = new Date("2026-11-12");
-const email = site.contactEmail;
+const email = site.privacyEmail;
 
 // The newsletter appears in this notice only once it is switched on (src/config/integrations.json).
 const newsletter = Boolean(site.integrations.newsletterUser);
@@ -233,4 +233,4 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
 const c = content[lang];
 ---
 
-<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />
+<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} email={email} />

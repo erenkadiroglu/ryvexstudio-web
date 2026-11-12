@@ -1,6 +1,7 @@
 {
   "contactEmail": "hello@ryvexstudio.com",
-  "supportEmail": "destek@ryvexstudio.com",
+  "supportEmail": "support@ryvexstudio.com",
+  "privacyEmail": "privacy@ryvexstudio.com",
   "social": [
     { "name": "Instagram", "url": "https://www.instagram.com/ryvexstudio" },
     { "name": "TikTok", "url": "https://www.tiktok.com/@ryvexstudio" },

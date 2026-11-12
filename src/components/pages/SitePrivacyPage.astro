@@ -9,7 +9,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const products = await getProducts();
-const email = site.contactEmail;
+const email = site.privacyEmail;
 const { analyticsToken, newsletterUser } = site.integrations;
 const updated = new Date("2026-11-09");
 const dateText = new Intl.DateTimeFormat(lang === "tr" ? "tr-TR" : "en-US", {
