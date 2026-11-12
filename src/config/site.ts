@@ -22,6 +22,8 @@ export const site = {
   contactEmail: contact.contactEmail,
   social: contact.social as { name: string; url: string }[],
   supportEmail: contact.supportEmail,
+  /** Privacy, KVKK and data deletion requests; the address shown in every privacy notice. */
+  privacyEmail: contact.privacyEmail,
   /**
    * Integrations that stay switched off until their value is filled in (src/config/integrations.json):
    * - analyticsToken: Cloudflare Web Analytics site token (cookieless visit counts).

@@ -24,7 +24,7 @@ links:
 specs:
   languages: [tr, en]
   offline: true
-supportEmail: "destek@ryvexstudio.com"
+supportEmail: "support@ryvexstudio.com"
 privacyUpdated: 2026-11-12
 privacy:
   accountRequired: false

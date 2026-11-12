@@ -13,7 +13,7 @@ const { product, lang } = Astro.props;
 const { data } = product;
 const { privacy } = data;
 const name = data.name;
-const email = site.contactEmail;
+const email = site.privacyEmail;
 
 const onDevice = privacy.dataCollected.filter((d) => d.storage === "device");
 const onServer = privacy.dataCollected.filter((d) => d.storage === "server");

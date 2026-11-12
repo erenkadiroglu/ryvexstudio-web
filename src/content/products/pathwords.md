@@ -21,7 +21,7 @@ links:
   googlePlay: "https://play.google.com/store/apps/details?id=com.ryvexstudio.pathwords"
 specs:
   offline: true
-supportEmail: "destek@ryvexstudio.com"
+supportEmail: "support@ryvexstudio.com"
 privacyUpdated: 2026-11-08
 privacy:
   accountRequired: false

@@ -100,4 +100,11 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
 const c = content[lang];
 ---
 
-<LegalDocument lang={lang} title={c.title} lede={c.lede} updated={updated} sections={c.sections} />
+<LegalDocument
+  lang={lang}
+  title={c.title}
+  lede={c.lede}
+  updated={updated}
+  sections={c.sections}
+  email={site.privacyEmail}
+/>

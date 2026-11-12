@@ -385,6 +385,12 @@ const config = {
             { name: "contactEmail", label: "Genel e-posta", widget: "string" },
             { name: "supportEmail", label: "Destek e-postası", widget: "string" },
             {
+              name: "privacyEmail",
+              label: "Gizlilik e-postası",
+              widget: "string",
+              hint: "Gizlilik politikalarında, KVKK metninde ve veri silme taleplerinde gösterilir.",
+            },
+            {
               name: "social",
               label: "Sosyal medya hesapları",
               label_singular: "Hesap",
