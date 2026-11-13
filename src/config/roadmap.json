@@ -37,8 +37,16 @@
       "product": "pathwords",
       "status": "next",
       "title": {
-        "tr": "App Store ve Google Play'de yayın",
-        "en": "Launch on the App Store and Google Play"
+        "tr": "Google Play'de yayın",
+        "en": "Launch on Google Play"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Kelime ustalığı, Tekrar Patikası, dünya finalleri ve kural değiştiren karolar",
+        "en": "Word mastery, a daily review path, world finales and rule-changing tiles"
       }
     },
     {
