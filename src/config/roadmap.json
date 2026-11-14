@@ -18,6 +18,22 @@
       }
     },
     {
+      "product": "pathwords",
+      "status": "next",
+      "title": {
+        "tr": "C1 ve C2 seviyeleri",
+        "en": "C1 and C2 levels"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Seviyeye göre sonsuz bulmacalar (A1–B2), PRO abonelik ve yeni görsel kimlik",
+        "en": "Endless puzzles by level (A1–B2), a PRO subscription and a new visual identity"
+      }
+    },
+    {
       "product": "fileconvert",
       "status": "next",
       "title": {
@@ -43,26 +59,42 @@
     },
     {
       "product": "pathwords",
-      "status": "done",
+      "status": "next",
       "title": {
-        "tr": "Kelime ustalığı, Tekrar Patikası, dünya finalleri ve kural değiştiren karolar",
-        "en": "Word mastery, a daily review path, world finales and rule-changing tiles"
+        "tr": "C1 ve C2 seviyeleri",
+        "en": "C1 and C2 levels"
       }
     },
     {
       "product": "pathwords",
       "status": "done",
       "title": {
-        "tr": "Sonsuz bölümler, kelime defteri ve sesli telaffuz",
-        "en": "Endless levels, a word notebook and spoken pronunciation"
+        "tr": "Seviyeye göre sonsuz bulmacalar (A1–B2), PRO abonelik ve yeni görsel kimlik",
+        "en": "Endless puzzles by level (A1–B2), a PRO subscription and a new visual identity"
       }
     },
     {
       "product": "pathwords",
       "status": "done",
       "title": {
-        "tr": "Günlük bulmaca ve başarımlar",
-        "en": "Daily puzzle and achievements"
+        "tr": "Kelime ustalığı, Tekrar Patikası ve kural değiştiren karolar",
+        "en": "Word mastery, a daily review path and rule-changing tiles"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Kelime defteri ve sesli telaffuz",
+        "en": "A word notebook and spoken pronunciation"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Günün bulmacası",
+        "en": "Daily puzzle"
       }
     },
     {
@@ -71,6 +103,22 @@
       "title": {
         "tr": "Google Play'de yayın",
         "en": "Launch on Google Play"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "next",
+      "title": {
+        "tr": "C1 ve C2 seviyeleri",
+        "en": "C1 and C2 levels"
+      }
+    },
+    {
+      "product": "pathwords",
+      "status": "done",
+      "title": {
+        "tr": "Seviyeye göre sonsuz bulmacalar (A1–B2), PRO abonelik ve yeni görsel kimlik",
+        "en": "Endless puzzles by level (A1–B2), a PRO subscription and a new visual identity"
       }
     },
     {
