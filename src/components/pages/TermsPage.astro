@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const updated = new Date("2026-11-08");
+const updated = new Date("2026-11-15");
 const privacyUrl = `https://ryvexstudio.com${route("privacy", lang)}`;
 
 const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
@@ -51,6 +51,20 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         heading: "Satın alımlar ve abonelikler",
         paragraphs: [
           "Ürünlerimizdeki ücretli içerikler ve abonelikler App Store ya da Google Play üzerinden satın alınır. Ödeme, iptal ve iade işlemleri ilgili mağazanın kurallarına tabidir ve mağaza hesabınız üzerinden yönetilir.",
+        ],
+      },
+      {
+        heading: "Otomatik yenilenen abonelikler",
+        paragraphs: [
+          "Bazı ürünlerimizde (ör. reklamları kaldıran FileConvert PRO) aylık ya da yıllık abonelik sunulur. Satın almadan önce fiyat, dönem ve varsa ücretsiz deneme süresi uygulamada ve mağazanın ödeme penceresinde gösterilir. Abonelik için hesap açmanız gerekmez; abonelik mağaza hesabınıza bağlıdır.",
+        ],
+        list: [
+          "Yenileme: Abonelik, iptal edilmedikçe her dönemin sonunda aynı süre için kendiliğinden yenilenir ve ücret mağaza hesabınızdan alınır.",
+          "Ücretsiz deneme: Yalnızca o aboneliği daha önce almamış hesaplara sunulur. Deneme bitmeden iptal ederseniz ücret alınmaz; iptal etmezseniz deneme bittiğinde seçtiğiniz planın ücreti alınır.",
+          "İptal: Google Play'de Profil › Ödemeler ve abonelikler › Abonelikler bölümünden istediğiniz zaman iptal edebilirsiniz. İptalden sonra abonelik, ödediğiniz dönemin sonuna kadar sürer.",
+          "İade: İade talepleri mağazanın iade koşullarına göre mağaza üzerinden yapılır. Sorun yaşarsanız bize de yazabilirsiniz; yürürlükteki tüketici mevzuatından doğan haklarınız saklıdır.",
+          "Fiyat değişikliği: Fiyat değişirse mağaza sizi önceden bilgilendirir; yeni fiyatı kabul etmezseniz aboneliğiniz dönem sonunda yenilenmez.",
+          "Telefon değiştirme: Aynı mağaza hesabıyla ürünü kurup uygulamadaki “Satın alımları geri yükle” ile aboneliğinizi taşıyabilirsiniz.",
         ],
       },
       {
@@ -128,6 +142,20 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         heading: "Purchases and subscriptions",
         paragraphs: [
           "Paid content and subscriptions in our products are purchased through the App Store or Google Play. Payments, cancellations and refunds follow that store's rules and are managed from your store account.",
+        ],
+      },
+      {
+        heading: "Auto-renewing subscriptions",
+        paragraphs: [
+          "Some of our products (for example FileConvert PRO, which removes ads) offer a monthly or yearly subscription. Before you buy, the price, the period and any free trial are shown in the app and in the store's payment window. You don't need an account; the subscription belongs to your store account.",
+        ],
+        list: [
+          "Renewal: Unless cancelled, the subscription renews automatically at the end of each period for the same length, and your store account is charged.",
+          "Free trial: Offered only to accounts that haven't had that subscription before. If you cancel before the trial ends, you aren't charged; if you don't, the price of the plan you chose is charged when the trial ends.",
+          "Cancelling: You can cancel at any time in Google Play under Profile › Payments & subscriptions › Subscriptions. After cancelling, the subscription lasts until the end of the period you paid for.",
+          "Refunds: Refund requests are made through the store under its refund terms. If you run into a problem you can also write to us; your rights under applicable consumer law are reserved.",
+          "Price changes: If the price changes, the store tells you in advance; if you don't accept the new price, your subscription doesn't renew at the end of the period.",
+          "New phone: Install the product with the same store account and use “Restore purchases” in the app to move your subscription.",
         ],
       },
       {
