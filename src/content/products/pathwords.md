@@ -24,7 +24,7 @@ links:
 specs:
   offline: true
 supportEmail: "support@ryvexstudio.com"
-privacyUpdated: 2026-11-14
+privacyUpdated: 2026-11-15
 privacy:
   accountRequired: false
   tracking: true
