@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const updated = new Date("2026-11-12");
+const updated = new Date("2026-11-15");
 const email = site.privacyEmail;
 
 // The newsletter appears in this notice only once it is switched on (src/config/integrations.json).
@@ -81,10 +81,76 @@ const adsEn: LegalSection[] = adApps.length
     ]
   : [];
 
+// Products whose subscriptions are verified through RevenueCat (listed among their third parties). The
+// subscription data is covered here because it is the one app data that leaves the phone apart from ads.
+const subApps = (await getProducts())
+  .filter((p) => p.data.privacy.thirdParties.some((t) => t.name === "RevenueCat"))
+  .map((p) => p.data.name);
+const subNames = (l: Lang) =>
+  new Intl.ListFormat(l === "tr" ? "tr-TR" : "en-US", { style: "long", type: "conjunction" }).format(subApps);
+const subsTr: LegalSection[] = subApps.length
+  ? [
+      {
+        heading: "Uygulamalarımızda abonelik",
+        paragraphs: [
+          `${subNames("tr")} uygulamasında reklamları kaldıran bir abonelik satın alabilirsiniz. Abonelik hesapsızdır: uygulama size rastgele bir müşteri kimliği verir, adınızı ya da e-postanızı istemez. Ödemeyi Google Play alır; kart bilgileriniz bize hiç ulaşmaz. Bu amaçla işlenen veriler:`,
+        ],
+        list: [
+          "Rastgele müşteri kimliği.",
+          "Satın alma kaydı: ürün ve plan, fiyat ve para birimi, satın alma, deneme ve yenileme tarihleri, Google Play sipariş numarası.",
+          "Uygulama sürümü, Android sürümü, dil ve ülke ile IP adresi.",
+        ],
+      },
+      {
+        heading: "Abonelik verilerinin amacı ve hukuki sebebi",
+        paragraphs: [
+          "Bu veriler aboneliğinizi doğrulamak, satın alımlarınızı yeni telefona taşımak (geri yükleme), iade ve itirazları yanıtlamak ve abonelik sayılarını toplu olarak görmek amacıyla işlenir.",
+          "Bu veriler, satın aldığınız aboneliğin sağlanması için zorunlu olduğundan sözleşmenin kurulması ve ifası (KVKK madde 5/2-c), sipariş ve ödeme kayıtları için hukuki yükümlülük (5/2-ç) ve sahte satın almaların önlenmesi için meşru menfaat (5/2-f) hukuki sebeplerine dayanılarak işlenir.",
+        ],
+      },
+      {
+        heading: "Abonelik verilerinin aktarımı ve saklanması",
+        paragraphs: [
+          "Satın alma ve ödeme, Google Play (Google LLC ve bağlı şirketleri) tarafından işlenir. Abonelik doğrulaması için satın alma kaydınız ve müşteri kimliğiniz RevenueCat, Inc.'e aktarılır. Telefon değiştirdiğinizde aboneliğin taşınabilmesi için müşteri kimliği, Google hesabınızın cihaz yedeğinde (Google Block Store) saklanır. Bu hizmetlerin sunucuları yurt dışında, başta Amerika Birleşik Devletleri'nde bulunur; yurt dışına aktarım KVKK'nın 9. maddesinde öngörülen usul ve esaslara uygun olarak yapılır.",
+          "Abonelik kayıtları, aboneliğiniz sürdüğü ve iade ile itiraz süreleri boyunca saklanır. Silinmesini istediğinizde, size bağlayabildiğimiz kayıtlar en geç 30 gün içinde silinir; Google Play'in yasal yükümlülükleri gereği tuttuğu sipariş ve ödeme kayıtları Google'ın kendi politikasındaki süre boyunca Google'da kalır.",
+        ],
+      },
+    ]
+  : [];
+const subsEn: LegalSection[] = subApps.length
+  ? [
+      {
+        heading: "Subscriptions in our apps",
+        paragraphs: [
+          `In ${subNames("en")} you can buy a subscription that removes ads. The subscription needs no account: the app gives you a random customer ID and never asks for your name or email address. Google Play takes the payment; your card details never reach us. The data processed for this purpose is:`,
+        ],
+        list: [
+          "A random customer ID.",
+          "The purchase record: product and plan, price and currency, purchase, trial and renewal dates, and the Google Play order number.",
+          "App version, Android version, language and country, and IP address.",
+        ],
+      },
+      {
+        heading: "Purpose and legal basis for subscription data",
+        paragraphs: [
+          "This data is processed to verify your subscription, move your purchases to a new phone (restore), answer refunds and disputes, and see subscription totals.",
+          "It is processed on the legal bases of concluding and performing the contract, as it is needed to provide the subscription you bought (KVKK Article 5(2)(c)), a legal obligation for order and payment records (5(2)(ç)), and our legitimate interest in preventing fraudulent purchases (5(2)(f)).",
+        ],
+      },
+      {
+        heading: "Transfer and retention of subscription data",
+        paragraphs: [
+          "Purchases and payments are processed by Google Play (Google LLC and its affiliates). To verify the subscription, your purchase record and customer ID are transferred to RevenueCat, Inc. So that the subscription can move with you to a new phone, the customer ID is kept in your Google account's device backup (Google Block Store). These services' servers are located outside Türkiye, mainly in the United States; transfers abroad are made in line with Article 9 of the KVKK.",
+          "Subscription records are kept while your subscription lasts and for the refund and dispute periods. If you ask for deletion, the records we can link to you are deleted within 30 days; order and payment records that Google Play must keep by law stay with Google for the period in Google's own policy.",
+        ],
+      },
+    ]
+  : [];
+
 const content: Record<Lang, { title: string; lede: string; sections: LegalSection[] }> = {
   tr: {
     title: "KVKK Aydınlatma Metni",
-    lede: `Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca, ryvexstudio.com web sitesi ve iletişim kanallarımız aracılığıyla işlenen kişisel verileriniz hakkında sizi bilgilendirmek için hazırlanmıştır. Uygulamalarımızdaki reklamlar için işlenen veriler de aşağıda açıklanmıştır; ürünlerimizde işlenen diğer veriler için her ürünün kendi gizlilik politikasına bakınız.`,
+    lede: `Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca, ryvexstudio.com web sitesi ve iletişim kanallarımız aracılığıyla işlenen kişisel verileriniz hakkında sizi bilgilendirmek için hazırlanmıştır. Uygulamalarımızdaki reklamlar ve abonelikler için işlenen veriler de aşağıda açıklanmıştır; ürünlerimizde işlenen diğer veriler için her ürünün kendi gizlilik politikasına bakınız.`,
     sections: [
       {
         heading: "Veri sorumlusu",
@@ -127,6 +193,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         ],
       },
       ...adsTr,
+      ...subsTr,
       {
         heading: "Saklama süresi",
         paragraphs: [
@@ -157,7 +224,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
   },
   en: {
     title: "Personal Data Notice",
-    lede: `This notice is provided under Article 10 of the Turkish Personal Data Protection Law No. 6698 ("KVKK") to inform you about the personal data processed through the ryvexstudio.com website and our contact channels. The data processed for ads in our apps is also explained below; for other data processed in our products, see each product's own privacy policy.`,
+    lede: `This notice is provided under Article 10 of the Turkish Personal Data Protection Law No. 6698 ("KVKK") to inform you about the personal data processed through the ryvexstudio.com website and our contact channels. The data processed for ads and subscriptions in our apps is also explained below; for other data processed in our products, see each product's own privacy policy.`,
     sections: [
       {
         heading: "Data controller",
@@ -200,6 +267,7 @@ const content: Record<Lang, { title: string; lede: string; sections: LegalSectio
         ],
       },
       ...adsEn,
+      ...subsEn,
       {
         heading: "Retention",
         paragraphs: [

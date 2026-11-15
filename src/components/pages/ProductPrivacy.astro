@@ -43,6 +43,9 @@ const copy = {
     s3: "Üçüncü taraf hizmetler",
     noThird: `${name}, verilerinizi hiçbir üçüncü tarafla paylaşmaz ve üçüncü taraf takip araçları kullanmaz.`,
     thirdIntro: `${name} aşağıdaki hizmetleri kullanır. Bu hizmetler kendi gizlilik politikalarına tabidir.`,
+    transfer:
+      "Bu hizmetlerin sunucuları yurt dışında, başta Amerika Birleşik Devletleri'nde bulunur; verilerin yurt dışına aktarımı 6698 sayılı Kanun'un 9. maddesinde öngörülen usul ve esaslara uygun olarak yapılır. Ayrıntılar:",
+    transferLink: "KVKK Aydınlatma Metni",
     policy: "gizlilik politikası",
     s4: "Saklama ve silme",
     retainDevice:
@@ -98,6 +101,9 @@ const copy = {
     s3: "Third-party services",
     noThird: `${name} does not share your data with third parties and does not use third-party tracking tools.`,
     thirdIntro: `${name} uses the services below. Each is governed by its own privacy policy.`,
+    transfer:
+      "These services' servers are located outside Türkiye, mainly in the United States; transfers abroad are made in line with Article 9 of the Turkish Personal Data Protection Law No. 6698. Details:",
+    transferLink: "Personal Data Notice",
     policy: "privacy policy",
     s4: "Retention and deletion",
     retainDevice:
@@ -196,6 +202,9 @@ const h2 = "mt-14 text-headline-md font-semibold text-primary";
             </li>
           ))}
         </ul>
+        <p class="mt-4">
+          {copy.transfer} <a href={route("kvkk", lang)} class="link-inline">{copy.transferLink}</a>
+        </p>
       </>
     )
   }

@@ -25,7 +25,7 @@ specs:
   languages: [tr, en]
   offline: true
 supportEmail: "support@ryvexstudio.com"
-privacyUpdated: 2026-11-12
+privacyUpdated: 2026-11-15
 privacy:
   accountRequired: false
   tracking: true
@@ -33,8 +33,11 @@ privacy:
     - data: { tr: "Belgeleriniz, görselleriniz ve dosya adları", en: "Your documents, images and file names" }
       purpose: { tr: "Dönüştürme, birleştirme ve düzenleme. Hiçbir sunucuya yüklenmez.", en: "Converting, merging and editing. Never uploaded to any server." }
       storage: device
-    - data: { tr: "Satın alma kaydı", en: "Purchase record" }
-      purpose: { tr: "FileConvert PRO aboneliğini doğrulamak", en: "Verifying your FileConvert PRO subscription" }
+    - data: { tr: "Rastgele müşteri kimliği; satın alma kaydı (ürün, plan, fiyat ve para birimi, satın alma, deneme ve yenileme tarihleri, Google Play sipariş numarası); uygulama sürümü, Android sürümü, dil ve ülke; IP adresi", en: "Random customer ID; purchase record (product, plan, price and currency, purchase, trial and renewal dates, Google Play order number); app version, Android version, language and country; IP address" }
+      purpose: { tr: "FileConvert PRO aboneliğini doğrulamak, satın alımları geri yüklemek ve abonelik sayılarını (aktif abone, deneme, gelir) toplu olarak görmek. Adınız, e-postanız ya da ödeme kartınız bize ulaşmaz.", en: "Verifying your FileConvert PRO subscription, restoring purchases and seeing subscription totals (active subscribers, trials, revenue). Your name, email address and payment card never reach us." }
+      storage: server
+    - data: { tr: "Ödeme bilgileri", en: "Payment details" }
+      purpose: { tr: "Abonelik ödemesi. Ödemeyi Google Play alır; kart bilgileriniz uygulamaya ve bize hiç gelmez.", en: "Paying for the subscription. Google Play takes the payment; your card details never reach the app or us." }
       storage: server
     - data: { tr: "Reklam kimliği, uygulama etkileşimleri, tanılama verisi ve IP adresinden kaba konum", en: "Advertising ID, app interactions, diagnostics and approximate location from IP address" }
       purpose: { tr: "Reklam göstermek ve reklamların ölçümü", en: "Showing ads and measuring them" }
@@ -43,8 +46,11 @@ privacy:
     - name: "Google AdMob"
       purpose: { tr: "Reklam gösterimi. Avrupa Birliği, Birleşik Krallık ve İsviçre'de onayınız istenir.", en: "Showing ads. Your consent is asked in the EU, the UK and Switzerland." }
       policyUrl: "https://policies.google.com/privacy"
+    - name: "Google Play Billing"
+      purpose: { tr: "Abonelik satın alma, ödeme, yenileme ve iptal. Google Play'in satın alma kütüphanesi ayrıca satın alma işleminin tanı kayıtlarını Google'a gönderir. Aboneliğinizi Google Play › Abonelikler'den yönetirsiniz.", en: "Buying, paying for, renewing and cancelling the subscription. Google Play's billing library also sends diagnostic logs of the purchase flow to Google. You manage the subscription in Google Play › Subscriptions." }
+      policyUrl: "https://policies.google.com/privacy"
     - name: "RevenueCat"
-      purpose: { tr: "Abonelik doğrulama", en: "Subscription verification" }
+      purpose: { tr: "Abonelik doğrulama (RevenueCat, Inc., sunucuları ABD'de). Uygulama size rastgele bir müşteri kimliği verir; telefon değiştirdiğinizde PRO'nun taşınabilmesi için bu kimlik Google hesabınızın cihaz yedeğinde (Google Block Store) saklanır.", en: "Subscription verification (RevenueCat, Inc., servers in the United States). The app gives you a random customer ID; so PRO can move with you to a new phone, this ID is kept in your Google account's device backup (Google Block Store)." }
       policyUrl: "https://www.revenuecat.com/privacy"
 faq:
   - q: { tr: "Dosyalarım bir sunucuya yükleniyor mu?", en: "Are my files uploaded to a server?" }
