@@ -18,7 +18,7 @@ platforms: [android]
 specs:
   offline: true
 supportEmail: "support@ryvexstudio.com"
-privacyUpdated: 2026-11-08
+privacyUpdated: 2026-11-20
 privacy:
   accountRequired: false
   tracking: false
@@ -27,13 +27,21 @@ privacy:
       purpose: { tr: "Taşları tanımak. Fotoğraf telefonda işlenir, hiçbir yere gönderilmez ve uygulama tarafından saklanmaz.", en: "Recognising the tiles. The photo is processed on the phone, never sent anywhere and not kept by the app." }
       storage: device
     - data: { tr: "Istakadaki taşlar, okey, gösterge ve baraj ayarları", en: "Tiles on the rack, the okey, the indicator and threshold settings" }
-      purpose: { tr: "Perleri denetlemek ve puanı hesaplamak", en: "Checking sets and calculating the score" }
+      purpose: { tr: "Perleri denetlemek ve puanı hesaplamak. Yalnızca uygulama açıkken telefonun belleğinde durur; uygulama kapanınca silinir, hiçbir yere kaydedilmez.", en: "Checking sets and calculating the score. Kept only in the phone's memory while the app is open; erased when the app closes and never saved anywhere." }
       storage: device
 faq:
   - q: { tr: "Fotoğraflarım bir sunucuya gönderiliyor mu?", en: "Are my photos sent to a server?" }
     a: { tr: "Hayır. Taş tanıma tamamen telefonunuzda yapılır; fotoğraf hiçbir yere gönderilmez.", en: "No. Tile recognition happens entirely on your phone; the photo is never sent anywhere." }
   - q: { tr: "İnternet bağlantısı gerekiyor mu?", en: "Do I need an internet connection?" }
     a: { tr: "Hayır. Tarama ve hesaplama internetsiz çalışır.", en: "No. Scanning and scoring work offline." }
+  - q: { tr: "Uygulama hangi izinleri istiyor?", en: "Which permissions does the app ask for?" }
+    a: { tr: "Yalnızca kamera izni: ıstakanızı taramak için. Galeriden fotoğraf seçmek Android'in kendi fotoğraf seçicisiyle yapılır, bunun için depolama ya da medya izni istenmez. Uygulama internet izni istemez; mikrofon, konum ve rehbere erişmez.", en: "Only the camera, to scan your rack. Picking a photo from the gallery uses Android's own photo picker, so no storage or media permission is asked for. The app does not ask for internet access and does not use the microphone, location or contacts." }
+  - q: { tr: "Kamera iznini reddedersem ne olur?", en: "What happens if I deny the camera permission?" }
+    a: { tr: "Galeriden bir ıstaka fotoğrafı seçebilir ya da taşları Manuel Giriş ile elle ekleyebilirsiniz. İzni sonradan Ayarlar › Uygulamalar › PerSayar › İzinler'den açabilirsiniz.", en: "You can pick a rack photo from your gallery or add the tiles by hand with Manual entry. You can turn the permission on later in Settings › Apps › PerSayar › Permissions." }
+  - q: { tr: "Verilerimi nasıl silerim?", en: "How do I delete my data?" }
+    a: { tr: "Silinecek bir veri yok: uygulama fotoğraf, ıstaka ya da ayar saklamaz, hesap da istemez. Tarama için çekilen fotoğraf işlem bitince geçici klasörde kalabilir; uygulamayı kaldırmak ya da Ayarlar › Uygulamalar › PerSayar › Depolama › Önbelleği temizle bunu da siler.", en: "There is nothing to delete: the app keeps no photos, racks or settings and needs no account. The photo taken for a scan may stay in a temporary folder after processing; uninstalling the app or Settings › Apps › PerSayar › Storage › Clear cache removes it too." }
+  - q: { tr: "PerSayar bir kumar ya da şans oyunu mu?", en: "Is PerSayar a gambling or betting app?" }
+    a: { tr: "Hayır. PerSayar, 101 Okey oynarken ıstakanızın puanını hesaplayan bir yardımcıdır. Oyun oynatmaz; para, bahis ya da ödül yoktur.", en: "No. PerSayar is a helper that calculates the score of your rack while you play 101 Okey. It does not run a game, and there is no money, betting or prize." }
   - q: { tr: "Bir taş yanlış tanınırsa ne yapabilirim?", en: "What if a tile is recognised wrongly?" }
     a: { tr: "Taşa dokunup düzeltebilir ya da Manuel Taş Ekle ile elle ekleyebilirsiniz.", en: "Tap the tile to correct it, or add it by hand with Add tile manually." }
   - q: { tr: "Hangi kuralları destekliyor?", en: "Which rules does it support?" }
