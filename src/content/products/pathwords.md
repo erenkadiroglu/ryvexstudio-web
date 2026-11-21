@@ -11,7 +11,7 @@ screenshots:
   - src: ../../assets/screenshots/pathwords/01-ana-sayfa.png
     alt: { tr: "Ana sayfa: seviye yolundaki sıradaki bulmaca, günlük hedef ve Tekrar Patikası", en: "Home: the next puzzle on your level, the daily goal and the review path" }
   - src: ../../assets/screenshots/pathwords/02-seviye-sec.png
-    alt: { tr: "Seviye seçimi: A1'den B2'ye, her seviye kendi kelimeleriyle", en: "Choosing a level: A1 to B2, each with its own words" }
+    alt: { tr: "Seviye seçimi: A1'den C2'ye, her seviye kendi kelimeleriyle", en: "Choosing a level: A1 to C2, each with its own words" }
   - src: ../../assets/screenshots/pathwords/03-patika-ciz.png
     alt: { tr: "Bulmaca: harfleri mürekkep iziyle birleştirin, bulunan kelime renkli şerit olarak kalır", en: "Puzzle: join letters with an ink trail; a found word stays as a coloured ribbon" }
   - src: ../../assets/screenshots/pathwords/04-kelimeler.png
@@ -56,16 +56,16 @@ faq:
   - q: { tr: "PathWords ücretsiz mi?", en: "Is PathWords free?" }
     a: { tr: "Evet. Bulmacalar arasında reklam gösterilir, bulmaca sırasında asla. İsteğe bağlı PathWords PRO aboneliği (aylık veya yıllık) reklamları kaldırır ve her gün ipucu verir.", en: "Yes. Ads appear between puzzles, never during one. The optional PathWords PRO subscription (monthly or yearly) removes ads and gives daily hints." }
   - q: { tr: "Hangi seviyeler var?", en: "Which levels are there?" }
-    a: { tr: "A1, A2, B1 ve B2; C1 ve C2 yakında. Kelime seviyeleri CEFR-J ve Octanove listelerinden gelir.", en: "A1, A2, B1 and B2; C1 and C2 are coming. Word levels come from the CEFR-J and Octanove lists." }
+    a: { tr: "A1, A2, B1, B2, C1 ve C2: altı seviyede 8800'den fazla kelime ve ifade. Kelime seviyeleri CEFR-J ve Octanove listelerinden gelir.", en: "A1, A2, B1, B2, C1 and C2: more than 8,800 words and phrases across six levels. Word levels come from the CEFR-J and Octanove lists." }
   - q: { tr: "İlerlememi nasıl sıfırlarım?", en: "How do I reset my progress?" }
     a: { tr: "Oyunda Ayarlar menüsündeki İlerlemeyi Sıfırla seçeneğini kullanın.", en: "Use the Reset progress option in the game's Settings menu." }
 aboutEn: |
-  PathWords turns English vocabulary into a short daily puzzle. Choose your level, from A1 to B2, and every puzzle is built only from that level's words, without end. You join the letters with a path; every letter belongs to exactly one word.
+  PathWords turns English vocabulary into a short daily puzzle. Choose your level, from A1 to C2, and every puzzle is built only from that level's words, without end. You join the letters with a path; every letter belongs to exactly one word.
 
   Each word you find comes with its Turkish meaning, pronunciation and an example sentence. The game remembers how well you know every word and brings it back at the right time, in the daily review path and in the word quiz.
 features:
   - title: { tr: "Seviyenize göre", en: "At your level" }
-    text: { tr: "A1'den B2'ye ayrı yollar; her bulmaca yalnızca o seviyenin kelimeleriyle kurulur ve sonu yoktur.", en: "Separate paths from A1 to B2; every puzzle uses only that level's words, without end." }
+    text: { tr: "A1'den C2'ye ayrı yollar; her bulmaca yalnızca o seviyenin kelimeleriyle kurulur ve sonu yoktur.", en: "Separate paths from A1 to C2; every puzzle uses only that level's words, without end." }
     shot: 1
   - title: { tr: "Patika bulmacası", en: "Path puzzles" }
     text: { tr: "Harfleri bir mürekkep iziyle birleştirin; her harf tek bir kelimeye aittir.", en: "Join letters with an ink trail; every letter belongs to exactly one word." }
@@ -86,6 +86,6 @@ featured: true
 order: 20
 ---
 
-PathWords, İngilizce kelime öğrenmeyi her gün birkaç dakikalık bir bulmacaya dönüştürür. Seviyenizi seçersiniz (A1'den B2'ye) ve her bulmaca yalnızca o seviyenin kelimeleriyle, sonu olmadan kurulur. Harfleri bir patikayla birleştirirsiniz; her harf tek bir kelimeye aittir.
+PathWords, İngilizce kelime öğrenmeyi her gün birkaç dakikalık bir bulmacaya dönüştürür. Seviyenizi seçersiniz (A1'den C2'ye) ve her bulmaca yalnızca o seviyenin kelimeleriyle, sonu olmadan kurulur. Harfleri bir patikayla birleştirirsiniz; her harf tek bir kelimeye aittir.
 
 Bulduğunuz her kelimenin Türkçe karşılığını, okunuşunu ve örnek cümlesini görürsünüz. Oyun her kelimeyi ne kadar iyi bildiğinizi hatırlar ve onu doğru zamanda geri getirir: günlük Tekrar Patikası'nda ve kelime quizinde.
